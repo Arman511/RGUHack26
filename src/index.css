@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* XP Desktop */
+    --background: 213 71% 53%;
+    --foreground: 0 0% 0%;
+
+    /* Window body */
+    --card: 0 0% 94%;
+    --card-foreground: 0 0% 0%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+
+    /* XP Blue accent */
+    --primary: 213 71% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Taskbar silver */
+    --secondary: 210 10% 82%;
+    --secondary-foreground: 0 0% 0%;
+
+    /* Classic grey surfaces */
+    --muted: 0 0% 88%;
+    --muted-foreground: 0 0% 35%;
+
+    /* XP green start */
+    --accent: 120 50% 35%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Alerts */
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Window borders */
+    --border: 0 0% 70%;
+    --input: 0 0% 75%;
+    --ring: 213 71% 53%;
+    --radius: 0px;
+
+    /* XP Title bar gradient */
+    --xp-title-start: 213 80% 55%;
+    --xp-title-end: 220 70% 30%;
+
+    /* XP taskbar */
+    --xp-taskbar: 213 25% 75%;
+    --xp-taskbar-dark: 213 15% 55%;
+
+    /* Boss Baby warning */
+    --warning: 45 100% 55%;
+    --warning-foreground: 0 0% 0%;
+
+    /* Demerit red */
+    --demerit: 0 85% 50%;
+
+    /* Success green */
+    --success: 120 60% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Tahoma', 'Segoe UI', Geneva, Verdana, sans-serif;
+    font-size: 12px;
+    overflow: hidden;
+    user-select: none;
+  }
+}
+
+/* XP Window styles */
+@layer components {
+  .xp-button {
+    @apply px-4 py-1 bg-muted border-2 text-sm font-normal cursor-pointer active:translate-y-px;
+    border-color: hsl(0 0% 95%) hsl(0 0% 50%) hsl(0 0% 50%) hsl(0 0% 95%);
+    min-width: 75px;
+    text-align: center;
+  }
+
+  .xp-button:active {
+    border-color: hsl(0 0% 50%) hsl(0 0% 95%) hsl(0 0% 95%) hsl(0 0% 50%);
+  }
+
+  .xp-button-primary {
+    @apply xp-button;
+    border: 2px solid hsl(var(--primary));
+    outline: 1px dotted hsl(0 0% 0%);
+    outline-offset: -4px;
+  }
+
+  .xp-window {
+    @apply border border-border shadow-lg;
+    border-color: hsl(213 60% 60%);
+    border-width: 3px;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .xp-title-bar {
+    background: linear-gradient(
+      180deg,
+      hsl(var(--xp-title-start)) 0%,
+      hsl(213 75% 45%) 40%,
+      hsl(var(--xp-title-end)) 100%
+    );
+    @apply px-2 py-1 flex items-center justify-between text-primary-foreground font-bold text-sm;
+    border-radius: 5px 5px 0 0;
+  }
+
+  .xp-title-bar-inactive {
+    background: linear-gradient(
+      180deg,
+      hsl(0 0% 72%) 0%,
+      hsl(0 0% 58%) 40%,
+      hsl(0 0% 48%) 100%
+    );
+    @apply px-2 py-1 flex items-center justify-between text-primary-foreground font-bold text-sm;
+    border-radius: 5px 5px 0 0;
+  }
+
+  .xp-close-btn {
+    @apply w-5 h-5 flex items-center justify-center text-xs font-bold cursor-pointer rounded-sm;
+    background: linear-gradient(180deg, hsl(0 70% 60%) 0%, hsl(0 65% 45%) 100%);
+    color: white;
+    border: 1px solid hsl(0 0% 30%);
+  }
+
+  .xp-close-btn:hover {
+    background: linear-gradient(180deg, hsl(0 80% 65%) 0%, hsl(0 70% 50%) 100%);
+  }
+
+  .xp-window-body {
+    @apply bg-card p-3;
+  }
+
+  .xp-taskbar {
+    background: linear-gradient(
+      180deg,
+      hsl(213 40% 80%) 0%,
+      hsl(213 30% 68%) 5%,
+      hsl(213 25% 72%) 50%,
+      hsl(213 20% 60%) 100%
+    );
+    @apply h-10 flex items-center px-1 border-t-2;
+    border-color: hsl(0 0% 90%);
+  }
+
+  .xp-start-btn {
+    background: linear-gradient(180deg, hsl(120 55% 45%) 0%, hsl(120 55% 30%) 100%);
+    @apply px-3 h-8 flex items-center gap-1 text-primary-foreground font-bold text-sm rounded-r-lg cursor-pointer;
+    border: 1px solid hsl(120 40% 20%);
+  }
+
+  .xp-start-btn:hover {
+    background: linear-gradient(180deg, hsl(120 55% 50%) 0%, hsl(120 55% 35%) 100%);
+  }
+
+  .teams-notification {
+    @apply fixed bottom-12 right-4 z-50;
+    animation: slideInRight 0.4s ease-out;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    animation: confettiFall 3s ease-in-out infinite;
+  }
+
+  .pixel-text {
+    font-family: 'Pixelify Sans', monospace;
+  }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes bossEnter {
+  0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+  60% { transform: scale(1.15) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
