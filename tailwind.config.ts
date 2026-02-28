@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        tahoma: ['Tahoma', 'Segoe UI', 'Geneva', 'Verdana', 'sans-serif'],
+        sans: ['Inter', 'Tahoma', 'Segoe UI', 'Geneva', 'Verdana', 'sans-serif'],
         pixel: ['Pixelify Sans', 'monospace'],
       },
       colors: {
