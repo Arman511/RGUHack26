@@ -49,7 +49,7 @@ const Index = () => {
     };
   }, []);
 
-  const triggerBoss = useCallback((msg: string, nextStage: GameStage) => {
+  const triggerBoss = useCallback((msg: string, nextStage: GameStage, delayMs: number = 0) => {
     setBossMsg(msg);
     setShowBoss(true);
     setNextStageAfterBoss(nextStage);
@@ -176,12 +176,20 @@ const Index = () => {
       } else {
         triggerBoss(
           "Check your emails! 10 unread messages! You're on prod support!",
-          skipTutorials ? "pacman" : "pacman-howto",
+          skipTutorials ? "pacman" : "pacman-howto", STAGE_DELAY_MS
         );
       }
 
     }
-  }, [skipTutorials, state.stage, triggerBoss, loopDone, handleMeterOutcome]);
+  }, [
+    skipTutorials,
+    state.stage,
+    triggerBoss,
+    loopDone,
+    handleMeterOutcome,
+    skipDoneStageDelay,
+    setStage,
+  ]);
 
   const handlePacmanWin = useCallback(() => {
     moveMeter(-30);
@@ -243,6 +251,9 @@ const Index = () => {
 
   useEffect(() => {
     if (state.stage === "tetris-done") {
+      if (skipDoneStageDelay) {
+        setSkipDoneStageDelay(false);
+      }
       if (handleMeterOutcome()) {
         return;
       }
