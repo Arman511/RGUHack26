@@ -28,6 +28,7 @@ Challenges sponsored by:
 Click on a sponsor or checkout the [Challenges Folder](challenges/)
 
 #### [Nao Documentation](http://doc.aldebaran.com/2-1/nao/nao-connecting.html#nao-connecting)
+#### [Nao Repo from SoCET](https://github.com/RGU-Computing/pepper)
 
 -----
 
