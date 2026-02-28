@@ -36,12 +36,14 @@ export const BossBaby: React.FC<BossBabyProps> = ({
         {/* XP Title Bar */}
         <div className="xp-title-bar">
           <div className="flex items-center gap-1.5">
-            <Baby size={14} />
+            <img src="/boss-baby.jpeg" alt="Boss Baby" className="w-4 h-4 rounded-full object-cover" />
             <span className="text-xs font-bold">
               LIAR... CHEATER... <span className="text-red-400">FIRED.</span>
             </span>
           </div>
         </div>
+        {/* <div className="xp-window-body flex flex-col items-center gap-3 p-4">
+          <div className="w-20 h-20 rounded-full bg-warning flex items-center justify-center border-4 border-foreground">
 
         {/* Dialogue Body */}
         <div className="xp-window-body p-4">
@@ -69,8 +71,8 @@ export const BossBaby: React.FC<BossBabyProps> = ({
 
             {/* Right: Character */}
             <div className="flex flex-col items-center w-[130px]">
-              <div className="w-24 h-24 bg-[#FFD966] border-4 border-black flex items-center justify-center shadow-inner">
-                <Baby size={48} className="text-black" />
+              <div className="w-24 h-24 border-4 border-black overflow-hidden rounded-full">
+                <img src="/boss-baby.jpeg" alt="Boss Baby" className="w-full h-full object-cover" />
               </div>
 
               {/* Name Tag */}

@@ -4,7 +4,7 @@ const COLS = 10;
 const ROWS = 18;
 const CELL = 20;
 const LABELS = ['BUG', 'UI', 'DEBT', 'FIX', 'TEST'];
-const TIMER_SECONDS = 30;
+const TIMER_SECONDS = 15;
 
 const SHAPES = [
   [[1, 1, 1, 1]], // I

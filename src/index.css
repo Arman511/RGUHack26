@@ -191,6 +191,11 @@
     -moz-osx-font-smoothing: grayscale;
     font-smooth: never;
   }
+
+  .intro-disclaimer {
+    /* larger and wider disclaimer, pushed further down */
+    @apply text-xl text-primary-foreground/70 text-center mt-12 italic max-w-6xl;
+  }
 }
 
 @keyframes slideInRight {
