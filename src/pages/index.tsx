@@ -202,8 +202,8 @@ const Index = () => {
       <FailMeter value={state.meterValue} />
       <DesktopIcons />
 
-      {/* Procrastination desktop */}
-      {['procrastination', 'pong-done', 'wordle-done', 'pacman-done', 'tetris-done'].includes(state.stage) && (
+      {/* Procrastination desktop — stays visible until player loses */}
+      {!showPunishment && (
         <ProcrastinationDesktop />
       )}
 
