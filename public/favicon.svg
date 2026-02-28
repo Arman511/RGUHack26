@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="RGU Hack">
-  <rect width="64" height="64" rx="12" fill="#111827"/>
-  <path d="M14 48V16h14c7 0 12 4.7 12 11 0 6.4-5 11-12 11h-6v10H14zm8-17h5.4c2.9 0 4.7-1.6 4.7-4.1S30.3 23 27.4 23H22v8z" fill="#f9fafb"/>
-  <circle cx="49" cy="46" r="7" fill="#22c55e"/>
-</svg>
