@@ -3,11 +3,25 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 interface PingPongGameProps {
   onWin: () => void;
   onLose: () => void;
+  playerAvatar?: string;
+  botAvatar?: string;
+  playerName?: string;
 }
 
-export const PingPongGame: React.FC<PingPongGameProps> = ({ onWin, onLose }) => {
+export const PingPongGame: React.FC<PingPongGameProps> = ({
+  onWin,
+  onLose,
+  playerAvatar,
+  botAvatar,
+
+}) => {
   const BALL_SPEED_X = 3.4;
   const BALL_SPEED_Y = 2.2;
+  // Marty Supreme color palette
+  const COLOR_BG = '#0a0a0a';
+  const COLOR_PRIMARY = '#ff8c00';
+  const COLOR_SECONDARY = '#ff4500';
+  const COLOR_UI_TEXT = '#ffffff';
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameRef = useRef<{
@@ -93,23 +107,64 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({ onWin, onLose }) => 
         g.ballX = 175; g.ballY = 120; g.ballVX = -BALL_SPEED_X; g.ballVY = BALL_SPEED_Y;
       }
 
-      // Draw
-      ctx.fillStyle = '#1a1a2e';
+      // Draw background
+      ctx.fillStyle = COLOR_BG;
       ctx.fillRect(0, 0, 350, 240);
-      ctx.setLineDash([4, 4]);
-      ctx.strokeStyle = '#444';
+
+      // Center dashed line (muted orange)
+      ctx.setLineDash([5, 5]);
+      ctx.strokeStyle = 'rgba(255,140,0,0.45)';
+      ctx.lineWidth = 2;
       ctx.beginPath(); ctx.moveTo(175, 0); ctx.lineTo(175, 240); ctx.stroke();
       ctx.setLineDash([]);
-      ctx.fillStyle = '#4cc9f0';
+
+      // Paddles with inner + outer glow
+      ctx.save();
+      ctx.shadowColor = COLOR_PRIMARY;
+      ctx.shadowBlur = 14;
+      // left paddle gradient (brighter center)
+      const leftGrad = ctx.createLinearGradient(5, g.paddleY, 17, g.paddleY + PADDLE_H);
+      leftGrad.addColorStop(0, COLOR_SECONDARY);
+      leftGrad.addColorStop(0.5, COLOR_PRIMARY);
+      leftGrad.addColorStop(1, COLOR_SECONDARY);
+      ctx.fillStyle = leftGrad;
       ctx.fillRect(5, g.paddleY, 12, PADDLE_H);
-      ctx.fillStyle = '#f72585';
+      ctx.restore();
+
+      ctx.save();
+      ctx.shadowColor = COLOR_PRIMARY;
+      ctx.shadowBlur = 12;
+      const rightGrad = ctx.createLinearGradient(333, g.aiY, 345, g.aiY + PADDLE_H);
+      rightGrad.addColorStop(0, COLOR_SECONDARY);
+      rightGrad.addColorStop(0.5, COLOR_PRIMARY);
+      rightGrad.addColorStop(1, COLOR_SECONDARY);
+      ctx.fillStyle = rightGrad;
       ctx.fillRect(333, g.aiY, 12, PADDLE_H);
-      ctx.fillStyle = '#fff';
-      ctx.beginPath(); ctx.arc(g.ballX, g.ballY, 6, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = '#666';
+      ctx.restore();
+
+      // Ball with radial gradient + glow (looks like a small lightbulb)
+      ctx.save();
+      const r = 6;
+      const grad = ctx.createRadialGradient(g.ballX, g.ballY, 1, g.ballX, g.ballY, r + 8);
+      grad.addColorStop(0, 'rgba(255, 245, 230, 1)');
+      grad.addColorStop(0.2, COLOR_PRIMARY);
+      grad.addColorStop(0.6, COLOR_SECONDARY);
+      grad.addColorStop(1, 'rgba(255,69,0,0.0)');
+      ctx.fillStyle = grad;
+      ctx.shadowColor = COLOR_PRIMARY;
+      ctx.shadowBlur = 18;
+      ctx.beginPath(); ctx.arc(g.ballX, g.ballY, r, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+
+      // Scores: labels in white, values below
+      ctx.fillStyle = COLOR_UI_TEXT;
+      ctx.font = '12px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('You', 140, 18);
+      ctx.fillText('Marty', 200, 18);
       ctx.font = '24px monospace';
-      ctx.fillText(String(g.playerScore), 140, 30);
-      ctx.fillText(String(g.aiScore), 200, 30);
+      ctx.fillText(String(g.playerScore), 140, 38);
+      ctx.fillText(String(g.aiScore), 200, 38);
 
       requestAnimationFrame(loop);
     };
@@ -124,10 +179,32 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({ onWin, onLose }) => 
 
   return (
     <div className="flex flex-col items-center gap-2">
+      {/* avatar above game, right-aligned */}
+      {playerAvatar && (
+        <div className="w-full flex justify-between items-center px-1">
+          <img
+            src={playerAvatar}
+            alt={'Player avatar'}
+            className="w-10 h-10 rounded-full border-2 border-primary object-cover"
+          />
+          <img
+            src={botAvatar}
+            alt={'Bot avatar'}
+            className="w-10 h-10 rounded-full border-2 border-primary object-cover"
+          />
+        </div>
+      )}
+
       <p className="text-xs text-card-foreground">W/S or ↑/↓ to move. First to 3 wins!</p>
-      <canvas ref={canvasRef} width={350} height={240} className="border border-border" />
+      <canvas
+        ref={canvasRef}
+        width={350}
+        height={240}
+        className="border border-border"
+        style={{ border: `2px solid ${COLOR_PRIMARY}`, borderRadius: 10, background: COLOR_BG }}
+      />
       <div className="text-xs text-muted-foreground">
-        You: {scores.player} | Boss AI: {scores.ai}
+        You: {scores.player} | Marty Supreme: {scores.ai}
       </div>
     </div>
   );
