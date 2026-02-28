@@ -38,6 +38,7 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({ onWin, onLose }) => 
     window.addEventListener('keyup', keyUp);
 
     const PADDLE_SPEED = 5;
+    const AI_PADDLE_SPEED = 1.8;
     const PADDLE_H = 60;
 
     const loop = () => {
@@ -60,8 +61,8 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({ onWin, onLose }) => 
 
       // AI movement (clamped)
       const aiCenter = g.aiY + 30;
-      if (aiCenter < g.ballY - 15) g.aiY = Math.min(240 - PADDLE_H, g.aiY + 2.2);
-      else if (aiCenter > g.ballY + 15) g.aiY = Math.max(0, g.aiY - 2.2);
+      if (aiCenter < g.ballY - 15) g.aiY = Math.min(240 - PADDLE_H, g.aiY + AI_PADDLE_SPEED);
+      else if (aiCenter > g.ballY + 15) g.aiY = Math.max(0, g.aiY - AI_PADDLE_SPEED);
 
       // Player paddle collision (left)
       if (g.ballX <= 18 && g.ballY >= g.paddleY && g.ballY <= g.paddleY + PADDLE_H) {
