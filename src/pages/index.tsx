@@ -86,8 +86,8 @@ const Index = () => {
 
   const handleTeamsClose = useCallback(() => {
     triggerBoss(
-      "SLACKING?! You closed the message?! Fine, if you won't work, you'll play. Beat me at Pong... if you can.",
-      skipTutorials ? "pingpong" : "pong-howto",
+      "Ignoring my pings? Fine. If you won't reply, then you'll rebound. Put your paddle where your mouse is and let's see if you can keep up.",
+      skipTutorials ? 'pingpong' : 'pong-howto'
     );
   }, [skipTutorials, triggerBoss]);
 
@@ -327,13 +327,26 @@ const Index = () => {
       )}
 
       {/* Ping Pong */}
-      {state.stage === "pingpong" && (
+      {state.stage === 'pingpong' && (
         <DraggableWindow
           title="Work Avoidance.exe"
           width={400}
           closable={false}
+          icon={
+            <img
+              src="/pingpongpaddle.jpeg"
+              alt="paddle icon"
+              className="w-4 h-4 rounded-full object-cover"
+            />
+          }
         >
-          <PingPongGame onWin={handlePongWin} onLose={handlePongLose} />
+          <PingPongGame
+            onWin={handlePongWin}
+            onLose={handlePongLose}
+            playerAvatar="/sword.jpeg"
+            botAvatar='/marty.jpeg'
+            playerName="Marty Supreme"
+          />
         </DraggableWindow>
       )}
 
