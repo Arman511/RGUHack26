@@ -70,6 +70,13 @@ const Index = () => {
     delayedStage('teams', 5000);
   }, [setStage, delayedStage]);
 
+  const handleTeamsJoin = useCallback(() => {
+    triggerBoss(
+      "You joined the meeting?! That's working! The meter moves toward PROMOTED! But can you survive the standup?",
+      'zoom'
+    );
+  }, [triggerBoss]);
+
   const handleTeamsClose = useCallback(() => {
     triggerBoss(
       "SLACKING?! You closed my message?! Fine, if you won't work, you'll play. Beat me at Pong... if you can.",
@@ -215,7 +222,7 @@ const Index = () => {
       {/* Teams Notification */}
       {state.stage === 'teams' && (
         <div className="teams-notification">
-          <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsClose} />
+          <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsJoin} />
         </div>
       )}
 
