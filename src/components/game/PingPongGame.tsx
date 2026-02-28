@@ -56,7 +56,7 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({
     window.addEventListener("keyup", keyUp);
 
     const PADDLE_SPEED = 5;
-    const AI_PADDLE_SPEED = 1.8;
+    const AI_PADDLE_SPEED = 1.2;
     const PADDLE_H = 60;
 
     const loop = () => {
