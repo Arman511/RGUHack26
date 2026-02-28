@@ -3,10 +3,13 @@ import { Video, MessageCircle, LayoutList } from "lucide-react";
 
 interface PunishmentScreenProps {
   onComplete: () => void;
+  gameStage: string;
 }
 
-const PUNISHMENTS = [
-  {
+const PUNISHMENT_TIME_SECONDS = 5;
+
+const PUNISHMENTS = {
+  zoom: {
     title: "Zoom - All Hands Meeting",
     icon: <Video size={14} />,
     content: (
@@ -40,7 +43,7 @@ const PUNISHMENTS = [
       </div>
     ),
   },
-  {
+  teams: {
     title: "Microsoft Teams - Sprint Chat",
     icon: <MessageCircle size={14} />,
     content: (
@@ -61,7 +64,7 @@ const PUNISHMENTS = [
       </div>
     ),
   },
-  {
+  jira: {
     title: "Jira - Sprint Board",
     icon: <LayoutList size={14} />,
     content: (
@@ -101,17 +104,45 @@ const PUNISHMENTS = [
       </div>
     ),
   },
-];
+  email: {
+    title: "Email - Inbox Overflow",
+    icon: <MessageCircle size={14} />,
+    content: (
+      <div className="flex flex-col gap-1 p-2 text-[10px]">
+        {[
+          "Inbox (99+ unread)",
+          'Subject: "Quick question"',
+          'Subject: "gentle reminder #4"',
+          'Subject: "RE: RE: RE: action needed"',
+          "Attachment: final_v2_REAL_final.pptx",
+          'CC: entire company',
+          "Sent from my iPhone",
+        ].map((msg, i) => (
+          <p key={i} className="text-card-foreground">
+            {msg}
+          </p>
+        ))}
+      </div>
+    ),
+  },
+};
+
+const GAME_STAGE_PUNISHMENT_MAP: Record<string, keyof typeof PUNISHMENTS> = {
+  pingpong: "teams",
+  wordle: "zoom",
+  tetris: "jira",
+  pacman: "email",
+};
 
 export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
-  onComplete,
+  onComplete, gameStage
 }) => {
-  const [timer, setTimer] = useState(3);
-  const [punishment] = useState(
-    () => PUNISHMENTS[Math.floor(Math.random() * PUNISHMENTS.length)],
-  );
+  const [timer, setTimer] = useState(PUNISHMENT_TIME_SECONDS);
+  const punishmentType = GAME_STAGE_PUNISHMENT_MAP[gameStage.toLowerCase()] ?? "zoom";
+  const punishment = PUNISHMENTS[punishmentType];
 
   useEffect(() => {
+    setTimer(PUNISHMENT_TIME_SECONDS);
     const interval = setInterval(() => {
       setTimer((prev) => {
         if (prev <= 1) {
@@ -123,7 +154,7 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [onComplete]);
+  }, [onComplete, gameStage]);
 
   return (
     <div className="fixed inset-0 z-[60] bg-foreground/60 flex items-center justify-center">
@@ -144,7 +175,7 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
           <div className="mt-2 bg-muted rounded-full h-2 overflow-hidden">
             <div
               className="bg-primary h-full transition-all duration-1000"
-              style={{ width: `${((3 - timer) / 3) * 100}%` }}
+              style={{ width: `${((PUNISHMENT_TIME_SECONDS - timer) / PUNISHMENT_TIME_SECONDS) * 100}%` }}
             />
           </div>
         </div>
