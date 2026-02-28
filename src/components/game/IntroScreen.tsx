@@ -3,9 +3,11 @@ import { Baby } from 'lucide-react';
 
 interface IntroScreenProps {
   onStart: () => void;
+  skipTutorials: boolean;
+  setSkipTutorials: (skip: boolean) => void;
 }
 
-export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
+export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart, skipTutorials, setSkipTutorials }) => {
   return (
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background font-sans">
       <div className="absolute inset-0 opacity-20"
@@ -13,13 +15,13 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
           backgroundImage: 'radial-gradient(circle at 30% 70%, hsl(213 80% 40%) 0%, transparent 50%), radial-gradient(circle at 70% 30%, hsl(220 70% 30%) 0%, transparent 50%)',
         }}
       />
-      
+
       <div className="relative z-10 flex flex-col items-center gap-6 max-w-lg px-8 ">
         <h1 className="pixel-text text-5xl md:text-7xl tracking-wide font-bold text-primary-foreground text-center leading-tight relative left-[0.5ch]">
           <span className="relative left-[0.30ch]">Liar...</span><br />
           Cheater...<br />
           <span className="text-destructive pixel-text tracking-wider relative" style={{ animation: 'shake 0.5s ease-in-out infinite' }}>
-             FIRED.
+            FIRED.
           </span>
         </h1>
 
@@ -35,18 +37,33 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
               <Baby size={32} className="text-foreground" />
             </div>
             <p className="text-sm text-center font-bold text-card-foreground leading-relaxed">
-              "I hate liars and cheaters. Why are you hired if you don't do your job? 
+              "I hate liars and cheaters. Why are you hired if you don't do your job?
               <span className="text-destructive"> Focus on work!</span>"
             </p>
           </div>
         </div>
 
-        <button 
+        <button
           className="xp-button-primary text-lg px-8 py-3 mt-2"
           onClick={onStart}
         >
           🔥 I'm ready to get fired
         </button>
+
+        <div className="xp-window w-[320px]">
+          <div className="xp-window-body flex items-center justify-between gap-3 p-3">
+            <label className="flex items-center gap-2 text-xs text-card-foreground font-bold cursor-pointer">
+              Skip tutorials
+            </label>
+            <button
+              type="button"
+              className="xp-button text-[10px] px-2 py-0.5 min-w-0"
+              onClick={() => setSkipTutorials(!skipTutorials)}
+            >
+              {skipTutorials ? 'ON' : 'OFF'}
+            </button>
+          </div>
+        </div>
 
         <p className="text-[9px] text-primary-foreground/60 text-center mt-4 italic max-w-sm">
           (Disclaimer: This is not representative of us developers; we are very, very, very, very good employees.)

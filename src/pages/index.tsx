@@ -19,6 +19,7 @@ import { Video, LayoutList, Mail } from 'lucide-react';
 
 const Index = () => {
   const { state, setStage, moveMeter, setBossMessage } = useGameState();
+  const [skipTutorials, setSkipTutorials] = useState(true);
   const [showBoss, setShowBoss] = useState(false);
   const [bossMsg, setBossMsg] = useState('');
   const [nextStageAfterBoss, setNextStageAfterBoss] = useState<GameStage | null>(null);
@@ -75,14 +76,15 @@ const Index = () => {
       "You joined the meeting?! That's working! The meter moves toward PROMOTED! But can you survive the standup?",
       'zoom'
     );
+    moveMeter(20);
   }, [triggerBoss]);
 
   const handleTeamsClose = useCallback(() => {
     triggerBoss(
       "SLACKING?! You closed my message?! Fine, if you won't work, you'll play. Beat me at Pong... if you can.",
-      'pong-howto'
+      skipTutorials ? 'pingpong' : 'pong-howto'
     );
-  }, [triggerBoss]);
+  }, [skipTutorials, triggerBoss]);
 
   const handlePongWin = useCallback(() => {
     moveMeter(-25); // toward FIRED (victory)
@@ -107,11 +109,12 @@ const Index = () => {
   }, [moveMeter, triggerBoss]);
 
   const handleZoomDecline = useCallback(() => {
+    moveMeter(-5); // declined meeting = toward fired
     triggerBoss(
       "Think you can skip the standup? Decode this corporate jargon!",
-      'wordle-howto'
+      skipTutorials ? 'wordle' : 'wordle-howto'
     );
-  }, [triggerBoss]);
+  }, [moveMeter, skipTutorials, triggerBoss]);
 
   const handleWordleComplete = useCallback((guesses: number) => {
     if (guesses <= 3) {
@@ -128,9 +131,9 @@ const Index = () => {
 
   useEffect(() => {
     if (state.stage === 'wordle-done') {
-      triggerBoss("Check your emails! 10 unread messages! You're on prod support!", 'pacman-howto');
+      triggerBoss("Check your emails! 10 unread messages! You're on prod support!", skipTutorials ? 'pacman' : 'pacman-howto');
     }
-  }, [state.stage, triggerBoss]);
+  }, [skipTutorials, state.stage, triggerBoss]);
 
   const handlePacmanWin = useCallback(() => {
     moveMeter(-25);
@@ -147,8 +150,8 @@ const Index = () => {
   }, [state.stage, delayedStage]);
 
   const handleJiraNotification = useCallback(() => {
-    triggerBoss("Organize the backlog! The sprint is on fire!", 'tetris-howto');
-  }, [triggerBoss]);
+    triggerBoss("Organize the backlog! The sprint is on fire!", skipTutorials ? 'tetris' : 'tetris-howto');
+  }, [skipTutorials, triggerBoss]);
 
   useEffect(() => {
     if (state.stage === 'jira') {
@@ -185,7 +188,7 @@ const Index = () => {
   // ── Rendering ──
 
   if (state.stage === 'intro') {
-    return <IntroScreen onStart={handleIntroStart} />;
+    return <IntroScreen onStart={handleIntroStart} skipTutorials={skipTutorials} setSkipTutorials={setSkipTutorials} />;
   }
 
   if (state.stage === 'fired') {
