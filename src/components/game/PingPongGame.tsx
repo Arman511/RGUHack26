@@ -9,8 +9,8 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({
   onWin,
   onLose,
 }) => {
-  const BALL_SPEED_X = 3.4;
-  const BALL_SPEED_Y = 2.2;
+  const BALL_SPEED_X = 2.5;
+  const BALL_SPEED_Y = 1.5;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameRef = useRef<{

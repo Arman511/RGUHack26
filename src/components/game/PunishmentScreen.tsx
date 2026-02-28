@@ -137,11 +137,12 @@ const GAME_STAGE_PUNISHMENT_MAP: Record<string, keyof typeof PUNISHMENTS> = {
 export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
   onComplete, gameStage
 }) => {
-  const [timer, setTimer] = useState(3);
+  const [timer, setTimer] = useState(PUNISHMENT_TIME_SECONDS);
   const punishmentType = GAME_STAGE_PUNISHMENT_MAP[gameStage.toLowerCase()] ?? "zoom";
   const punishment = PUNISHMENTS[punishmentType];
 
   useEffect(() => {
+    setTimer(PUNISHMENT_TIME_SECONDS);
     const interval = setInterval(() => {
       setTimer((prev) => {
         if (prev <= 1) {
@@ -153,7 +154,7 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [onComplete]);
+  }, [onComplete, gameStage]);
 
   return (
     <div className="fixed inset-0 z-[60] bg-foreground/60 flex items-center justify-center">
