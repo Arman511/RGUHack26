@@ -1,27 +1,44 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from "react";
 
 const COLS = 10;
 const ROWS = 18;
 const CELL = 20;
-const LABELS = ['BUG', 'UI', 'DEBT', 'FIX', 'TEST'];
+const LABELS = ["BUG", "UI", "DEBT", "FIX", "TEST"];
 const TIMER_SECONDS = 15;
 
 const SHAPES = [
   [[1, 1, 1, 1]], // I
-  [[1, 1], [1, 1]], // O
-  [[0, 1, 0], [1, 1, 1]], // T
-  [[1, 0], [1, 0], [1, 1]], // L
-  [[0, 1], [0, 1], [1, 1]], // J
+  [
+    [1, 1],
+    [1, 1],
+  ], // O
+  [
+    [0, 1, 0],
+    [1, 1, 1],
+  ], // T
+  [
+    [1, 0],
+    [1, 0],
+    [1, 1],
+  ], // L
+  [
+    [0, 1],
+    [0, 1],
+    [1, 1],
+  ], // J
 ];
 
-const COLORS = ['#4cc9f0', '#f72585', '#7209b7', '#4361ee', '#4895ef'];
+const COLORS = ["#4cc9f0", "#f72585", "#7209b7", "#4361ee", "#4895ef"];
 
 interface TetrisGameProps {
   onTopReached: () => void;
   onCleared: () => void;
 }
 
-export const TetrisGame: React.FC<TetrisGameProps> = ({ onTopReached, onCleared }) => {
+export const TetrisGame: React.FC<TetrisGameProps> = ({
+  onTopReached,
+  onCleared,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS);
@@ -30,11 +47,19 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({ onTopReached, onCleared 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const grid: (string | null)[][] = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
-    let currentPiece: { shape: number[][]; color: string; label: string; x: number; y: number } | null = null;
+    const grid: (string | null)[][] = Array.from({ length: ROWS }, () =>
+      Array(COLS).fill(null),
+    );
+    let currentPiece: {
+      shape: number[][];
+      color: string;
+      label: string;
+      x: number;
+      y: number;
+    } | null = null;
     let running = true;
     let dropCounter = 0;
     let lastTime = 0;
@@ -85,10 +110,10 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({ onTopReached, onCleared 
         }
       }
       for (let r = ROWS - 1; r >= 0; r--) {
-        if (grid[r].every(c => c !== null)) {
+        if (grid[r].every((c) => c !== null)) {
           grid.splice(r, 1);
           grid.unshift(Array(COLS).fill(null));
-          setScore(prev => prev + 100);
+          setScore((prev) => prev + 100);
           r++;
         }
       }
@@ -113,7 +138,7 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({ onTopReached, onCleared 
     function rotate() {
       if (!currentPiece) return;
       const rotated = currentPiece.shape[0].map((_, i) =>
-        currentPiece!.shape.map(row => row[i]).reverse()
+        currentPiece!.shape.map((row) => row[i]).reverse(),
       );
       const old = currentPiece.shape;
       currentPiece.shape = rotated;
@@ -121,7 +146,7 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({ onTopReached, onCleared 
     }
 
     function draw() {
-      ctx.fillStyle = '#0a0a1a';
+      ctx.fillStyle = "#0a0a1a";
       ctx.fillRect(0, 0, COLS * CELL, ROWS * CELL);
       for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
@@ -136,20 +161,35 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({ onTopReached, onCleared 
         for (let r = 0; r < currentPiece.shape.length; r++) {
           for (let c = 0; c < currentPiece.shape[r].length; c++) {
             if (currentPiece.shape[r][c]) {
-              ctx.fillRect((currentPiece.x + c) * CELL, (currentPiece.y + r) * CELL, CELL - 1, CELL - 1);
+              ctx.fillRect(
+                (currentPiece.x + c) * CELL,
+                (currentPiece.y + r) * CELL,
+                CELL - 1,
+                CELL - 1,
+              );
             }
           }
         }
-        ctx.fillStyle = '#fff';
-        ctx.font = '8px monospace';
-        ctx.fillText(currentPiece.label, (currentPiece.x + 0.2) * CELL, (currentPiece.y + 1) * CELL);
+        ctx.fillStyle = "#fff";
+        ctx.font = "8px monospace";
+        ctx.fillText(
+          currentPiece.label,
+          (currentPiece.x + 0.2) * CELL,
+          (currentPiece.y + 1) * CELL,
+        );
       }
-      ctx.strokeStyle = '#1a1a3e';
+      ctx.strokeStyle = "#1a1a3e";
       for (let r = 0; r <= ROWS; r++) {
-        ctx.beginPath(); ctx.moveTo(0, r * CELL); ctx.lineTo(COLS * CELL, r * CELL); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, r * CELL);
+        ctx.lineTo(COLS * CELL, r * CELL);
+        ctx.stroke();
       }
       for (let c = 0; c <= COLS; c++) {
-        ctx.beginPath(); ctx.moveTo(c * CELL, 0); ctx.lineTo(c * CELL, ROWS * CELL); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(c * CELL, 0);
+        ctx.lineTo(c * CELL, ROWS * CELL);
+        ctx.stroke();
       }
     }
 
@@ -179,20 +219,20 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({ onTopReached, onCleared 
 
     const keyHandler = (e: KeyboardEvent) => {
       if (!running) return;
-      if (e.key === 'ArrowLeft') move(-1);
-      if (e.key === 'ArrowRight') move(1);
-      if (e.key === 'ArrowDown') drop();
-      if (e.key === 'ArrowUp') rotate();
+      if (e.key === "ArrowLeft") move(-1);
+      if (e.key === "ArrowRight") move(1);
+      if (e.key === "ArrowDown") drop();
+      if (e.key === "ArrowUp") rotate();
     };
 
-    window.addEventListener('keydown', keyHandler);
+    window.addEventListener("keydown", keyHandler);
     newPiece();
     startTime = performance.now();
     requestAnimationFrame(gameLoop);
 
     return () => {
       running = false;
-      window.removeEventListener('keydown', keyHandler);
+      window.removeEventListener("keydown", keyHandler);
     };
   }, [onTopReached, onCleared]);
 
@@ -200,12 +240,21 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({ onTopReached, onCleared 
     <div className="flex flex-col items-center gap-2">
       <div className="flex justify-between w-full px-1">
         <span className="text-xs text-card-foreground">Score: {score}</span>
-        <span className={`text-xs font-bold ${timeLeft <= 10 ? 'text-destructive animate-pulse' : 'text-card-foreground'}`}>
+        <span
+          className={`text-xs font-bold ${timeLeft <= 10 ? "text-destructive animate-pulse" : "text-card-foreground"}`}
+        >
           ⏱ {timeLeft}s
         </span>
       </div>
-      <canvas ref={canvasRef} width={COLS * CELL} height={ROWS * CELL} className="border border-border" />
-      <p className="text-[10px] text-muted-foreground">Survive 30s! Arrow keys to move/rotate.</p>
+      <canvas
+        ref={canvasRef}
+        width={COLS * CELL}
+        height={ROWS * CELL}
+        className="border border-border"
+      />
+      <p className="text-[10px] text-muted-foreground">
+        Survive 30s! Arrow keys to move/rotate.
+      </p>
     </div>
   );
 };

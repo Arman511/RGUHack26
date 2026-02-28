@@ -4,7 +4,10 @@ interface TeamsNotifProps {
 }
 
 export function TeamsNotif({ onDismiss, onJoin }: TeamsNotifProps) {
-  const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const time = new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
     <div
@@ -31,7 +34,9 @@ export function TeamsNotif({ onDismiss, onJoin }: TeamsNotifProps) {
               src="/profile.jpg"
               alt="avatar"
               className="w-10 h-10 rounded-full border border-[#0a246a] object-cover"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = "none";
+              }}
             />
             <div className="flex flex-col leading-tight">
               <span className="text-sm font-bold text-black">Peter Parker</span>
