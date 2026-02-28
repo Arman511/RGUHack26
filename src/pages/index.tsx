@@ -66,16 +66,16 @@ const Index = () => {
   const handlePunishmentDone = useCallback(() => {
     setShowPunishment(null);
     if (stageAfterPunishment) {
-      delayedStage(stageAfterPunishment);
+      setStage(stageAfterPunishment);
       setStageAfterPunishment(null);
     }
-  }, [stageAfterPunishment, delayedStage]);
+  }, [stageAfterPunishment, setStage]);
 
   // ── Handlers ──
 
   const handleIntroStart = useCallback(() => {
     setStage("procrastination");
-    delayedStage("teams", 5000);
+    delayedStage("teams", 3000);
   }, [setStage, delayedStage]);
 
   const handleTeamsClose = useCallback(() => {
@@ -99,7 +99,7 @@ const Index = () => {
   }, [moveMeter, triggerPunishment]);
 
   useEffect(() => {
-    if (state.stage === "pong-done") delayedStage("zoom", 5000);
+    if (state.stage === "pong-done") delayedStage("zoom", 3000);
   }, [state.stage, delayedStage]);
 
   const handleZoomJoin = useCallback(() => {
@@ -163,7 +163,7 @@ const Index = () => {
   }, [moveMeter, triggerPunishment]);
 
   useEffect(() => {
-    if (state.stage === "pacman-done") delayedStage("jira", 5000);
+    if (state.stage === "pacman-done") delayedStage("jira", 3000);
   }, [state.stage, delayedStage]);
 
   const handleJiraNotification = useCallback(() => {
@@ -198,7 +198,7 @@ const Index = () => {
       if (state.meterValue > -100 && state.meterValue < 100) {
         delayedStage("procrastination", 3000);
         // Will restart sequence
-        const t = setTimeout(() => delayedStage("teams", 8000), 100);
+        const t = setTimeout(() => delayedStage("teams", 5000), 100);
         return () => clearTimeout(t);
       }
     }
