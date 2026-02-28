@@ -1,14 +1,17 @@
 import React from 'react';
-import { Baby } from 'lucide-react';
+// boss baby profile image uses public asset
 
-// boss baby poster stored in the hidden .assets folder
-import bossPic from '../../../.assets/boss-baby.jpeg';
+
+
+
 
 interface IntroScreenProps {
   onStart: () => void;
+  skipTutorials: boolean;
+  setSkipTutorials: (skip: boolean) => void;
 }
 
-export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
+export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart, skipTutorials, setSkipTutorials }) => {
   return (
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background font-sans">
       <div className="absolute inset-0 opacity-20"
@@ -22,21 +25,21 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
           <span className="relative left-[0.30ch]">Liar...</span><br />
           Cheater...<br />
           <span className="text-destructive pixel-text tracking-wider relative" style={{ animation: 'shake 0.5s ease-in-out infinite' }}>
-             FIRED.
+            FIRED.
           </span>
         </h1>
 
         <div className="xp-window w-[380px]">
           <div className="xp-title-bar">
             <div className="flex items-center gap-1.5">
-              <Baby size={14} />
+              <img src="/boss-baby.jpeg" alt="Boss Baby" className="w-4 h-4 rounded-full object-cover" />
               <span className="text-xs">Boss Baby</span>
             </div>
           </div>
           <div className="xp-window-body flex flex-col items-center gap-3 p-4">
             <div className="relative w-16 h-16">
               <img
-                src={bossPic}
+                src="/boss-baby.jpeg"
                 alt="Boss Baby"
                 loading="lazy"
                 className="w-full h-full object-cover rounded-full"
@@ -45,19 +48,33 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
               <div className="absolute inset-0 rounded-full border-2 border-primary" />
             </div>
             <p className="text-sm text-center font-bold text-card-foreground leading-relaxed">
-              "I hate liars and cheaters. Why are you hired if you don't do your job? 
+              "I hate liars and cheaters. Why are you hired if you don't do your job?
               <span className="text-destructive"> Focus on work!</span>"
             </p>
           </div>
         </div>
 
-        <button 
+        <button
           className="xp-button-primary text-lg px-8 py-3 mt-2"
           onClick={onStart}
         >
           🔥 I'm ready to get fired
         </button>
 
+        <div className="xp-window w-[320px]">
+          <div className="xp-window-body flex items-center justify-between gap-3 p-3">
+            <label className="flex items-center gap-2 text-xs text-card-foreground font-bold cursor-pointer">
+              Skip tutorials
+            </label>
+            <button
+              type="button"
+              className="xp-button text-[10px] px-2 py-0.5 min-w-0"
+              onClick={() => setSkipTutorials(!skipTutorials)}
+            >
+              {skipTutorials ? 'ON' : 'OFF'}
+            </button>
+          </div>
+        </div>
       </div>
 
       <p className="intro-disclaimer">
