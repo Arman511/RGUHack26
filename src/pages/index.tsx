@@ -52,17 +52,18 @@ const Index = () => {
   }, [nextStageAfterBoss, setStage]);
 
   const triggerPunishment = useCallback((nextStage: GameStage) => {
+    setStage('punishment');
     setShowPunishment(true);
     setStageAfterPunishment(nextStage);
-  }, []);
+  }, [setStage]);
 
   const handlePunishmentDone = useCallback(() => {
     setShowPunishment(false);
     if (stageAfterPunishment) {
-      delayedStage(stageAfterPunishment);
+      setStage(stageAfterPunishment);
       setStageAfterPunishment(null);
     }
-  }, [stageAfterPunishment, delayedStage]);
+  }, [stageAfterPunishment, setStage]);
 
   // ── Handlers ──
 
