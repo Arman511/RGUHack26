@@ -1,12 +1,12 @@
-import React from 'react';
-import { Trash2, FolderOpen, FileText, Monitor } from 'lucide-react';
+import React from "react";
+import { Trash2, FolderOpen, FileText, Monitor } from "lucide-react";
 
 export const DesktopIcons: React.FC = () => {
   const icons = [
-    { icon: <Monitor size={28} />, label: 'My Computer' },
-    { icon: <Trash2 size={28} />, label: 'Recycle Bin' },
-    { icon: <FolderOpen size={28} />, label: 'My Documents' },
-    { icon: <FileText size={28} />, label: 'README.txt' },
+    { icon: <Monitor size={28} />, label: "My Computer" },
+    { icon: <Trash2 size={28} />, label: "Recycle Bin" },
+    { icon: <FolderOpen size={28} />, label: "My Documents" },
+    { icon: <FileText size={28} />, label: "README.txt" },
   ];
 
   return (

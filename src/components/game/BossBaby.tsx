@@ -6,10 +6,7 @@ interface BossBabyProps {
   onDismiss: () => void;
 }
 
-export const BossBaby: React.FC<BossBabyProps> = ({
-  message,
-  onDismiss,
-}) => {
+export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
   const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);
 
@@ -36,7 +33,11 @@ export const BossBaby: React.FC<BossBabyProps> = ({
         {/* XP Title Bar */}
         <div className="xp-title-bar">
           <div className="flex items-center gap-1.5">
-            <img src="/boss-baby.jpeg" alt="Boss Baby" className="w-4 h-4 rounded-full object-cover" />
+            <img
+              src="/boss-baby.jpeg"
+              alt="Boss Baby"
+              className="w-4 h-4 rounded-full object-cover"
+            />
             <span className="text-xs font-bold">
               LIAR... CHEATER... <span className="text-red-400">FIRED.</span>
             </span>
@@ -48,7 +49,6 @@ export const BossBaby: React.FC<BossBabyProps> = ({
         {/* Dialogue Body */}
         <div className="xp-window-body p-4">
           <div className="flex items-start justify-between gap-4">
-
             {/* Left: Dialogue Text */}
             <div className="flex-1 bg-[#ECE9D8] border-2 border-[#808080] p-3 text-sm font-bold leading-relaxed min-h-[120px]">
               <p className="whitespace-pre-wrap">
@@ -59,10 +59,7 @@ export const BossBaby: React.FC<BossBabyProps> = ({
               {/* Continue Button */}
               {displayedText === message && (
                 <div className="mt-4 text-right">
-                  <button
-                    className="xp-button-primary"
-                    onClick={onDismiss}
-                  >
+                  <button className="xp-button-primary" onClick={onDismiss}>
                     AGH, fine...
                   </button>
                 </div>
@@ -72,7 +69,11 @@ export const BossBaby: React.FC<BossBabyProps> = ({
             {/* Right: Character */}
             <div className="flex flex-col items-center w-[130px]">
               <div className="w-24 h-24 border-4 border-black overflow-hidden rounded-full">
-                <img src="/boss-baby.jpeg" alt="Boss Baby" className="w-full h-full object-cover" />
+                <img
+                  src="/boss-baby.jpeg"
+                  alt="Boss Baby"
+                  className="w-full h-full object-cover"
+                />
               </div>
 
               {/* Name Tag */}
@@ -80,7 +81,6 @@ export const BossBaby: React.FC<BossBabyProps> = ({
                 Manager
               </div>
             </div>
-
           </div>
         </div>
       </div>

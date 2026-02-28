@@ -1,5 +1,5 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { X } from 'lucide-react';
+import React, { useState, useRef, useCallback } from "react";
+import { X } from "lucide-react";
 
 interface DraggableWindowProps {
   title: string;
@@ -27,29 +27,39 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
   closable = true,
 }) => {
   const [pos, setPos] = useState({
-    x: initialX ?? Math.max(50, (window.innerWidth - width) / 2 + Math.random() * 60 - 30),
-    y: initialY ?? Math.max(30, window.innerHeight / 2 - 200 + Math.random() * 60 - 30),
+    x:
+      initialX ??
+      Math.max(50, (window.innerWidth - width) / 2 + Math.random() * 60 - 30),
+    y:
+      initialY ??
+      Math.max(30, window.innerHeight / 2 - 200 + Math.random() * 60 - 30),
   });
   const dragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
 
-  const onMouseDown = useCallback((e: React.MouseEvent) => {
-    dragging.current = true;
-    offset.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
+  const onMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      dragging.current = true;
+      offset.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
 
-    const onMove = (ev: MouseEvent) => {
-      if (dragging.current) {
-        setPos({ x: ev.clientX - offset.current.x, y: ev.clientY - offset.current.y });
-      }
-    };
-    const onUp = () => {
-      dragging.current = false;
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseup', onUp);
-    };
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
-  }, [pos]);
+      const onMove = (ev: MouseEvent) => {
+        if (dragging.current) {
+          setPos({
+            x: ev.clientX - offset.current.x,
+            y: ev.clientY - offset.current.y,
+          });
+        }
+      };
+      const onUp = () => {
+        dragging.current = false;
+        window.removeEventListener("mousemove", onMove);
+        window.removeEventListener("mouseup", onUp);
+      };
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("mouseup", onUp);
+    },
+    [pos],
+  );
 
   return (
     <div
@@ -57,9 +67,9 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
       style={{ left: pos.x, top: pos.y, width }}
     >
       <div
-        className={active ? 'xp-title-bar' : 'xp-title-bar-inactive'}
+        className={active ? "xp-title-bar" : "xp-title-bar-inactive"}
         onMouseDown={onMouseDown}
-        style={{ cursor: 'grab' }}
+        style={{ cursor: "grab" }}
       >
         <div className="flex items-center gap-1.5">
           {icon}

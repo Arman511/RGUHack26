@@ -1,5 +1,5 @@
-import React from 'react';
-import { DraggableWindow } from './DraggableWindow';
+import React from "react";
+import { DraggableWindow } from "./DraggableWindow";
 
 interface FailMeterProps {
   value: number; // -100 (FIRED) to +100 (PROMOTED)
@@ -26,7 +26,13 @@ export const FailMeter: React.FC<FailMeterProps> = ({ value }) => {
       closable={false}
     >
       <div className="p-1">
-        <div className="border-2 p-1" style={{ borderColor: 'hsl(0 0% 80%) hsl(0 0% 45%) hsl(0 0% 45%) hsl(0 0% 80%)' }}>
+        <div
+          className="border-2 p-1"
+          style={{
+            borderColor:
+              "hsl(0 0% 80%) hsl(0 0% 45%) hsl(0 0% 45%) hsl(0 0% 80%)",
+          }}
+        >
           <svg width="240" height="144" viewBox="0 0 240 144">
             {/* Background arc */}
             <path
@@ -74,10 +80,25 @@ export const FailMeter: React.FC<FailMeterProps> = ({ value }) => {
             <circle cx={cx} cy={cy} r="6" fill="hsl(0 0% 20%)" />
 
             {/* Labels */}
-            <text x="18" y="138" fontSize="10" fontWeight="bold" fill="hsl(var(--success))" fontFamily="Tahoma">
+            <text
+              x="18"
+              y="138"
+              fontSize="10"
+              fontWeight="bold"
+              fill="hsl(var(--success))"
+              fontFamily="Tahoma"
+            >
               🎉 FIRED
             </text>
-            <text x="230" y="138" textAnchor="end" fontSize="10" fontWeight="bold" fill="hsl(var(--demerit))" fontFamily="Tahoma">
+            <text
+              x="230"
+              y="138"
+              textAnchor="end"
+              fontSize="10"
+              fontWeight="bold"
+              fill="hsl(var(--demerit))"
+              fontFamily="Tahoma"
+            >
               PROMOTED 😱
             </text>
           </svg>
