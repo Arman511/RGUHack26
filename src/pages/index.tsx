@@ -18,6 +18,7 @@ import { TeamsNotif } from "@/components/game/TeamsNotif";
 import { Video, LayoutList, Mail } from "lucide-react";
 
 const STAGE_DELAY_MS = 3000;
+const STAGE_METER_POINT_CUTOF = 9;
 
 const Index = () => {
   const { state, setStage, moveMeter, setBossMessage } = useGameState();
@@ -30,6 +31,7 @@ const Index = () => {
   const [stageAfterPunishment, setStageAfterPunishment] =
     useState<GameStage | null>(null);
   const [skipDoneStageDelay, setSkipDoneStageDelay] = useState(false);
+  const [loopDone, setLoopDone] = useState(false);
   const delayTimer = useRef<ReturnType<typeof setTimeout>>();
 
   // Delayed stage transition (5s gap)
@@ -90,7 +92,7 @@ const Index = () => {
   }, [skipTutorials, triggerBoss]);
 
   const handlePongWin = useCallback(() => {
-    moveMeter(-25); // toward FIRED (victory)
+    moveMeter(-30); // toward FIRED (victory)
     triggerBoss(
       "You WON?! Instead of working?! The meter moves toward FIRED. Now get to the standup!",
       "pong-done",
@@ -98,12 +100,30 @@ const Index = () => {
   }, [moveMeter, triggerBoss]);
 
   const handlePongLose = useCallback(() => {
-    moveMeter(15); // toward PROMOTED (loss)
+    moveMeter(10); // toward PROMOTED (loss)
     triggerPunishment("pong-done", "pingpong");
   }, [moveMeter, triggerPunishment]);
 
+  const handleMeterOutcome = useCallback(() => {
+    if (state.meterValue <= -STAGE_METER_POINT_CUTOF) {
+      setStage("fired");
+      return true;
+    }
+
+    if (state.meterValue >= STAGE_METER_POINT_CUTOF) {
+      setStage("promoted");
+      return true;
+    }
+
+    return false;
+  }, [state.meterValue, setStage]);
+
   useEffect(() => {
     if (state.stage === "pong-done") {
+      if (loopDone && handleMeterOutcome()) {
+        return;
+      }
+
       if (skipDoneStageDelay) {
         setSkipDoneStageDelay(false);
         setStage("zoom");
@@ -111,10 +131,10 @@ const Index = () => {
         delayedStage("zoom", STAGE_DELAY_MS);
       }
     }
-  }, [state.stage, skipDoneStageDelay, delayedStage, setStage]);
+  }, [state.stage, skipDoneStageDelay, delayedStage, setStage, loopDone, handleMeterOutcome]);
 
   const handleZoomJoin = useCallback(() => {
-    moveMeter(15); // did work = toward promoted
+    moveMeter(20); // did work = toward promoted
     triggerBoss(
       "Good employee! You joined the meeting. But that moves you toward PROMOTED...",
       "wordle-done",
@@ -122,7 +142,7 @@ const Index = () => {
   }, [moveMeter, triggerBoss]);
 
   const handleZoomDecline = useCallback(() => {
-    moveMeter(-5); // declined meeting = toward fired
+    moveMeter(-15); // declined meeting = toward fired
     triggerBoss(
       "Think you can skip the standup? Decode this corporate jargon!",
       skipTutorials ? "wordle" : "wordle-howto",
@@ -131,20 +151,14 @@ const Index = () => {
 
   const handleWordleComplete = useCallback(
     (guesses: number) => {
-      if (guesses <= 3) {
+      if (guesses <= 6) {
         moveMeter(-25);
         triggerBoss(
-          `Decoded in ${guesses} tries?! Too fast for corporate. The meter moves toward FIRED!`,
-          "wordle-done",
-        );
-      } else if (guesses <= 6) {
-        moveMeter(10);
-        triggerBoss(
-          "Corporate pace. Good. But that's too productive...",
+          `Decoded in ${guesses} tries?! You are trying to escape work, aren't you? The meter moves toward FIRED!`,
           "wordle-done",
         );
       } else {
-        moveMeter(15);
+        moveMeter(10);
         triggerPunishment("wordle-done", "wordle");
       }
     },
@@ -153,28 +167,36 @@ const Index = () => {
 
   useEffect(() => {
     if (state.stage === "wordle-done") {
+      if (loopDone && handleMeterOutcome()) {
+        return;
+      }
+
       triggerBoss(
         "Check your emails! 10 unread messages! You're on prod support!",
         skipTutorials ? "pacman" : "pacman-howto",
       );
     }
-  }, [skipTutorials, state.stage, triggerBoss]);
+  }, [skipTutorials, state.stage, triggerBoss, loopDone, handleMeterOutcome]);
 
   const handlePacmanWin = useCallback(() => {
-    moveMeter(-25);
+    moveMeter(-30);
     triggerBoss(
-      "You cleared all emails by AVOIDING work?! Impressive slacking!",
+      "You are AVOIDING work?! Impressive slacking! Keep it up and you might get FIRED!",
       "pacman-done",
     );
   }, [moveMeter, triggerBoss]);
 
   const handlePacmanLose = useCallback(() => {
-    moveMeter(15);
+    moveMeter(10);
     triggerPunishment("pacman-done", "pacman");
   }, [moveMeter, triggerPunishment]);
 
   useEffect(() => {
     if (state.stage === "pacman-done") {
+      if (loopDone && handleMeterOutcome()) {
+        return;
+      }
+
       if (skipDoneStageDelay) {
         setSkipDoneStageDelay(false);
         setStage("jira");
@@ -182,11 +204,11 @@ const Index = () => {
         delayedStage("jira", STAGE_DELAY_MS);
       }
     }
-  }, [state.stage, skipDoneStageDelay, delayedStage, setStage]);
+  }, [state.stage, skipDoneStageDelay, delayedStage, setStage, loopDone, handleMeterOutcome]);
 
   const handleJiraNotification = useCallback(() => {
     triggerBoss(
-      "Organize the backlog! The sprint is on fire!",
+      "The sprint is on fire! It's all your fault for not working! Survive the backlog of tasks!",
       skipTutorials ? "tetris" : "tetris-howto",
     );
   }, [skipTutorials, triggerBoss]);
@@ -199,7 +221,7 @@ const Index = () => {
   }, [state.stage, handleJiraNotification]);
 
   const handleTetrisTopReached = useCallback(() => {
-    moveMeter(20); // failed work = toward fired
+    moveMeter(10); // failed work = toward fired
     triggerBoss(
       "Ha got you, better luck next time, pay attention during the zoom! Moving toward PROMOTED...",
       "tetris-done",
@@ -207,7 +229,7 @@ const Index = () => {
   }, [moveMeter]);
 
   const handleTetrisSurvived = useCallback(() => {
-    moveMeter(-20); // survived = too productive
+    moveMeter(-30); // survived = too productive
     triggerBoss(
       "You survived the backlog?! I'll get you next time! Moving toward FIRED!",
       "tetris-done",
@@ -216,15 +238,16 @@ const Index = () => {
 
   useEffect(() => {
     if (state.stage === "tetris-done") {
-      // Check final state - if not fired/promoted yet, loop back
-      if (state.meterValue > -100 && state.meterValue < 100) {
-        delayedStage("procrastination", STAGE_DELAY_MS);
-        // Will restart sequence
-        const t = setTimeout(() => delayedStage("teams", 5000), 100);
-        return () => clearTimeout(t);
+      if (handleMeterOutcome()) {
+        return;
       }
+
+      setLoopDone(true);
+      delayedStage("procrastination", STAGE_DELAY_MS);
+      const t = setTimeout(() => delayedStage("teams", 5000), 100);
+      return () => clearTimeout(t);
     }
-  }, [state.stage, state.meterValue, delayedStage]);
+  }, [state.stage, delayedStage, handleMeterOutcome]);
 
   const handleRestart = useCallback(() => {
     window.location.reload();
