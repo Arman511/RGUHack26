@@ -14,7 +14,8 @@ import { ProcrastinationDesktop } from '@/components/game/ProcrastinationDesktop
 import { FailMeter } from '@/components/game/FailMeter';
 import { HowToPlay } from '@/components/game/HowToPlay';
 import { PunishmentScreen } from '@/components/game/PunishmentScreen';
-import { MessageCircle, Video, LayoutList, Mail } from 'lucide-react';
+import { TeamsNotif } from '@/components/game/TeamsNotif';
+import { Video, LayoutList, Mail } from 'lucide-react';
 
 const Index = () => {
   const { state, setStage, moveMeter, setBossMessage } = useGameState();
@@ -214,29 +215,7 @@ const Index = () => {
       {/* Teams Notification */}
       {state.stage === 'teams' && (
         <div className="teams-notification">
-          <div className="xp-window w-[340px]">
-            <div className="xp-title-bar">
-              <div className="flex items-center gap-1.5">
-                <MessageCircle size={14} />
-                <span className="text-xs">Microsoft Teams</span>
-              </div>
-              <button className="xp-close-btn" onClick={handleTeamsClose}>
-                <span className="text-[10px]">✕</span>
-              </button>
-            </div>
-            <div className="xp-window-body">
-              <div className="flex gap-2 items-start">
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold shrink-0">M</div>
-                <div>
-                  <p className="text-xs font-bold text-card-foreground">Manager</p>
-                  <p className="text-xs text-card-foreground mt-1 leading-relaxed">
-                    I'm watching you, dev. Don't get distracted. Check the <span className="text-destructive font-bold">Prod Incident</span> immediately. 🔥
-                  </p>
-                  <p className="text-[10px] text-muted-foreground mt-1">Just now</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsClose} />
         </div>
       )}
 
