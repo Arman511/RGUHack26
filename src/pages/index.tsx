@@ -16,6 +16,7 @@ import { HowToPlay } from "@/components/game/HowToPlay";
 import { PunishmentScreen } from "@/components/game/PunishmentScreen";
 import { TeamsNotif } from "@/components/game/TeamsNotif";
 import { Video, LayoutList, Mail } from "lucide-react";
+import { set } from "react-hook-form";
 
 const STAGE_DELAY_MS = 3000;
 const STAGE_METER_POINT_CUTOF = 9;
@@ -32,6 +33,7 @@ const Index = () => {
     useState<GameStage | null>(null);
   const [skipDoneStageDelay, setSkipDoneStageDelay] = useState(false);
   const [loopDone, setLoopDone] = useState(false);
+  const [isPunishment, setIsPunishment] = useState(true);
   const delayTimer = useRef<ReturnType<typeof setTimeout>>();
 
   // Delayed stage transition (5s gap)
@@ -63,9 +65,10 @@ const Index = () => {
     }
   }, [nextStageAfterBoss, setStage]);
 
-  const triggerPunishment = useCallback((nextStage: GameStage, punishmentStage: GameStage) => {
+  const triggerPunishment = useCallback((nextStage: GameStage, punishmentStage: GameStage, isPunishment: boolean = true) => {
     setShowPunishment(punishmentStage);
     setStageAfterPunishment(nextStage);
+    setIsPunishment(isPunishment);
   }, []);
 
   const handlePunishmentDone = useCallback(() => {
@@ -85,6 +88,7 @@ const Index = () => {
   }, [setStage, delayedStage]);
 
   const handleTeamsClose = useCallback(() => {
+    setIsPunishment(true);
     triggerBoss(
       "Ignoring my pings? Fine. If you won't reply, then you'll rebound. Put your paddle where your mouse is and let's see if you can keep up.",
       skipTutorials ? 'pingpong' : 'pong-howto'
@@ -93,6 +97,7 @@ const Index = () => {
 
   const handleTeamsJoin = useCallback(() => {
     moveMeter(10);
+    setIsPunishment(true);
     triggerPunishment("pong-done", "pingpong");
   }, [moveMeter, triggerPunishment]);
 
@@ -106,6 +111,7 @@ const Index = () => {
 
   const handlePongLose = useCallback(() => {
     moveMeter(10); // toward PROMOTED (loss)
+    setIsPunishment(true);
     triggerPunishment("pong-done", "pingpong");
   }, [moveMeter, triggerPunishment]);
 
@@ -140,11 +146,13 @@ const Index = () => {
 
   const handleZoomJoin = useCallback(() => {
     moveMeter(20); // did work = toward promoted
+    setIsPunishment(false);
     triggerPunishment("wordle-done", "wordle");
   }, [moveMeter, triggerPunishment]);
 
   const handleZoomDecline = useCallback(() => {
     moveMeter(-15); // declined meeting = toward fired
+    setIsPunishment(true);
     triggerBoss(
       "Think you can skip the standup? Decode this corporate jargon!",
       skipTutorials ? "wordle" : "wordle-howto",
@@ -508,6 +516,7 @@ const Index = () => {
         <PunishmentScreen
           onComplete={handlePunishmentDone}
           gameStage={showPunishment}
+          isPunishment={isPunishment}
         />
       )}
 
