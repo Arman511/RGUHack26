@@ -170,11 +170,16 @@ const Index = () => {
       if (loopDone && handleMeterOutcome()) {
         return;
       }
+      if (skipDoneStageDelay) {
+        setSkipDoneStageDelay(false);
+        setStage("pacman");
+      } else {
+        triggerBoss(
+          "Check your emails! 10 unread messages! You're on prod support!",
+          skipTutorials ? "pacman" : "pacman-howto",
+        );
+      }
 
-      triggerBoss(
-        "Check your emails! 10 unread messages! You're on prod support!",
-        skipTutorials ? "pacman" : "pacman-howto",
-      );
     }
   }, [skipTutorials, state.stage, triggerBoss, loopDone, handleMeterOutcome]);
 
