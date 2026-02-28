@@ -20,6 +20,8 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitAny": false,
+    "strictNullChecks": false,
+    "allowJs": true,
     "noFallthroughCasesInSwitch": false,
 
     "baseUrl": ".",

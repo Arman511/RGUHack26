@@ -187,7 +187,7 @@ const Index = () => {
     return <EndScreen type="promoted" onRestart={handleRestart} />;
   }
 
-  const isGameActive = ['pingpong', 'wordle', 'pacman', 'tetris'].includes(state.stage) 
+  const isGameActive = ['pingpong', 'wordle', 'pacman', 'tetris'].includes(state.stage)
     || state.stage.endsWith('-howto');
 
   return (
