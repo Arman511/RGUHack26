@@ -91,6 +91,11 @@ const Index = () => {
     );
   }, [skipTutorials, triggerBoss]);
 
+  const handleTeamsJoin = useCallback(() => {
+    moveMeter(10);
+    triggerPunishment("pong-done", "pingpong");
+  }, [moveMeter, triggerPunishment]);
+
   const handlePongWin = useCallback(() => {
     moveMeter(-30); // toward FIRED (victory)
     triggerBoss(
@@ -135,11 +140,8 @@ const Index = () => {
 
   const handleZoomJoin = useCallback(() => {
     moveMeter(20); // did work = toward promoted
-    triggerBoss(
-      "Good employee! You joined the meeting. But that moves you toward PROMOTED...",
-      "wordle-done",
-    );
-  }, [moveMeter, triggerBoss]);
+    triggerPunishment("wordle-done", "wordle");
+  }, [moveMeter, triggerPunishment]);
 
   const handleZoomDecline = useCallback(() => {
     moveMeter(-15); // declined meeting = toward fired
@@ -314,7 +316,7 @@ const Index = () => {
       {/* Teams Notification */}
       {state.stage === "teams" && (
         <div className="teams-notification">
-          <TeamsNotif onDismiss={handleTeamsClose} />
+          <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsJoin} />
         </div>
       )}
 
