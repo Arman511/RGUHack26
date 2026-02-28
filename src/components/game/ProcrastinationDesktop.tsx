@@ -1,72 +1,118 @@
-import React from 'react';
-import { Globe, Play, Cat } from 'lucide-react';
+import React from "react";
+import { Globe, Play, Cat } from "lucide-react";
 
 export const ProcrastinationDesktop: React.FC = () => {
   return (
-    <div className="xp-window fixed z-20" style={{ left: '10%', top: '8%', width: '75%' }}>
-      <div className="xp-title-bar">
-        <div className="flex items-center gap-1.5">
-          <Globe size={14} />
-          <span className="text-xs">Google Chrome - CricketLiveScore.tv</span>
-        </div>
-        <div className="flex gap-0.5">
-          <div className="w-4 h-4 bg-primary-foreground/20 rounded-sm flex items-center justify-center text-[8px]">─</div>
-          <div className="w-4 h-4 bg-primary-foreground/20 rounded-sm flex items-center justify-center text-[8px]">□</div>
-        </div>
-      </div>
-      {/* Browser toolbar */}
-      <div className="bg-muted px-2 py-1 flex items-center gap-2 border-b border-border">
-        <div className="flex gap-1">
-          <span className="text-muted-foreground text-[10px]">←</span>
-          <span className="text-muted-foreground text-[10px]">→</span>
-          <span className="text-muted-foreground text-[10px]">⟳</span>
-        </div>
-        <div className="flex-1 bg-popover border border-border px-2 py-0.5 text-[10px] text-muted-foreground rounded-sm">
-          🔒 https://www.cricketlive.tv/match/ind-vs-aus-2026
-        </div>
-      </div>
-      {/* Tabs */}
-      <div className="bg-muted px-1 flex items-end gap-px">
-        <div className="bg-card px-3 py-1 text-[10px] text-card-foreground border border-b-0 border-border rounded-t-sm flex items-center gap-1">
-          <Globe size={8} /> Cricket Live 🏏
-        </div>
-        <div className="bg-muted/60 px-3 py-1 text-[10px] text-muted-foreground border border-b-0 border-border rounded-t-sm flex items-center gap-1">
-          <Cat size={8} /> Cat Videos 🐱
-        </div>
-        <div className="bg-muted/60 px-3 py-1 text-[10px] text-muted-foreground border border-b-0 border-border rounded-t-sm flex items-center gap-1">
-          <Play size={8} /> YouTube
-        </div>
-      </div>
-      {/* Content */}
-      <div className="bg-card p-4" style={{ minHeight: '300px' }}>
-        <div className="flex flex-col items-center gap-4">
-          <h2 className="text-lg font-bold text-card-foreground">🏏 IND vs AUS - LIVE</h2>
-          <div className="bg-foreground/5 border border-border rounded p-4 w-full max-w-md">
-            <div className="flex justify-between items-center mb-3">
-              <div className="text-center">
-                <p className="text-sm font-bold text-card-foreground">🇮🇳 INDIA</p>
-                <p className="text-2xl font-bold text-primary">287/4</p>
-                <p className="text-[10px] text-muted-foreground">(42.3 ov)</p>
-              </div>
-              <div className="text-xs text-muted-foreground font-bold">vs</div>
-              <div className="text-center">
-                <p className="text-sm font-bold text-card-foreground">🇦🇺 AUSTRALIA</p>
-                <p className="text-2xl font-bold text-destructive">265/10</p>
-                <p className="text-[10px] text-muted-foreground">(48.2 ov)</p>
-              </div>
+    <div className="fixed inset-0 flex justify-start pt-10 pl-24 z-20">
+
+      {/* XP Window */}
+      <div
+        className="bg-[#ECE9D8] border-2 border-[#003c74] shadow-2xl flex flex-col"
+        style={{ width: "700px", fontFamily: "Tahoma, sans-serif", maxHeight: "500px" }}
+      >
+        {/* Title Bar */}
+        <div className="bg-gradient-to-r from-[#0a246a] to-[#3a6ea5] text-white px-3 py-1 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <Globe size={14} />
+            <span className="text-xs font-bold">
+              Google Chrome - CricketLiveScore.tv
+            </span>
+          </div>
+
+          {/* XP Buttons */}
+          <div className="flex gap-1">
+            <div className="w-5 h-5 bg-[#d4d0c8] text-black text-[10px] flex items-center justify-center border border-black">
+              _
             </div>
-            <div className="text-center">
-              <p className="text-xs text-success font-bold animate-pulse">● LIVE - India need 22 runs from 45 balls</p>
+            <div className="w-5 h-5 bg-[#d4d0c8] text-black text-[10px] flex items-center justify-center border border-black">
+              □
+            </div>
+            <div className="w-5 h-5 bg-[#d4d0c8] text-black text-[10px] flex items-center justify-center border border-black">
+              ✕
             </div>
           </div>
-          <div className="flex gap-4 text-[10px] text-muted-foreground">
-            <span>💬 Live Chat (2.4k)</span>
-            <span>📊 Scorecard</span>
-            <span>📋 Commentary</span>
+        </div>
+
+        {/* Browser Toolbar */}
+        <div className="bg-[#d4d0c8] px-2 py-1 flex items-center gap-2 border-t border-white border-b border-[#808080]">
+          <span className="text-xs">←</span>
+          <span className="text-xs">→</span>
+          <span className="text-xs">⟳</span>
+
+          <div className="flex-1 bg-white border border-[#808080] px-2 py-0.5 text-[11px]">
+            https://www.cricketlive.tv/match/ind-vs-aus-2026
           </div>
-          <div className="bg-warning/20 border border-warning/40 p-2 rounded text-[10px] text-card-foreground text-center w-full max-w-md">
-            ⚠️ Reminder: You should probably be working right now...
+        </div>
+
+        {/* Improved XP Tabs */}
+        <div className="bg-[#d4d0c8] px-1 pt-1 flex gap-1 border-b border-[#808080]">
+          
+          {/* Active Tab */}
+          <div className="bg-[#ECE9D8] px-3 py-1 text-[11px] border-t border-l border-r border-white border-b-0 font-bold flex items-center gap-1">
+            <Globe size={10} /> Cricket Live 🏏
           </div>
+
+          {/* Inactive Tabs */}
+          <div className="bg-[#c0c0c0] px-3 py-1 text-[11px] border border-[#808080] flex items-center gap-1">
+            <Globe size={10} /> Cat Videos 🐱
+          </div>
+
+          <div className="bg-[#c0c0c0] px-3 py-1 text-[11px] border border-[#808080] flex items-center gap-1">
+            <Play size={10} /> YouTube
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div className="bg-white p-6 overflow-y-auto flex-1">
+
+          {/* Match Title */}
+          <h2 className="text-lg font-bold text-center mb-6">
+            🏏 IND vs AUS - LIVE
+          </h2>
+
+          {/* Score Panel (Classic XP Inset Look) */}
+          <div className="mx-auto max-w-md bg-[#ECE9D8] p-4 border-2 border-[#808080] shadow-inner">
+
+            <div className="flex justify-between items-center mb-4">
+              
+              {/* India */}
+              <div className="text-center">
+                <p className="text-sm font-bold">INDIA</p>
+                <p className="text-2xl font-bold text-blue-700">
+                  287/4
+                </p>
+                <p className="text-xs text-gray-600">(42.3 ov)</p>
+              </div>
+
+              <div className="text-sm font-bold text-gray-600">
+                vs
+              </div>
+
+              {/* Australia */}
+              <div className="text-center">
+                <p className="text-sm font-bold">AUSTRALIA</p>
+                <p className="text-2xl font-bold text-red-600">
+                  265/10
+                </p>
+                <p className="text-xs text-gray-600">(48.2 ov)</p>
+              </div>
+            </div>
+
+            {/* Live Status */}
+            <div className="text-center mt-3">
+              <p className="text-sm font-bold text-green-700">
+                ● LIVE - India need 22 runs from 45 balls
+              </p>
+            </div>
+          </div>
+
+          {/* Bottom Links */}
+          <div className="flex justify-center gap-6 text-xs mt-6">
+            <span className="underline cursor-pointer">Live Chat (2.4k)</span>
+            <span className="underline cursor-pointer">Scorecard</span>
+            <span className="underline cursor-pointer">Commentary</span>
+          </div>
+
         </div>
       </div>
     </div>
