@@ -26,6 +26,9 @@ Challenges sponsored by:
 
 
 Click on a sponsor or checkout the [Challenges Folder](challenges/)
+
+#### [Nao Documentation](http://doc.aldebaran.com/2-1/nao/nao-connecting.html#nao-connecting)
+
 -----
 
 <img width="200" height="147" alt="image" src="https://github.com/user-attachments/assets/6e5e8b95-4d36-43e5-82b8-71b3ad1fef09" />
