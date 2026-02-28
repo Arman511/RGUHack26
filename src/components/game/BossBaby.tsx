@@ -1,5 +1,4 @@
 import React from 'react';
-import { Baby } from 'lucide-react';
 
 interface BossBabyProps {
   message: string;
@@ -20,13 +19,13 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
       <div className="xp-window w-[380px]">
         <div className="xp-title-bar">
           <div className="flex items-center gap-1.5">
-            <Baby size={14} />
+            <img src="/boss-baby.jpeg" alt="Boss Baby" className="w-4 h-4 rounded-full object-cover" />
             <span className="text-xs">Boss Baby - URGENT</span>
           </div>
         </div>
         <div className="xp-window-body flex flex-col items-center gap-3 p-4">
           <div className="w-20 h-20 rounded-full bg-warning flex items-center justify-center border-4 border-foreground">
-            <Baby size={40} className="text-foreground" />
+            <img src="/boss-baby.jpeg" alt="Boss Baby" className="w-full h-full object-cover rounded-full" />
           </div>
           <p className="text-sm text-center font-bold text-card-foreground leading-relaxed">
             {message}
