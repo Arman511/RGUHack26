@@ -420,8 +420,9 @@ const Index = () => {
         <DraggableWindow
           title="Email Client - Inbox"
           icon={<Mail size={14} />}
-          width={340}
+          width={510}
           closable={false}
+          bodyStyle={{ padding: 0 }}
         >
           <PacmanGame onWin={handlePacmanWin} onLose={handlePacmanLose} />
         </DraggableWindow>

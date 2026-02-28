@@ -12,6 +12,7 @@ interface DraggableWindowProps {
   initialY?: number;
   active?: boolean;
   closable?: boolean;
+  bodyStyle?: React.CSSProperties;
 }
 
 export const DraggableWindow: React.FC<DraggableWindowProps> = ({
@@ -25,6 +26,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
   initialY,
   active = true,
   closable = true,
+  bodyStyle,
 }) => {
   const [pos, setPos] = useState({
     x:
@@ -83,7 +85,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
           )}
         </div>
       </div>
-      <div className="xp-window-body" style={height ? { height } : undefined}>
+      <div className="xp-window-body" style={{ ...(height ? { height } : {}), ...bodyStyle }}>
         {children}
       </div>
     </div>
