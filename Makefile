@@ -29,7 +29,6 @@ serve:
 local-serve:
 	docker compose -f $(docker_compose_file_dev) down
 	docker compose -f $(docker_compose_file_dev) up --build
-	make clean
 
 shell:
 	docker exec -it $$(docker compose -f $(docker_compose_file) ps -q $(project_name)) sh || bash

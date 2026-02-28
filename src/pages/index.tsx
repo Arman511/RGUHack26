@@ -24,7 +24,7 @@ const Index = () => {
   const [bossMsg, setBossMsg] = useState("");
   const [nextStageAfterBoss, setNextStageAfterBoss] =
     useState<GameStage | null>(null);
-  const [showPunishment, setShowPunishment] = useState(false);
+  const [showPunishment, setShowPunishment] = useState<GameStage | null>(null);
   const [stageAfterPunishment, setStageAfterPunishment] =
     useState<GameStage | null>(null);
   const delayTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -58,13 +58,13 @@ const Index = () => {
     }
   }, [nextStageAfterBoss, setStage]);
 
-  const triggerPunishment = useCallback((nextStage: GameStage) => {
-    setShowPunishment(true);
+  const triggerPunishment = useCallback((nextStage: GameStage, punishmentStage: GameStage) => {
+    setShowPunishment(punishmentStage);
     setStageAfterPunishment(nextStage);
   }, []);
 
   const handlePunishmentDone = useCallback(() => {
-    setShowPunishment(false);
+    setShowPunishment(null);
     if (stageAfterPunishment) {
       delayedStage(stageAfterPunishment);
       setStageAfterPunishment(null);
@@ -95,7 +95,7 @@ const Index = () => {
 
   const handlePongLose = useCallback(() => {
     moveMeter(15); // toward PROMOTED (loss)
-    triggerPunishment("pong-done");
+    triggerPunishment("pong-done", "pingpong");
   }, [moveMeter, triggerPunishment]);
 
   useEffect(() => {
@@ -134,7 +134,7 @@ const Index = () => {
         );
       } else {
         moveMeter(15);
-        triggerPunishment("wordle-done");
+        triggerPunishment("wordle-done", "wordle");
       }
     },
     [moveMeter, triggerBoss, triggerPunishment],
@@ -159,7 +159,7 @@ const Index = () => {
 
   const handlePacmanLose = useCallback(() => {
     moveMeter(15);
-    triggerPunishment("pacman-done");
+    triggerPunishment("pacman-done", "pacman");
   }, [moveMeter, triggerPunishment]);
 
   useEffect(() => {
@@ -427,7 +427,12 @@ const Index = () => {
       )}
 
       {/* Punishment Screen */}
-      {showPunishment && <PunishmentScreen onComplete={handlePunishmentDone} />}
+      {showPunishment && (
+        <PunishmentScreen
+          onComplete={handlePunishmentDone}
+          gameStage={showPunishment}
+        />
+      )}
 
       <Taskbar meterValue={state.meterValue} />
     </div>
