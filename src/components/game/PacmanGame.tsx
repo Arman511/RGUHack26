@@ -43,18 +43,11 @@ const GHOST_CONFIGS = [
   { color: "#40a0e0", label: "CEO" },
   { color: "#e040a0", label: "CFO" },
   { color: "#40c080", label: "CTO" },
-  { color: "#a060d0", label: "VP" },
-  { color: "#d0a040", label: "MGR" },
-  { color: "#60b0b0", label: "OPS" },
-  { color: "#c06060", label: "MKT" },
-  { color: "#8080d0", label: "DEV" },
 ];
 
 const GHOST_SPAWNS = [
   { x: 9, y: 9 }, { x: 10, y: 9 }, { x: 11, y: 9 },
   { x: 9, y: 8 }, { x: 11, y: 8 },
-  { x: 9, y: 7 }, { x: 11, y: 7 },
-  { x: 10, y: 7 }, { x: 10, y: 8 }, { x: 10, y: 11 },
 ];
 
 const canMove = (x: number, y: number) =>
@@ -68,7 +61,6 @@ interface PacmanGameProps {
 export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [emailsLeft, setEmailsLeft] = useState(EMAIL_COUNT);
-  const [score, setScore] = useState(0);
   const stateRef = useRef<any>(null);
 
   const initState = useCallback(() => {
@@ -89,7 +81,7 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
         x: spawn.x, y: spawn.y,
         targetX: spawn.x, targetY: spawn.y,
         progress: 1,
-        speed: 0.02 + Math.random() * 0.015,
+        speed: 0.015 + Math.random() * 0.008,
         color: cfg.color,
         label: cfg.label,
         dir: { dx: 0, dy: 0 },
@@ -106,7 +98,6 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
       mouth: 0, mouthDir: 0.04,
       emails,
       ghosts,
-      score: 0,
       tick: 0,
     };
   }, []);
@@ -120,7 +111,6 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
     const state = initState();
     stateRef.current = state;
     setEmailsLeft(EMAIL_COUNT);
-    setScore(0);
 
     const keyHandler = (e: KeyboardEvent) => {
       const s = stateRef.current;
@@ -195,8 +185,6 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
       for (const em of s.emails) {
         if (!em.eaten && cpx === em.x && cpy === em.y) {
           em.eaten = true;
-          s.score += 100;
-          setScore(s.score);
           const left = s.emails.filter(e => !e.eaten).length;
           setEmailsLeft(left);
           if (left === 0) {
@@ -328,13 +316,10 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
 
   return (
     <div style={{ fontFamily: "Arial, sans-serif", userSelect: "none" }}>
-      {/* Info / Emails + Score */}
+      {/* Info / Emails */}
       <div className="flex justify-between w-full px-2 py-1" style={{ background: "#0a0a1e" }}>
         <span style={{ color: "#f7d000", fontFamily: "var(--font-body)", fontSize: 16 }}>
-          ✉ Emails: {emailsLeft}
-        </span>
-        <span style={{ color: "#fff", fontFamily: "var(--font-body)", fontSize: 16 }}>
-          Score: {score}
+          Emails: {emailsLeft}
         </span>
       </div>
 

@@ -395,7 +395,7 @@ const Index = () => {
       {/* Pacman */}
       {state.stage === "pacman" && (
         <DraggableWindow
-          title="Email Client - Inbox"
+          title="Outlook Inbox"
           icon={<Mail size={14} />}
           width={510}
           closable={false}
