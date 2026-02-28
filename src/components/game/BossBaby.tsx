@@ -68,7 +68,7 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
 
             {/* Right: Character */}
             <div className="flex flex-col items-center w-[130px]">
-              <div className="w-24 h-24 border-4 border-black overflow-hidden rounded-full">
+              <div className="w-24 h-24 border-2 border-black overflow-hidden rounded-full">
                 <img
                   src="/boss-baby.jpeg"
                   alt="Boss Baby"
