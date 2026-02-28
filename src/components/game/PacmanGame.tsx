@@ -1,35 +1,64 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 
-const CELL = 20;
-const COLS = 15;
-const ROWS = 13;
-const EMAIL_COUNT = 20;
+const CELL = 24;
+const COLS = 21;
+const ROWS = 17;
+const EMAIL_COUNT = 10;
 
-// Simple maze: 0=path, 1=wall
 const MAZE: number[][] = [
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
+  [1,0,1,1,0,1,1,1,0,0,1,0,0,1,1,1,0,1,1,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,0,1],
+  [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+  [1,1,1,1,0,1,1,1,0,0,1,0,0,1,1,1,0,1,1,1,1],
+  [1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1],
+  [1,1,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,1,1],
+  [0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0],
+  [1,1,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,1,1],
+  [1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1],
+  [1,1,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
+  [1,0,1,1,0,1,1,1,0,0,1,0,0,1,1,1,0,1,1,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 ];
 
 interface Ghost {
   x: number;
   y: number;
+  targetX: number;
+  targetY: number;
+  progress: number;
+  speed: number;
   color: string;
   label: string;
-  dx: number;
-  dy: number;
+  dir: { dx: number; dy: number };
 }
+
+const GHOST_CONFIGS = [
+  { color: "#e04040", label: "PM" },
+  { color: "#e07020", label: "HR" },
+  { color: "#40a0e0", label: "CEO" },
+  { color: "#e040a0", label: "CFO" },
+  { color: "#40c080", label: "CTO" },
+  { color: "#a060d0", label: "VP" },
+  { color: "#d0a040", label: "MGR" },
+  { color: "#60b0b0", label: "OPS" },
+  { color: "#c06060", label: "MKT" },
+  { color: "#8080d0", label: "DEV" },
+];
+
+const GHOST_SPAWNS = [
+  { x: 9, y: 9 }, { x: 10, y: 9 }, { x: 11, y: 9 },
+  { x: 9, y: 8 }, { x: 11, y: 8 },
+  { x: 9, y: 7 }, { x: 11, y: 7 },
+  { x: 10, y: 7 }, { x: 10, y: 8 }, { x: 10, y: 11 },
+];
+
+const canMove = (x: number, y: number) =>
+  x >= 0 && x < COLS && y >= 0 && y < ROWS && MAZE[y]?.[x] === 0;
 
 interface PacmanGameProps {
   onWin: () => void;
@@ -39,7 +68,48 @@ interface PacmanGameProps {
 export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [emailsLeft, setEmailsLeft] = useState(EMAIL_COUNT);
-  const [done, setDone] = useState(false);
+  const [score, setScore] = useState(0);
+  const stateRef = useRef<any>(null);
+
+  const initState = useCallback(() => {
+    const paths: { x: number; y: number }[] = [];
+    for (let r = 0; r < ROWS; r++)
+      for (let c = 0; c < COLS; c++)
+        if (MAZE[r][c] === 0 && !(r === 1 && c === 1))
+          paths.push({ x: c, y: r });
+    for (let i = paths.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [paths[i], paths[j]] = [paths[j], paths[i]];
+    }
+    const emails = paths.slice(0, EMAIL_COUNT).map(p => ({ ...p, eaten: false }));
+
+    const ghosts: Ghost[] = GHOST_CONFIGS.map((cfg, i) => {
+      const spawn = GHOST_SPAWNS[i % GHOST_SPAWNS.length];
+      return {
+        x: spawn.x, y: spawn.y,
+        targetX: spawn.x, targetY: spawn.y,
+        progress: 1,
+        speed: 0.02 + Math.random() * 0.015,
+        color: cfg.color,
+        label: cfg.label,
+        dir: { dx: 0, dy: 0 },
+      };
+    });
+
+    return {
+      running: true,
+      px: 1, py: 1,
+      targetX: 1, targetY: 1,
+      progress: 1,
+      nextDir: { dx: 0, dy: 0 },
+      currentDir: { dx: 0, dy: 0 },
+      mouth: 0, mouthDir: 0.04,
+      emails,
+      ghosts,
+      score: 0,
+      tick: 0,
+    };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -47,223 +117,239 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let running = true;
-    let px = 1,
-      py = 1;
-    let mouthOpen = true;
-    let mouthTimer = 0;
-    let dir = { dx: 0, dy: 0 };
-
-    // Place emails on paths
-    const emails: { x: number; y: number; eaten: boolean }[] = [];
-    const paths: { x: number; y: number }[] = [];
-    for (let r = 0; r < ROWS; r++) {
-      for (let c = 0; c < COLS; c++) {
-        if (MAZE[r][c] === 0 && !(r === 1 && c === 1))
-          paths.push({ x: c, y: r });
-      }
-    }
-    // Shuffle and pick
-    for (let i = paths.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [paths[i], paths[j]] = [paths[j], paths[i]];
-    }
-    for (let i = 0; i < Math.min(EMAIL_COUNT, paths.length); i++) {
-      emails.push({ x: paths[i].x, y: paths[i].y, eaten: false });
-    }
-
-    // Ghosts (coworkers)
-    const ghosts: Ghost[] = [
-      { x: 7, y: 6, color: "#f72585", label: "PM", dx: 1, dy: 0 },
-      { x: 13, y: 1, color: "#7209b7", label: "HR", dx: 0, dy: 1 },
-      { x: 1, y: 11, color: "#4361ee", label: "CEO", dx: 1, dy: 0 },
-    ];
-
-    const canMove = (gx: number, gy: number) => {
-      if (gx < 0 || gx >= COLS || gy < 0 || gy >= ROWS) return false;
-      return MAZE[gy][gx] === 0;
-    };
+    const state = initState();
+    stateRef.current = state;
+    setEmailsLeft(EMAIL_COUNT);
+    setScore(0);
 
     const keyHandler = (e: KeyboardEvent) => {
-      if (e.key === "ArrowUp" || e.key === "w") dir = { dx: 0, dy: -1 };
-      if (e.key === "ArrowDown" || e.key === "s") dir = { dx: 0, dy: 1 };
-      if (e.key === "ArrowLeft" || e.key === "a") dir = { dx: -1, dy: 0 };
-      if (e.key === "ArrowRight" || e.key === "d") dir = { dx: 1, dy: 0 };
+      const s = stateRef.current;
+      if (!s || !s.running) return;
+      const dirs: Record<string, { dx: number; dy: number }> = {
+        ArrowUp: { dx: 0, dy: -1 }, w: { dx: 0, dy: -1 },
+        ArrowDown: { dx: 0, dy: 1 }, s: { dx: 0, dy: 1 },
+        ArrowLeft: { dx: -1, dy: 0 }, a: { dx: -1, dy: 0 },
+        ArrowRight: { dx: 1, dy: 0 }, d: { dx: 1, dy: 0 },
+      };
+      if (dirs[e.key]) {
+        e.preventDefault();
+        s.nextDir = dirs[e.key];
+      }
     };
     window.addEventListener("keydown", keyHandler);
 
-    let moveCounter = 0;
+    const PACMAN_SPEED = 0.045;
 
-    const loop = () => {
-      if (!running) return;
-      moveCounter++;
+    const chooseGhostDir = (g: Ghost) => {
+      const dirs = [
+        { dx: 1, dy: 0 }, { dx: -1, dy: 0 },
+        { dx: 0, dy: 1 }, { dx: 0, dy: -1 },
+      ].filter(d => canMove(g.targetX + d.dx, g.targetY + d.dy));
 
-      // Player movement (every 8 frames)
-      if (moveCounter % 8 === 0) {
-        const nx = px + dir.dx;
-        const ny = py + dir.dy;
-        if (canMove(nx, ny)) {
-          px = nx;
-          py = ny;
+      const nonReverse = dirs.filter(d => !(d.dx === -g.dir.dx && d.dy === -g.dir.dy));
+      const options = nonReverse.length > 0 ? nonReverse : dirs;
+
+      if (options.length === 0) return { dx: 0, dy: 0 };
+
+      const s = stateRef.current!;
+      if (Math.random() < 0.4) {
+        let best = options[0];
+        let bestDist = Infinity;
+        for (const d of options) {
+          const nx = g.targetX + d.dx;
+          const ny = g.targetY + d.dy;
+          const dist = Math.abs(nx - s.px) + Math.abs(ny - s.py);
+          if (dist < bestDist) { bestDist = dist; best = d; }
         }
-
-        // Eat emails
-        for (const em of emails) {
-          if (!em.eaten && em.x === px && em.y === py) {
-            em.eaten = true;
-            const left = emails.filter((e) => !e.eaten).length;
-            setEmailsLeft(left);
-            if (left === 0) {
-              running = false;
-              setDone(true);
-              onWin();
-              return;
-            }
-          }
-        }
+        return best;
       }
 
-      // Ghost movement (every 12 frames)
-      if (moveCounter % 12 === 0) {
-        for (const g of ghosts) {
-          // Simple random movement with bias toward player
-          const dirs = [
-            { dx: 1, dy: 0 },
-            { dx: -1, dy: 0 },
-            { dx: 0, dy: 1 },
-            { dx: 0, dy: -1 },
-          ].filter((d) => canMove(g.x + d.dx, g.y + d.dy));
+      return options[Math.floor(Math.random() * options.length)];
+    };
 
-          if (dirs.length > 0) {
-            // 40% chance to move toward player
-            if (Math.random() < 0.4) {
-              dirs.sort((a, b) => {
-                const da =
-                  Math.abs(g.x + a.dx - px) + Math.abs(g.y + a.dy - py);
-                const db =
-                  Math.abs(g.x + b.dx - px) + Math.abs(g.y + b.dy - py);
-                return da - db;
-              });
-            }
-            const pick =
-              Math.random() < 0.6
-                ? dirs[0]
-                : dirs[Math.floor(Math.random() * dirs.length)];
-            g.x += pick.dx;
-            g.y += pick.dy;
-          }
+    const loop = () => {
+      const s = stateRef.current;
+      if (!s || !s.running) return;
+      s.tick++;
 
-          // Check collision
-          if (g.x === px && g.y === py) {
-            running = false;
-            setDone(true);
-            onLose();
+      // --- PACMAN LOGIC ---
+      if (s.progress >= 1) {
+        s.px = s.targetX;
+        s.py = s.targetY;
+        if (canMove(s.px + s.nextDir.dx, s.py + s.nextDir.dy)) s.currentDir = { ...s.nextDir };
+        if (canMove(s.px + s.currentDir.dx, s.py + s.currentDir.dy)) {
+          s.targetX = s.px + s.currentDir.dx;
+          s.targetY = s.py + s.currentDir.dy;
+          s.progress = 0;
+        }
+      } else s.progress = Math.min(1, s.progress + PACMAN_SPEED);
+
+      const pacScreenX = (s.px + (s.targetX - s.px) * s.progress) * CELL + CELL / 2;
+      const pacScreenY = (s.py + (s.targetY - s.py) * s.progress) * CELL + CELL / 2;
+
+      s.mouth += s.mouthDir;
+      if (s.mouth > 0.3 || s.mouth < 0) s.mouthDir *= -1;
+
+      const cpx = Math.round(s.px + (s.targetX - s.px) * s.progress);
+      const cpy = Math.round(s.py + (s.targetY - s.py) * s.progress);
+      for (const em of s.emails) {
+        if (!em.eaten && cpx === em.x && cpy === em.y) {
+          em.eaten = true;
+          s.score += 100;
+          setScore(s.score);
+          const left = s.emails.filter(e => !e.eaten).length;
+          setEmailsLeft(left);
+          if (left === 0) {
+            s.running = false;
+            onWin();
             return;
           }
         }
       }
 
-      // Mouth animation
-      mouthTimer++;
-      if (mouthTimer % 10 === 0) mouthOpen = !mouthOpen;
+      // --- GHOSTS ---
+      for (const g of s.ghosts) {
+        if (g.progress >= 1) {
+          g.x = g.targetX;
+          g.y = g.targetY;
+          const newDir = chooseGhostDir(g);
+          g.dir = newDir;
+          if (canMove(g.x + newDir.dx, g.y + newDir.dy)) {
+            g.targetX = g.x + newDir.dx;
+            g.targetY = g.y + newDir.dy;
+            g.progress = 0;
+          }
+        } else g.progress = Math.min(1, g.progress + g.speed);
 
-      // Draw
+        const gsx = (g.x + (g.targetX - g.x) * g.progress) * CELL + CELL / 2;
+        const gsy = (g.y + (g.targetY - g.y) * g.progress) * CELL + CELL / 2;
+
+        if (Math.abs(pacScreenX - gsx) < CELL * 0.6 && Math.abs(pacScreenY - gsy) < CELL * 0.6) {
+          s.running = false;
+          onLose();
+          return;
+        }
+      }
+
+      // --- DRAW ---
       ctx.fillStyle = "#1a1a2e";
       ctx.fillRect(0, 0, COLS * CELL, ROWS * CELL);
 
-      // Maze
-      for (let r = 0; r < ROWS; r++) {
-        for (let c = 0; c < COLS; c++) {
+      for (let r = 0; r < ROWS; r++)
+        for (let c = 0; c < COLS; c++)
           if (MAZE[r][c] === 1) {
-            ctx.fillStyle = "#2a2a5e";
+            ctx.fillStyle = "#1a3a6e";
             ctx.fillRect(c * CELL, r * CELL, CELL, CELL);
+            ctx.strokeStyle = "#2a5aae";
+            ctx.lineWidth = 1;
+            ctx.strokeRect(c * CELL + 0.5, r * CELL + 0.5, CELL - 1, CELL - 1);
           }
-        }
-      }
 
-      // Emails (dots)
-      for (const em of emails) {
+      for (const em of s.emails) {
         if (!em.eaten) {
-          ctx.fillStyle = "#fcbf49";
-          ctx.font = "12px serif";
-          ctx.fillText("✉", em.x * CELL + 3, em.y * CELL + 15);
+          const ex = em.x * CELL + CELL / 2;
+          const ey = em.y * CELL + CELL / 2;
+          ctx.fillStyle = "#fffbe6";
+          ctx.fillRect(ex - 7, ey - 4, 14, 10);
+          ctx.strokeStyle = "#c9a84c";
+          ctx.strokeRect(ex - 7, ey - 4, 14, 10);
+          ctx.beginPath();
+          ctx.moveTo(ex - 7, ey - 4);
+          ctx.lineTo(ex, ey + 2);
+          ctx.lineTo(ex + 7, ey - 4);
+          ctx.stroke();
         }
       }
 
-      // Pacman
-      ctx.fillStyle = "#f7d000";
-      ctx.beginPath();
-      const startAngle = mouthOpen ? 0.25 : 0.05;
-      const endAngle = mouthOpen ? -0.25 : -0.05;
-      const facing =
-        dir.dx === -1
-          ? Math.PI
-          : dir.dy === -1
-            ? -Math.PI / 2
-            : dir.dy === 1
-              ? Math.PI / 2
-              : 0;
-      ctx.arc(
-        px * CELL + CELL / 2,
-        py * CELL + CELL / 2,
-        CELL / 2 - 2,
-        facing + startAngle * Math.PI,
-        facing + (2 - endAngle) * Math.PI,
-      );
-      ctx.lineTo(px * CELL + CELL / 2, py * CELL + CELL / 2);
-      ctx.fill();
-
-      // Ghosts
-      for (const g of ghosts) {
+      for (const g of s.ghosts) {
+        const gx = (g.x + (g.targetX - g.x) * g.progress) * CELL + CELL / 2;
+        const gy = (g.y + (g.targetY - g.y) * g.progress) * CELL + CELL / 2;
+        const r = CELL / 2 - 2;
         ctx.fillStyle = g.color;
         ctx.beginPath();
-        const gx = g.x * CELL + CELL / 2;
-        const gy = g.y * CELL + CELL / 2;
-        ctx.arc(gx, gy - 2, CELL / 2 - 2, Math.PI, 0);
-        ctx.lineTo(gx + CELL / 2 - 2, gy + CELL / 2 - 2);
-        ctx.lineTo(gx - CELL / 2 + 2, gy + CELL / 2 - 2);
+        ctx.arc(gx, gy - 2, r, Math.PI, 0);
+        ctx.lineTo(gx + r, gy + r);
+        const wave = Math.sin(s.tick * 0.15) * 2;
+        for (let i = 0; i < 4; i++) {
+          const wx = gx + r - (r * 2 / 4) * (i + 0.5);
+          ctx.quadraticCurveTo(wx + 2, gy + r + wave * (i % 2 === 0 ? 1 : -1), wx - 2, gy + r);
+        }
+        ctx.lineTo(gx - r, gy + r);
+        ctx.closePath();
         ctx.fill();
-        // Eyes
+
         ctx.fillStyle = "#fff";
         ctx.beginPath();
-        ctx.arc(gx - 3, gy - 4, 3, 0, Math.PI * 2);
-        ctx.arc(gx + 3, gy - 4, 3, 0, Math.PI * 2);
+        ctx.ellipse(gx - 3, gy - 3, 3, 4, 0, 0, Math.PI * 2);
+        ctx.ellipse(gx + 3, gy - 3, 3, 4, 0, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = "#000";
+        const angle = Math.atan2(pacScreenY - gy, pacScreenX - gx);
+        ctx.fillStyle = "#222";
         ctx.beginPath();
-        ctx.arc(gx - 2, gy - 3, 1.5, 0, Math.PI * 2);
-        ctx.arc(gx + 4, gy - 3, 1.5, 0, Math.PI * 2);
+        ctx.arc(gx - 3 + Math.cos(angle) * 1.5, gy - 3 + Math.sin(angle) * 1.5, 1.5, 0, Math.PI * 2);
+        ctx.arc(gx + 3 + Math.cos(angle) * 1.5, gy - 3 + Math.sin(angle) * 1.5, 1.5, 0, Math.PI * 2);
         ctx.fill();
-        // Label
         ctx.fillStyle = "#fff";
-        ctx.font = "7px monospace";
-        ctx.fillText(g.label, gx - 6, gy + CELL / 2 + 6);
+        ctx.font = "bold 8px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(g.label, gx, gy + r + 10);
       }
+
+      const pacAngle = Math.atan2(s.currentDir.dy, s.currentDir.dx);
+      ctx.fillStyle = "#f7d000";
+      ctx.beginPath();
+      ctx.arc(
+        pacScreenX, pacScreenY,
+        CELL / 2 - 2,
+        pacAngle + s.mouth * Math.PI,
+        pacAngle + (2 - s.mouth) * Math.PI
+      );
+      ctx.lineTo(pacScreenX, pacScreenY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#111";
+      ctx.beginPath();
+      ctx.arc(
+        pacScreenX + Math.cos(pacAngle - Math.PI / 4) * 4,
+        pacScreenY + Math.sin(pacAngle - Math.PI / 4) * 4,
+        2, 0, Math.PI * 2
+      );
+      ctx.fill();
 
       requestAnimationFrame(loop);
     };
 
     requestAnimationFrame(loop);
     return () => {
-      running = false;
+      if (stateRef.current) stateRef.current.running = false;
       window.removeEventListener("keydown", keyHandler);
     };
-  }, [onWin, onLose]);
+  }, [initState, onWin, onLose]);
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <p className="text-xs text-card-foreground font-bold">
-        📧 Emails remaining: {emailsLeft} | Avoid coworkers!
-      </p>
+    <div style={{ fontFamily: "Arial, sans-serif", userSelect: "none" }}>
+      {/* Info / Emails + Score */}
+      <div className="flex justify-between w-full px-2 py-1" style={{ background: "#0a0a1e" }}>
+        <span style={{ color: "#f7d000", fontFamily: "var(--font-body)", fontSize: 16 }}>
+          ✉ Emails: {emailsLeft}
+        </span>
+        <span style={{ color: "#fff", fontFamily: "var(--font-body)", fontSize: 16 }}>
+          Score: {score}
+        </span>
+      </div>
+
+      {/* Canvas */}
       <canvas
         ref={canvasRef}
         width={COLS * CELL}
         height={ROWS * CELL}
-        className="border border-border"
+        style={{ display: "block", imageRendering: "pixelated" }}
       />
-      <p className="text-[10px] text-muted-foreground">
-        Arrow keys or WASD to move
-      </p>
+
+      {/* Status Bar */}
+      <div style={{ background: "#000080", color: "#fff", padding: "2px 6px", fontSize: 12 }}>
+        Avoid the coworkers!
+      </div>
     </div>
   );
 };
