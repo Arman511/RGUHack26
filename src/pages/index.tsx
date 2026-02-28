@@ -71,17 +71,9 @@ const Index = () => {
     delayedStage('teams', 5000);
   }, [setStage, delayedStage]);
 
-  const handleTeamsJoin = useCallback(() => {
-    triggerBoss(
-      "You joined the meeting?! That's working! The meter moves toward PROMOTED! But can you survive the standup?",
-      'zoom'
-    );
-    moveMeter(20);
-  }, [triggerBoss]);
-
   const handleTeamsClose = useCallback(() => {
     triggerBoss(
-      "SLACKING?! You closed my message?! Fine, if you won't work, you'll play. Beat me at Pong... if you can.",
+      "SLACKING?! You closed the message?! Fine, if you won't work, you'll play. Beat me at Pong... if you can.",
       skipTutorials ? 'pingpong' : 'pong-howto'
     );
   }, [skipTutorials, triggerBoss]);
@@ -225,7 +217,7 @@ const Index = () => {
       {/* Teams Notification */}
       {state.stage === 'teams' && (
         <div className="teams-notification">
-          <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsJoin} />
+          <TeamsNotif onDismiss={handleTeamsClose}/>
         </div>
       )}
 
@@ -336,8 +328,13 @@ const Index = () => {
         </DraggableWindow>
       )}
 
-      {/* Boss Baby Popup */}
-      {showBoss && <BossBaby message={bossMsg} onDismiss={dismissBoss} />}
+      {/* Boss Baby Overlay + Popup */}
+      {showBoss && (
+        <>
+          <div className="fixed inset-0 bg-foreground/50 z-40" />
+          <BossBaby message={bossMsg} onDismiss={dismissBoss} />
+        </>
+      )}
 
       {/* Punishment Screen */}
       {showPunishment && <PunishmentScreen onComplete={handlePunishmentDone} />}
