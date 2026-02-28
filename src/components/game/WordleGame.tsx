@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 
-const VALID_WORDS = [
+const FALLBACK_VALID_WORDS = [
   'SYNCS', 'AGILE', 'PIVOT', 'SCRUM', 'EPICS', 'FLEET', 'RAPID', 'SLACK',
   'STAND', 'FOCUS', 'ALIGN', 'SCOPE', 'PATCH', 'BRICK', 'CRANE', 'GLOBE',
   'HOUSE', 'LIGHT', 'MONEY', 'POWER', 'QUEST', 'RAISE', 'SMART', 'THINK',
@@ -30,7 +30,36 @@ export const WordleGame: React.FC<WordleGameProps> = ({ onComplete }) => {
   const [current, setCurrent] = useState('');
   const [done, setDone] = useState(false);
   const [error, setError] = useState('');
+  const [validWords, setValidWords] = useState<Set<string>>(() => new Set(FALLBACK_VALID_WORDS));
   const [letterStates, setLetterStates] = useState<Record<string, 'correct' | 'present' | 'absent'>>({});
+
+  useEffect(() => {
+    let active = true;
+
+    const loadWords = async () => {
+      try {
+        const response = await fetch('/words.txt');
+        if (!response.ok) return;
+
+        const text = await response.text();
+        const words = text
+          .split(/\r?\n/)
+          .map(word => word.trim().toUpperCase())
+          .filter(word => /^[A-Z]{5}$/.test(word));
+
+        if (!active || words.length === 0) return;
+        setValidWords(new Set([...FALLBACK_VALID_WORDS, ...words]));
+      } catch {
+        // Keep fallback words if dictionary cannot be loaded
+      }
+    };
+
+    loadWords();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const updateLetterStates = useCallback((word: string, targetWord: string) => {
     setLetterStates(prev => {
@@ -52,9 +81,9 @@ export const WordleGame: React.FC<WordleGameProps> = ({ onComplete }) => {
   const submit = useCallback(() => {
     if (current.length !== 5 || done) return;
     const upper = current.toUpperCase();
-    
+
     // Validate against dictionary
-    if (!VALID_WORDS.includes(upper)) {
+    if (!validWords.has(upper)) {
       setError('Not a valid word!');
       setTimeout(() => setError(''), 1500);
       return;
@@ -72,7 +101,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({ onComplete }) => {
       setDone(true);
       onComplete(7);
     }
-  }, [current, guesses, target, done, onComplete, updateLetterStates]);
+  }, [current, guesses, target, done, onComplete, updateLetterStates, validWords]);
 
   const handleKey = useCallback((key: string) => {
     if (done) return;
