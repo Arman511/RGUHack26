@@ -6,6 +6,9 @@ interface PingPongGameProps {
 }
 
 export const PingPongGame: React.FC<PingPongGameProps> = ({ onWin, onLose }) => {
+  const BALL_SPEED_X = 3.4;
+  const BALL_SPEED_Y = 2.2;
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameRef = useRef<{
     ballX: number; ballY: number;
@@ -16,7 +19,7 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({ onWin, onLose }) => 
     keysDown: Set<string>;
   }>({
     ballX: 175, ballY: 120,
-    ballVX: 3, ballVY: 2,
+    ballVX: BALL_SPEED_X, ballVY: BALL_SPEED_Y,
     paddleY: 90, aiY: 90,
     playerScore: 0, aiScore: 0,
     running: true,
@@ -81,13 +84,13 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({ onWin, onLose }) => 
         g.aiScore++;
         setScores({ player: g.playerScore, ai: g.aiScore });
         if (g.aiScore >= 3) { g.running = false; onLose(); return; }
-        g.ballX = 175; g.ballY = 120; g.ballVX = 3; g.ballVY = 2;
+        g.ballX = 175; g.ballY = 120; g.ballVX = BALL_SPEED_X; g.ballVY = BALL_SPEED_Y;
       }
       if (g.ballX > 350) {
         g.playerScore++;
         setScores({ player: g.playerScore, ai: g.aiScore });
         if (g.playerScore >= 3) { g.running = false; onWin(); return; }
-        g.ballX = 175; g.ballY = 120; g.ballVX = -3; g.ballVY = 2;
+        g.ballX = 175; g.ballY = 120; g.ballVX = -BALL_SPEED_X; g.ballVY = BALL_SPEED_Y;
       }
 
       // Draw
