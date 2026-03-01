@@ -554,7 +554,7 @@ const Index = () => {
         <DraggableWindow
           title="Jira Backlog Refinement"
           icon={<LayoutList size={14} />}
-          width={260}
+          width={470}
           closable={false}
         >
           <HowToPlay
@@ -575,7 +575,7 @@ const Index = () => {
         <DraggableWindow
           title="Jira Backlog Refinement"
           icon={<LayoutList size={14} />}
-          width={275}
+          width={470}
           closable={false}
         >
           <TetrisGame
