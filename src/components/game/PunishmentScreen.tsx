@@ -124,7 +124,6 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
     return () => clearInterval(interval);
   }, [onComplete, gameStage, punishmentType]);
 
-// ...existing code...
   return (
     <div className="fixed inset-0 z-[60] bg-foreground/60 flex items-center justify-center">
       <div className="xp-window max-w-fit max-h-fit flex flex-col justify-center items-center">
