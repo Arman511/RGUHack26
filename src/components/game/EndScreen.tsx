@@ -39,8 +39,7 @@ export const EndScreen: React.FC<EndScreenProps> = ({ type, onRestart }) => {
   if (type === "fired") {
     return (
       <div
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-cover bg-center"
-        style={{ backgroundImage: "url('/background.png')" }}
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-background"
       >
         {confetti.map((c) => (
           <div
@@ -88,8 +87,7 @@ export const EndScreen: React.FC<EndScreenProps> = ({ type, onRestart }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: "url('/background.png')" }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-background"
     >
       <div className="xp-window w-[min(95vw,680px)] z-10">
         <div className="xp-title-bar-inactive">
