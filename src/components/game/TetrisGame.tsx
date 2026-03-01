@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const COLS = 11;
-const ROWS = 20;
+const COLS = 20;
+const ROWS = 12;
 const CELL = 22;
 const TIMER_SECONDS = 15;
 // Row index from the top (0 = very top, ROWS-1 = bottom).
