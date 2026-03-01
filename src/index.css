@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Override Tailwind cursor-pointer utility and any other cursor changes */
+button, a, [role="button"], .cursor-pointer, input, select, textarea {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M5 1 L5 26 L10 20 L14 30 L18 28 L14 18 L21 18 Z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 1, default !important;
+}
+
 @layer base {
   :root {
     /* XP Desktop */
@@ -89,7 +94,7 @@
   }
 
   button, a, [role="button"], .cursor-pointer {
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M13 3 L13 21 M8 16 L13 21 L18 16 M13 3 C13 3 10 8 7 10 L13 10 L13 3 Z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E") 13 3, pointer;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M5 1 L5 26 L10 20 L14 30 L18 28 L14 18 L21 18 Z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 1, default;
   }
 
   [style*="cursor: grab"], [style*="cursor:grab"], .cursor-grab {
@@ -100,10 +105,11 @@
 /* XP Window styles */
 @layer components {
   .xp-button {
-    @apply px-4 py-1 bg-muted border-2 text-sm font-normal cursor-pointer active:translate-y-px;
+    @apply px-4 py-1 bg-muted border-2 text-sm font-normal active:translate-y-px;
     border-color: hsl(0 0% 95%) hsl(0 0% 50%) hsl(0 0% 50%) hsl(0 0% 95%);
     min-width: 75px;
     text-align: center;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M5 1 L5 26 L10 20 L14 30 L18 28 L14 18 L21 18 Z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 1, default !important;
   }
 
   .xp-button:active {
@@ -147,10 +153,11 @@
   }
 
   .xp-close-btn {
-    @apply w-5 h-5 flex items-center justify-center text-xs font-bold cursor-pointer rounded-sm;
+    @apply w-5 h-5 flex items-center justify-center text-xs font-bold rounded-sm;
     background: linear-gradient(180deg, hsl(0 70% 60%) 0%, hsl(0 65% 45%) 100%);
     color: white;
     border: 1px solid hsl(0 0% 30%);
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M5 1 L5 26 L10 20 L14 30 L18 28 L14 18 L21 18 Z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 1, default !important;
   }
 
   .xp-close-btn:hover {
@@ -179,8 +186,9 @@
       hsl(120 55% 45%) 0%,
       hsl(120 55% 30%) 100%
     );
-    @apply px-3 h-8 flex items-center gap-1 text-primary-foreground font-bold text-sm rounded-r-lg cursor-pointer;
+    @apply px-3 h-8 flex items-center gap-1 text-primary-foreground font-bold text-sm rounded-r-lg;
     border: 1px solid hsl(120 40% 20%);
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M5 1 L5 26 L10 20 L14 30 L18 28 L14 18 L21 18 Z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 1, default !important;
   }
 
   .xp-start-btn:hover {

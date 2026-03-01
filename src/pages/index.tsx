@@ -30,6 +30,7 @@ const Index = () => {
   const [bossMsg, setBossMsg] = useState("");
   const [bossAutoAdvance, setBossAutoAdvance] = useState<number | undefined>(undefined);
   const [bossAltButton, setBossAltButton] = useState<{ label: string; onAlt: () => void } | undefined>(undefined);
+  const [bossDismissLabel, setBossDismissLabel] = useState<string | undefined>(undefined);
   const [nextStageAfterBoss, setNextStageAfterBoss] =
     useState<GameStage | null>(null);
   const [showPunishment, setShowPunishment] = useState<GameStage | null>(null);
@@ -56,10 +57,11 @@ const Index = () => {
     };
   }, []);
 
-  const triggerBoss = useCallback((msg: string, nextStage: GameStage, autoAdvanceDelay?: number, altButton?: { label: string; onAlt: () => void }) => {
+  const triggerBoss = useCallback((msg: string, nextStage: GameStage, autoAdvanceDelay?: number, altButton?: { label: string; onAlt: () => void }, dismissLabel?: string) => {
     setBossMsg(msg);
     setBossAutoAdvance(autoAdvanceDelay);
     setBossAltButton(altButton);
+    setBossDismissLabel(dismissLabel);
     setShowBoss(true);
     setNextStageAfterBoss(nextStage);
   }, []);
@@ -79,6 +81,7 @@ const Index = () => {
     setShowBoss(false);
     setBossAutoAdvance(undefined);
     setBossAltButton(undefined);
+    setBossDismissLabel(undefined);
     const cb = bossOnDismissRef.current;
     bossOnDismissRef.current = null;
     if (cb) {
@@ -139,6 +142,9 @@ const Index = () => {
     triggerBoss(
       "You WON?! Instead of working?! The meter moves toward FIRED. Now get to the standup!",
       "pong-done",
+      undefined,
+      undefined,
+      "wtv.",
     );
   }, [moveMeter, triggerBoss]);
 
@@ -147,7 +153,7 @@ const Index = () => {
     setIsPunishment(true);
     bossOnDismissRef.current = () => triggerPunishment("pong-done", "pingpong");
     triggerBoss(
-      "Ha! You lost to ME?! Guess you have to reply loser. - PLACEHOLDER",
+      "Damn, you're out of practice! Guess you've been working... Let's see you work on that ",
       "pong-done", // fallback, won't be used
       1500,
     );
@@ -207,15 +213,18 @@ const Index = () => {
       if (guesses <= 6) {
         moveMeter(-25);
         triggerBoss(
-          `Decoded in ${guesses} tries?! You are trying to escape work, aren't you? The meter moves toward FIRED!`,
+          `Decoded in ${guesses} tries?! Bet you cheated using AI... Moving towards FIRED!`,
           "wordle-done",
+          undefined,
+          undefined,
+          "wtv.",
         );
       } else {
         moveMeter(10);
         setIsPunishment(true);
         bossOnDismissRef.current = () => triggerPunishment("wordle-done", "wordle");
         triggerBoss(
-          "Can't even decode corporate buzzwords?! Back to the grind — punishment first, then emails.",
+          "Can't even decode corporate buzzwords?! Seems like you need to attend the meeting after all...",
           "wordle-done", // fallback, won't be used
           1500,
         );
@@ -261,6 +270,9 @@ const Index = () => {
     triggerBoss(
       "You are AVOIDING work?! Impressive slacking! Keep it up and you might get FIRED!",
       "pacman-done",
+      undefined,
+      undefined,
+      "wtv.",
     );
   }, [moveMeter, triggerBoss]);
 
@@ -269,7 +281,7 @@ const Index = () => {
     setIsPunishment(true);
     bossOnDismissRef.current = () => triggerPunishment("pacman-done", "pacman");
     triggerBoss(
-      "Eaten by your own coworkers?! Pathetic. That's what happens when you don't clear your inbox. Punishment time!",
+      "Eaten by your own coworkers?! Pathetic. That's what happens when you don't clear your inbox. Organisation time!",
       "pacman-done", // fallback, won't be used
       1500,
     );
@@ -325,6 +337,9 @@ const Index = () => {
     triggerBoss(
       "Wait... NO WORK ASSIGNED TO YOU?! You survived the backlog without lifting a finger?! You absolute DEAD WEIGHT! 😤 I’ll get you next time, Slacker..",
       "tetris-done",
+      undefined,
+      undefined,
+      "wtv.",
     );
   }, [moveMeter, triggerBoss]);
 
@@ -589,7 +604,7 @@ const Index = () => {
       {showBoss && (
         <>
           <div className="fixed inset-0 bg-foreground/50 z-40" />
-          <BossBaby message={bossMsg} onDismiss={dismissBoss} autoAdvanceDelay={bossAutoAdvance} altButton={bossAltButton} />
+          <BossBaby message={bossMsg} onDismiss={dismissBoss} autoAdvanceDelay={bossAutoAdvance} altButton={bossAltButton} dismissLabel={bossDismissLabel} />
         </>
       )}
 
