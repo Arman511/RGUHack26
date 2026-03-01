@@ -4,9 +4,11 @@ import { Baby } from "lucide-react";
 interface BossBabyProps {
   message: string;
   onDismiss: () => void;
+  autoAdvanceDelay?: number;
+  altButton?: { label: string; onAlt: () => void };
 }
 
-export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
+export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss, autoAdvanceDelay, altButton }) => {
   const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);
 
@@ -20,6 +22,14 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
       return () => clearTimeout(timeout);
     }
   }, [index, message]);
+
+  // Auto-advance after typing completes
+  useEffect(() => {
+    if (autoAdvanceDelay !== undefined && displayedText === message && message.length > 0) {
+      const t = setTimeout(onDismiss, autoAdvanceDelay);
+      return () => clearTimeout(t);
+    }
+  }, [displayedText, message, autoAdvanceDelay, onDismiss]);
 
   return (
     <div
@@ -56,13 +66,18 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
                 <span className="animate-pulse">▌</span>
               </p>
 
-              {/* Continue Button */}
-              {displayedText === message && (
-                <div className="mt-4 text-right">
+              {/* Continue Button — hidden when auto-advancing */}
+              {displayedText === message && autoAdvanceDelay === undefined && (
+                <div className="mt-4 flex justify-end gap-2">
+                  {altButton && (
+                    <button className="xp-button" onClick={altButton.onAlt}>
+                      {altButton.label}
+                    </button>
+                  )}
                   <button className="xp-button-primary" onClick={onDismiss}>
                     {message.toLowerCase().includes("email") ||
                     message.toLowerCase().includes("outlook")
-                      ? "AGH, no..."
+                      ? "AGH, no..." 
                       : "AGH, fine..."}
                   </button>
                 </div>
@@ -71,7 +86,7 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
 
             {/* Right: Character */}
             <div className="flex flex-col items-center w-[130px]">
-              <div className="w-24 h-24 border-2 border-black overflow-hidden rounded-full">
+              <div className="w-24 h-24 border-2 border-primary overflow-hidden rounded-full">
                 <img
                   src="/boss-baby.jpeg"
                   alt="Boss Baby"
@@ -80,9 +95,7 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
               </div>
 
               {/* Name Tag */}
-              <div className="mt-2 px-3 py-1 bg-[#245edb] text-white text-xs font-bold border border-black shadow">
-                Manager
-              </div>
+              <span className="text-sm font-bold text-card-foreground mt-2">Boss Baby</span>
             </div>
           </div>
         </div>

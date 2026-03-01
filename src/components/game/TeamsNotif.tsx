@@ -11,13 +11,13 @@ export function TeamsNotif({ onDismiss, onJoin }: TeamsNotifProps) {
 
   return (
     <div
-      className="fixed bottom-12 right-4 z-50"
+      className="fixed bottom-14 right-4 z-50"
       style={{ fontFamily: "Tahoma, 'MS Sans Serif', sans-serif" }}
     >
       <div className="w-[325px] overflow-hidden border-2 border-[#0a246a] shadow-[6px_6px_0px_#808080]">
         {/* XP Title Bar */}
         <div className="flex items-center bg-[#0a246a] px-3 py-2 text-white">
-          <span className="font-bold text-sm">💬 Microsoft Teams PING!</span>
+          <span className="font-bold text-sm">💬 Microsoft Teams</span>
           <button
             onClick={onDismiss}
             className="ml-auto w-5 h-5 flex items-center justify-center bg-[#d4d0c8] text-black text-xs font-bold leading-none border-2 border-t-white border-l-white border-b-[#808080] border-r-[#808080] active:border-t-[#808080] active:border-l-[#808080] active:border-b-white active:border-r-white"
@@ -31,9 +31,9 @@ export function TeamsNotif({ onDismiss, onJoin }: TeamsNotifProps) {
         <div className="bg-[#ece9d8] px-4 py-3 flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <img
-              src="/profile.jpg"
-              alt="avatar"
-              className="w-10 h-10 rounded-full border border-[#0a246a] object-cover"
+              src="/boss-baby.jpeg"
+              alt="Boss Baby"
+              className="w-14 h-14 rounded-full border border-[#0a246a] object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = "none";
               }}

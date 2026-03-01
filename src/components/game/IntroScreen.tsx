@@ -29,7 +29,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
       <div className="absolute inset-0 bg-foreground/35" />
 
       <div className="relative z-10 flex flex-col items-center justify-center gap-6 px-6 text-center w-full">
-        <div className="xp-window w-[560px] max-w-[95vw]">
+        <div className="xp-window w-[680px] max-w-[95vw]">
           <div className="xp-title-bar">
             <div className="flex items-center gap-1.5">
               <img
@@ -44,54 +44,64 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
             </button>
           </div>
 
-          <div className="xp-window-body flex flex-col items-center gap-5 p-5">
+          <div className="xp-window-body flex flex-col items-center gap-8 p-9">
             <div className="select-none flex flex-col gap-1">
-              <h1 className="pixel-text text-3xl md:text-4xl font-bold tracking-wide text-foreground">
+              <h1 className="pixel-text text-4xl md:text-5xl font-bold tracking-wide text-foreground">
                 LIAR...
               </h1>
-              <h1 className="pixel-text text-3xl md:text-4xl font-bold tracking-wide text-foreground">
+              <h1 className="pixel-text text-4xl md:text-5xl font-bold tracking-wide text-foreground">
                 CHEATER...
               </h1>
-              <h1 className="pixel-text text-4xl md:text-5xl font-extrabold tracking-wider text-destructive">
+              <h1 className="pixel-text text-5xl md:text-6xl font-extrabold tracking-wider text-destructive">
                 FIRED.
               </h1>
             </div>
 
-            <div className="xp-window w-full max-w-[460px]">
-              <div className="xp-title-bar-inactive">
-                <span className="text-xs">Boss Message</span>
-              </div>
-              <div className="xp-window-body flex flex-col items-center gap-4 p-4">
-                <div className="relative w-20 h-20">
-                  <img
-                    src="/boss-baby.jpeg"
-                    alt="Boss Baby"
-                    loading="lazy"
-                    className="w-full h-full object-cover rounded-full"
-                  />
-                  <div className="absolute inset-0 rounded-full border-2 border-primary" />
+            <div className="xp-window w-full max-w-[535px]">
+              <div className="xp-title-bar">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-bold">
+                    BOSS MESSAGE
+                  </span>
                 </div>
-
-                <p className="text-sm text-center font-bold leading-relaxed text-card-foreground">
-                  "I hate liars and cheaters. Why are you hired if you don't do
-                  your job?{" "}
-                  <span className="text-destructive">Focus on work!</span>"
-                </p>
+              </div>
+              <div className="xp-window-body flex flex-col gap-6 p-5">
+                <div className="flex items-center gap-4">
+                  <div className="flex flex-col gap-14 flex-1 justify-center">
+                    <p className="text-base font-bold leading-relaxed text-left whitespace-pre-wrap">
+                      "I hate liars and cheaters. Why are you hired if you don't do
+                      your job?{" "}
+                      <span className="text-destructive">Focus on work!</span>"
+                    </p>
+                    <div className="flex justify-start">
+                      <button
+                        className="xp-button-primary text-xs px-4 py-0.5"
+                        onClick={onStart}
+                      >
+                        I'm ready to get fired!
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center flex-shrink-0">
+                    <div className="relative w-32 h-32">
+                      <img
+                        src="/boss-baby.jpeg"
+                        alt="Boss Baby"
+                        loading="lazy"
+                        className="w-full h-full object-cover rounded-full border-2 border-primary"
+                      />
+                    </div>
+                    <span className="text-sm font-bold text-card-foreground mt-2">Boss Baby</span>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <button
-              className="xp-button-primary text-base px-10 py-2"
-              onClick={onStart}
-            >
-              🔥 I'm ready to get fired
-            </button>
           </div>
         </div>
       </div>
 
       {/* Settings — bottom right, above taskbar */}
-      <div className="absolute bottom-[87px] right-6 z-30 flex items-center">
+      <div className="absolute bottom-[68px] right-6 z-30 flex items-center">
         {/* Expandable panel slides out to the left, attached to the button */}
         <div
           style={{
