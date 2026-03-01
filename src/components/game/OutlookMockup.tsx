@@ -1,16 +1,21 @@
 import React from "react";
 
-const EMAILS = [
+const UNREAD_EMAILS = [
   { from: "Michael (VP)", subject: "RE: RE: RE: Q3 Sprint Planning - URGENT", time: "9:02 AM" },
   { from: "Sandra (HR)", subject: "Mandatory Fun: Team Building Next Friday", time: "9:15 AM" },
   { from: "Dave (ED)", subject: "Quick sync? (will take 2 hrs)", time: "9:23 AM" },
   { from: "Karen (SE)", subject: "Budget cuts - please review ASAP", time: "9:41 AM" },
-  { from: "Brian (HR)", subject: "Why is prod down again???", time: "10:05 AM" },
-  { from: "Lisa (VP)", subject: "FW: FW: FW: Motivational Quote of the Day", time: "10:12 AM" },
+  { from: "Brian (VP)", subject: "Why is prod down again???", time: "10:05 AM" },
   { from: "Tom (MD)", subject: "Can you stay late tonight?", time: "10:30 AM" },
-  { from: "Rachel (CEO)", subject: "Printer on 3rd floor is jammed again", time: "10:44 AM" },
-  { from: "Greg (SE)", subject: "Need slides by EOD (sorry!)", time: "11:01 AM" },
   { from: "Jenny (ED)", subject: "Git blame says this is your fault", time: "11:18 AM" },
+];
+
+const READ_EMAILS = [
+  { from: "IT Support", subject: "Your password expires in 1 day", time: "Yesterday" },
+  { from: "Noreply (HR)", subject: "Updated: Holiday policy 2026 (please read)", time: "Yesterday" },
+  { from: "Michael (VP)", subject: "RE: Team offsite — venue confirmed", time: "Mon" },
+  { from: "All Staff", subject: "Reminder: submit timesheets by Friday", time: "Mon" },
+  { from: "Facilities", subject: "AC on floor 2 is fixed (finally)", time: "Sun" },
 ];
 
 interface OutlookMockupProps {
@@ -19,7 +24,7 @@ interface OutlookMockupProps {
 
 export const OutlookMockup: React.FC<OutlookMockupProps> = ({ onPlayAgain }) => {
   return (
-    <div className="flex flex-col" style={{ width: 553 }}>
+    <div className="flex flex-col" style={{ width: 710 }}>
       {/* Outlook toolbar */}
       <div
         className="flex items-center gap-2 px-2 py-1"
@@ -37,7 +42,7 @@ export const OutlookMockup: React.FC<OutlookMockupProps> = ({ onPlayAgain }) => 
         <span>Forward</span>
         <span>Delete</span>
         <span style={{ marginLeft: "auto", color: "#c00", fontFamily: "var(--font-display)", fontSize: 13 }}>
-          10 Unread
+          7 Unread
         </span>
       </div>
 
@@ -61,10 +66,11 @@ export const OutlookMockup: React.FC<OutlookMockupProps> = ({ onPlayAgain }) => 
       </div>
 
       {/* Email rows */}
-      <div style={{ background: "#fff", maxHeight: 280, overflowY: "auto" }}>
-        {EMAILS.map((email, i) => (
+      <div style={{ background: "#fff", height: 350, overflowY: "auto" }}>
+        {/* Unread emails */}
+        {UNREAD_EMAILS.map((email, i) => (
           <div
-            key={i}
+            key={`unread-${i}`}
             className="grid px-2 py-1"
             style={{
               gridTemplateColumns: "20px 140px 1fr 60px",
@@ -74,7 +80,7 @@ export const OutlookMockup: React.FC<OutlookMockupProps> = ({ onPlayAgain }) => 
               fontWeight: 700,
               color: "#111",
               cursor: "pointer",
-              background: i % 2 === 0 ? "#fff" : "#f4f6fa",
+              background: i % 2 === 0 ? "#fff" : "#eef3fb",
             }}
           >
             <span style={{ color: "#1a5cb5" }}>✉</span>
@@ -84,7 +90,39 @@ export const OutlookMockup: React.FC<OutlookMockupProps> = ({ onPlayAgain }) => 
             <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
               {email.subject}
             </span>
-            <span style={{ color: "#888", fontWeight: 400, fontSize: 12 }}>{email.time}</span>
+            <span style={{ color: "#1a5cb5", fontWeight: 700, fontSize: 12 }}>{email.time}</span>
+          </div>
+        ))}
+
+        {/* Divider */}
+        <div style={{ background: "hsl(210,14%,93%)", borderTop: "1px solid hsl(220,10%,78%)", borderBottom: "1px solid hsl(220,10%,78%)", padding: "2px 8px", fontSize: 11, color: "#888", fontFamily: "var(--font-body)" }}>
+          Older — Read
+        </div>
+
+        {/* Read emails */}
+        {READ_EMAILS.map((email, i) => (
+          <div
+            key={`read-${i}`}
+            className="grid px-2 py-1"
+            style={{
+              gridTemplateColumns: "20px 140px 1fr 60px",
+              borderBottom: "1px solid #e8e8e8",
+              fontFamily: "var(--font-body)",
+              fontSize: 14,
+              fontWeight: 400,
+              color: "#555",
+              cursor: "pointer",
+              background: i % 2 === 0 ? "#f9f9f9" : "#f2f2f2",
+            }}
+          >
+            <span style={{ color: "#aaa" }}>✉</span>
+            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {email.from}
+            </span>
+            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {email.subject}
+            </span>
+            <span style={{ color: "#aaa", fontSize: 12 }}>{email.time}</span>
           </div>
         ))}
       </div>
@@ -100,7 +138,7 @@ export const OutlookMockup: React.FC<OutlookMockupProps> = ({ onPlayAgain }) => 
           color: "#666",
         }}
       >
-        <span>10 Items, 10 Unread</span>
+        <span>12 Items, 7 Unread</span>
         <span>Connected to Exchange Server</span>
       </div>
     </div>
