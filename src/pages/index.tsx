@@ -18,8 +18,8 @@ import { TeamsNotif } from "@/components/game/TeamsNotif";
 import { OutlookMockup } from "@/components/game/OutlookMockup";
 import { Video, LayoutList, Mail } from "lucide-react";
 
-const STAGE_DELAY_MS = 3000;
-const SECOND_DELAY_MS = 3000;
+const STAGE_DELAY_MS = 5000;
+const SECOND_DELAY_MS = 5000;
 const STAGE_METER_POINT_CUTOF = 9;
 
 const Index = () => {
@@ -378,7 +378,7 @@ const Index = () => {
   const shouldHideProcrastinationDesktop =
     Boolean(showPunishment) || isGameActive || state.stage === "outlook";
   const shouldDisableProcrastinationDesktop =
-    showBoss;
+    showBoss || state.stage === "teams" || state.stage === "zoom";
 
   return (
     <div
