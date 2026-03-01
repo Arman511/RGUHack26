@@ -40,7 +40,7 @@ export function TeamsNotif({ onDismiss, onJoin }: TeamsNotifProps) {
             />
             <div className="flex flex-col leading-tight">
               <span className="text-sm font-bold text-black">Boss Baby</span>
-              <span className="text-xs text-[#444]">JOIN MY ZOOM. We need to discuss cross-functional alignment</span>
+              <span className="text-xs text-[#444]">JOIN MY TEAMS. We need to discuss cross-functional alignment</span>
             </div>
           </div>
           <div className="flex justify-end">
