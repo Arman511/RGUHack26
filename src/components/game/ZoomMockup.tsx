@@ -22,7 +22,7 @@ export const ZoomMockup: React.FC = () => {
       <div className="p-1 bg-[#f6f4ea]">
         <div className="relative bg-black border border-black">
           <img
-            src="public/zoomscreenshare.png"
+            src="zoomscreenshare.png"
             className="w-full max-h-[35vh] object-contain opacity-90"
           />
 

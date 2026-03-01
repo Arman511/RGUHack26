@@ -74,10 +74,10 @@ export const EndScreen: React.FC<EndScreenProps> = ({ type, onRestart }) => {
               earned your freedom.
             </p>
             <button
-              className="xp-button-primary text-base px-8 py-2 mt-2"
+              className="xp-button-primary pixel-text text-sm px-8 py-2 mt-2"
               onClick={onRestart}
             >
-              Freedom (Play Again)
+              PLAY AGAIN
             </button>
           </div>
         </div>
@@ -111,10 +111,10 @@ export const EndScreen: React.FC<EndScreenProps> = ({ type, onRestart }) => {
             Dream big. Now spend forever in back-to-back status calls.
           </p>
           <button
-            className="xp-button-primary text-base px-8 py-2 mt-2"
+            className="xp-button-primary pixel-text text-sm px-8 py-2 mt-2"
             onClick={onRestart}
           >
-            Try Again (Escape)
+            PLAY AGAIN
           </button>
         </div>
       </div>

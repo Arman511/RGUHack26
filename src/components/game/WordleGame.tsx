@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 
+const MAX_GUESSES = 4;
+
 const FALLBACK_VALID_WORDS = [
   "SYNCS",
   "AGILE",
@@ -216,7 +218,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({ onComplete }) => {
     if (upper === target) {
       setDone(true);
       onComplete(newGuesses.length);
-    } else if (newGuesses.length >= 6) {
+    } else if (newGuesses.length >= MAX_GUESSES) {
       setDone(true);
       onComplete(7);
     }
@@ -308,7 +310,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({ onComplete }) => {
   };
 
   const rows = [...guesses];
-  while (rows.length < 6) rows.push("");
+  while (rows.length < MAX_GUESSES) rows.push("");
 
   return (
     <div className="flex flex-col items-center gap-2">

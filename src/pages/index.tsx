@@ -501,10 +501,10 @@ const Index = () => {
           <HowToPlay
             title="Wordle"
             instructions={[
-              "Guess the 5-letter corporate buzzword in 6 tries",
+              "Guess the 5-letter corporate buzzword in 4 tries",
               "Green = correct letter & position",
               "Yellow = correct letter, wrong position",
-              "Getting it in ≤3 tries = slacking (good!)",
+              "Getting it in ≤4 tries = slacking (good!)",
             ]}
             onStart={() => setStage("wordle")}
           />
