@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Globe, Play } from "lucide-react";
+import { Globe } from "lucide-react";
 
 const MAX_BALLS_PER_INNINGS = 90 * 6;
 
@@ -27,6 +27,9 @@ function isInningsComplete(innings: InningsState) {
 
 export const ProcrastinationDesktop: React.FC = () => {
   const [pos, setPos] = useState({ x: 96, y: 40 });
+  const [activeTab, setActiveTab] = useState<"cricket" | "cat" | "youtube">(
+    "cricket",
+  );
   const [match, setMatch] = useState<MatchState>({
     battingTeam: "INDIA",
     india: { runs: 0, wickets: 0, balls: 0 },
@@ -120,6 +123,23 @@ export const ProcrastinationDesktop: React.FC = () => {
           ? "text-red-700"
           : "text-gray-700";
 
+  const browserTitle =
+    activeTab === "cricket"
+      ? "CricketLiveScore.tv"
+      : activeTab === "cat"
+        ? "CatVideosNow.tv"
+        : "YouTube";
+
+  const browserFavicon =
+    activeTab === "cricket" ? "🏏" : activeTab === "cat" ? "🐱" : "▶️";
+
+  const browserUrl =
+    activeTab === "cricket"
+      ? "https://www.cricketlive.tv/match/ind-vs-aus-2026"
+      : activeTab === "cat"
+        ? "https://www.catvideosnow.tv/watch/funniest-cats"
+        : "https://www.youtube.com/watch?v=minecraft-live";
+
   const onMouseDown = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
@@ -157,7 +177,7 @@ export const ProcrastinationDesktop: React.FC = () => {
           <div className="flex items-center gap-2">
             <Globe size={14} />
             <span className="text-xs font-bold">
-              Google Chrome - CricketLiveScore.tv
+              Google Chrome - {browserFavicon} {browserTitle}
             </span>
           </div>
           <div className="flex gap-1">
@@ -173,61 +193,119 @@ export const ProcrastinationDesktop: React.FC = () => {
           <span className="text-xs">→</span>
           <span className="text-xs">⟳</span>
           <div className="flex-1 bg-white border border-[#808080] px-2 py-0.5 text-[11px]">
-            https://www.cricketlive.tv/match/ind-vs-aus-2026
+            {browserUrl}
           </div>
         </div>
 
         {/* Tabs */}
         <div className="bg-[#d4d0c8] px-1 pt-1 flex gap-1 border-b border-[#808080]">
-          <div className="bg-[#ECE9D8] px-3 py-1 text-[11px] border-t border-l border-r border-white border-b-0 font-bold flex items-center gap-1">
-            <Globe size={10} /> Cricket Live 🏏
-          </div>
-          <div className="bg-[#c0c0c0] px-3 py-1 text-[11px] border border-[#808080] flex items-center gap-1">
-            <Globe size={10} /> Cat Videos 🐱
-          </div>
-          <div className="bg-[#c0c0c0] px-3 py-1 text-[11px] border border-[#808080] flex items-center gap-1">
-            <Play size={10} /> YouTube
-          </div>
+          <button
+            type="button"
+            onClick={() => setActiveTab("cricket")}
+            className={`${activeTab === "cricket"
+              ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
+              : "bg-[#c0c0c0] border border-[#808080]"
+              } px-3 py-1 text-[11px] flex items-center gap-1`}
+          >
+            🏏 Cricket Live
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("cat")}
+            className={`${activeTab === "cat"
+              ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
+              : "bg-[#c0c0c0] border border-[#808080]"
+              } px-3 py-1 text-[11px] flex items-center gap-1`}
+          >
+            🐱 Cat Videos
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("youtube")}
+            className={`${activeTab === "youtube"
+              ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
+              : "bg-[#c0c0c0] border border-[#808080]"
+              } px-3 py-1 text-[11px] flex items-center gap-1`}
+          >
+            ▶️ YouTube
+          </button>
         </div>
 
         {/* Content */}
         <div className="bg-white p-6 overflow-y-auto flex-1">
-          <h2 className="text-lg font-bold text-center mb-6">
-            🏏 IND vs AUS - LIVE
-          </h2>
-          <div className="mx-auto max-w-md bg-[#ECE9D8] p-4 border-2 border-[#808080] shadow-inner">
-            <div className="flex justify-between items-center mb-4">
-              <div className="text-center">
-                <p className="text-sm font-bold">INDIA</p>
-                <p className="text-2xl font-bold text-blue-700">
-                  {match.india.runs}/{match.india.wickets}
-                </p>
-                <p className="text-xs text-gray-600">
-                  ({formatOvers(match.india.balls)} ov)
-                </p>
+          {activeTab === "cricket" && (
+            <>
+              <h2 className="text-lg font-bold text-center mb-6">
+                🏏 IND vs AUS - LIVE
+              </h2>
+              <div className="mx-auto max-w-md bg-[#ECE9D8] p-4 border-2 border-[#808080] shadow-inner">
+                <div className="flex justify-between items-center mb-4">
+                  <div className="text-center">
+                    <p className="text-sm font-bold">INDIA</p>
+                    <p className="text-2xl font-bold text-blue-700">
+                      {match.india.runs}/{match.india.wickets}
+                    </p>
+                    <p className="text-xs text-gray-600">
+                      ({formatOvers(match.india.balls)} ov)
+                    </p>
+                  </div>
+                  <div className="text-sm font-bold text-gray-600">vs</div>
+                  <div className="text-center">
+                    <p className="text-sm font-bold">AUSTRALIA</p>
+                    <p className="text-2xl font-bold text-red-600">
+                      {match.australia.runs}/{match.australia.wickets}
+                    </p>
+                    <p className="text-xs text-gray-600">
+                      ({formatOvers(match.australia.balls)} ov)
+                    </p>
+                  </div>
+                </div>
+                <div className="text-center mt-3">
+                  <p className={`text-sm font-bold ${statusColorClass}`}>
+                    {liveLine}
+                  </p>
+                </div>
               </div>
-              <div className="text-sm font-bold text-gray-600">vs</div>
-              <div className="text-center">
-                <p className="text-sm font-bold">AUSTRALIA</p>
-                <p className="text-2xl font-bold text-red-600">
-                  {match.australia.runs}/{match.australia.wickets}
-                </p>
-                <p className="text-xs text-gray-600">
-                  ({formatOvers(match.australia.balls)} ov)
-                </p>
+              <div className="flex justify-center gap-6 text-xs mt-6">
+                <span className="underline cursor-pointer">Live Chat (2.4k)</span>
+                <span className="underline cursor-pointer">Scorecard</span>
+                <span className="underline cursor-pointer">Commentary</span>
               </div>
+            </>
+          )}
+
+          {activeTab === "cat" && (
+            <div className="h-full flex flex-col items-center justify-center gap-4">
+              <h2 className="text-lg font-bold text-center">🐱 Cat Videos - LIVE</h2>
+              <img
+                src="/cats.gif"
+                alt="Funny cat video"
+                className="max-h-[320px] w-auto border-2 border-[#808080]"
+              />
             </div>
-            <div className="text-center mt-3">
-              <p className={`text-sm font-bold ${statusColorClass}`}>
-                {liveLine}
+          )}
+
+          {activeTab === "youtube" && (
+            <div className="h-full flex flex-col items-center justify-center gap-4">
+              <h2 className="text-lg font-bold text-center">▶ YouTube</h2>
+              <div className="relative w-full max-w-[560px] border-2 border-[#808080] bg-black">
+                <img
+                  src="/minecraft.jpg"
+                  alt="Minecraft gameplay"
+                  className="w-full h-auto max-h-[315px] object-cover opacity-85"
+                />
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/25">
+                  <div className="w-10 h-10 border-4 border-white/40 border-t-white rounded-full animate-spin" />
+                  <p className="text-xs font-bold text-white drop-shadow">
+                    Buffering...
+                  </p>
+                </div>
+              </div>
+              <p className="text-xs text-gray-600 font-bold">
+                probably your office Wi-Fi.
               </p>
             </div>
-          </div>
-          <div className="flex justify-center gap-6 text-xs mt-6">
-            <span className="underline cursor-pointer">Live Chat (2.4k)</span>
-            <span className="underline cursor-pointer">Scorecard</span>
-            <span className="underline cursor-pointer">Commentary</span>
-          </div>
+          )}
         </div>
       </div>
     </div>

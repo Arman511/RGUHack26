@@ -17,14 +17,13 @@ import { PunishmentScreen } from "@/components/game/PunishmentScreen";
 import { TeamsNotif } from "@/components/game/TeamsNotif";
 import { OutlookMockup } from "@/components/game/OutlookMockup";
 import { Video, LayoutList, Mail } from "lucide-react";
-import { set } from "react-hook-form";
 
 const STAGE_DELAY_MS = 3000;
 const SECOND_DELAY_MS = 3000;
 const STAGE_METER_POINT_CUTOF = 9;
 
 const Index = () => {
-  const { state, setStage, moveMeter, setBossMessage } = useGameState();
+  const { state, setStage, moveMeter } = useGameState();
   const [skipTutorials, setSkipTutorials] = useState(true);
   const [showBoss, setShowBoss] = useState(false);
   const [bossMsg, setBossMsg] = useState("");
@@ -39,7 +38,7 @@ const Index = () => {
   const [skipDoneStageDelay, setSkipDoneStageDelay] = useState(false);
   const [loopDone, setLoopDone] = useState(false);
   const [isPunishment, setIsPunishment] = useState(true);
-  const delayTimer = useRef<ReturnType<typeof setTimeout>>();
+  const delayTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bossOnDismissRef = useRef<(() => void) | null>(null);
 
   // Delayed stage transition (5s gap)
@@ -306,13 +305,6 @@ const Index = () => {
     loopDone,
     handleMeterOutcome,
   ]);
-
-  const handleJiraNotification = useCallback(() => {
-    triggerBoss(
-      "It's all your fault for not working! Every line of this backlog is about to be assigned to an individual... MAKE SURE YOU HAVE SOME WORK!!!",
-      skipTutorials ? "tetris" : "tetris-howto",
-    );
-  }, [skipTutorials, triggerBoss]);
 
   useEffect(() => {
     if (state.stage === "jira") {
