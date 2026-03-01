@@ -70,8 +70,9 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
                 </div>
 
                 <p className="text-sm text-center font-bold leading-relaxed text-card-foreground">
-                  "I hate liars and cheaters. Why are you hired if you don't do your
-                  job? <span className="text-destructive">Focus on work!</span>"
+                  "I hate liars and cheaters. Why are you hired if you don't do
+                  your job?{" "}
+                  <span className="text-destructive">Focus on work!</span>"
                 </p>
               </div>
             </div>

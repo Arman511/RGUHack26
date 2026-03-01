@@ -77,11 +77,18 @@ const Index = () => {
     }
   }, [nextStageAfterBoss, setStage]);
 
-  const triggerPunishment = useCallback((nextStage: GameStage, punishmentStage: GameStage, isPunishment: boolean = true) => {
-    setShowPunishment(punishmentStage);
-    setStageAfterPunishment(nextStage);
-    setIsPunishment(isPunishment);
-  }, []);
+  const triggerPunishment = useCallback(
+    (
+      nextStage: GameStage,
+      punishmentStage: GameStage,
+      isPunishment: boolean = true,
+    ) => {
+      setShowPunishment(punishmentStage);
+      setStageAfterPunishment(nextStage);
+      setIsPunishment(isPunishment);
+    },
+    [],
+  );
 
   const handlePunishmentDone = useCallback(() => {
     setShowPunishment(null);
@@ -103,7 +110,7 @@ const Index = () => {
     setIsPunishment(true);
     triggerBoss(
       "Ignoring my pings? Fine. If you won't reply, then you'll rebound. Put your paddle where your mouse is and let's see if you can keep up.",
-      skipTutorials ? 'pingpong' : 'pong-howto'
+      skipTutorials ? "pingpong" : "pong-howto",
     );
   }, [skipTutorials, triggerBoss]);
 
@@ -154,7 +161,14 @@ const Index = () => {
         delayedStage("zoom", STAGE_DELAY_MS);
       }
     }
-  }, [state.stage, skipDoneStageDelay, delayedStage, setStage, loopDone, handleMeterOutcome]);
+  }, [
+    state.stage,
+    skipDoneStageDelay,
+    delayedStage,
+    setStage,
+    loopDone,
+    handleMeterOutcome,
+  ]);
 
   const handleZoomJoin = useCallback(() => {
     moveMeter(20); // did work = toward promoted
@@ -201,9 +215,15 @@ const Index = () => {
         skipTutorials ? "pacman" : "pacman-howto",
         SECOND_DELAY_MS,
       );
-
     }
-  }, [skipTutorials, state.stage, loopDone, handleMeterOutcome, triggerBossWithDelay, setStage]);
+  }, [
+    skipTutorials,
+    state.stage,
+    loopDone,
+    handleMeterOutcome,
+    triggerBossWithDelay,
+    setStage,
+  ]);
 
   const handlePacmanWin = useCallback(() => {
     moveMeter(-30);
@@ -231,7 +251,14 @@ const Index = () => {
         delayedStage("jira", STAGE_DELAY_MS);
       }
     }
-  }, [state.stage, skipDoneStageDelay, delayedStage, setStage, loopDone, handleMeterOutcome]);
+  }, [
+    state.stage,
+    skipDoneStageDelay,
+    delayedStage,
+    setStage,
+    loopDone,
+    handleMeterOutcome,
+  ]);
 
   const handleJiraNotification = useCallback(() => {
     triggerBoss(
@@ -316,7 +343,6 @@ const Index = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-
       <FailMeter value={state.meterValue} />
       <DesktopIcons />
 
@@ -353,7 +379,7 @@ const Index = () => {
       )}
 
       {/* Ping Pong */}
-      {state.stage === 'pingpong' && (
+      {state.stage === "pingpong" && (
         <DraggableWindow
           title="Work Avoidance.exe"
           width={400}
@@ -370,7 +396,7 @@ const Index = () => {
             onWin={handlePongWin}
             onLose={handlePongLose}
             playerAvatar="/sword.jpeg"
-            botAvatar='/marty.jpeg'
+            botAvatar="/marty.jpeg"
             playerName="Marty Supreme"
           />
         </DraggableWindow>

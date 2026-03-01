@@ -6,23 +6,23 @@ const ROWS = 17;
 const EMAIL_COUNT = 7;
 
 const MAZE: number[][] = [
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
-  [1,0,1,1,0,1,1,1,0,0,1,0,0,1,1,1,0,1,1,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,0,1],
-  [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
-  [1,1,1,1,0,1,1,1,0,0,1,0,0,1,1,1,0,1,1,1,1],
-  [1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1],
-  [1,1,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,1,1],
-  [0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0],
-  [1,1,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,1,1],
-  [1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1],
-  [1,1,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,1,1],
-  [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
-  [1,0,1,1,0,1,1,1,0,0,1,0,0,1,1,1,0,1,1,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1],
+  [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+  [1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1],
+  [1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1],
+  [1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1],
+  [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+  [1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1],
+  [1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1],
+  [1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
 
 interface Ghost {
@@ -47,8 +47,11 @@ const GHOST_CONFIGS = [
 ];
 
 const GHOST_SPAWNS = [
-  { x: 9, y: 9 }, { x: 10, y: 9 }, { x: 11, y: 9 },
-  { x: 9, y: 8 }, { x: 11, y: 8 },
+  { x: 9, y: 9 },
+  { x: 10, y: 9 },
+  { x: 11, y: 9 },
+  { x: 9, y: 8 },
+  { x: 11, y: 8 },
 ];
 
 const canMove = (x: number, y: number) =>
@@ -74,13 +77,17 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
       const j = Math.floor(Math.random() * (i + 1));
       [paths[i], paths[j]] = [paths[j], paths[i]];
     }
-    const emails = paths.slice(0, EMAIL_COUNT).map(p => ({ ...p, eaten: false }));
+    const emails = paths
+      .slice(0, EMAIL_COUNT)
+      .map((p) => ({ ...p, eaten: false }));
 
     const ghosts: Ghost[] = GHOST_CONFIGS.map((cfg, i) => {
       const spawn = GHOST_SPAWNS[i % GHOST_SPAWNS.length];
       return {
-        x: spawn.x, y: spawn.y,
-        targetX: spawn.x, targetY: spawn.y,
+        x: spawn.x,
+        y: spawn.y,
+        targetX: spawn.x,
+        targetY: spawn.y,
         progress: 1,
         speed: 0.018 + Math.random() * 0.004,
         color: cfg.color,
@@ -91,12 +98,15 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
 
     return {
       running: true,
-      px: 1, py: 1,
-      targetX: 1, targetY: 1,
+      px: 1,
+      py: 1,
+      targetX: 1,
+      targetY: 1,
       progress: 1,
       nextDir: { dx: 0, dy: 0 },
       currentDir: { dx: 0, dy: 0 },
-      mouth: 0, mouthDir: 0.04,
+      mouth: 0,
+      mouthDir: 0.04,
       emails,
       ghosts,
       tick: 0,
@@ -117,10 +127,14 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
       const s = stateRef.current;
       if (!s || !s.running) return;
       const dirs: Record<string, { dx: number; dy: number }> = {
-        ArrowUp: { dx: 0, dy: -1 }, w: { dx: 0, dy: -1 },
-        ArrowDown: { dx: 0, dy: 1 }, s: { dx: 0, dy: 1 },
-        ArrowLeft: { dx: -1, dy: 0 }, a: { dx: -1, dy: 0 },
-        ArrowRight: { dx: 1, dy: 0 }, d: { dx: 1, dy: 0 },
+        ArrowUp: { dx: 0, dy: -1 },
+        w: { dx: 0, dy: -1 },
+        ArrowDown: { dx: 0, dy: 1 },
+        s: { dx: 0, dy: 1 },
+        ArrowLeft: { dx: -1, dy: 0 },
+        a: { dx: -1, dy: 0 },
+        ArrowRight: { dx: 1, dy: 0 },
+        d: { dx: 1, dy: 0 },
       };
       if (dirs[e.key]) {
         e.preventDefault();
@@ -133,11 +147,15 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
 
     const chooseGhostDir = (g: Ghost) => {
       const dirs = [
-        { dx: 1, dy: 0 }, { dx: -1, dy: 0 },
-        { dx: 0, dy: 1 }, { dx: 0, dy: -1 },
-      ].filter(d => canMove(g.targetX + d.dx, g.targetY + d.dy));
+        { dx: 1, dy: 0 },
+        { dx: -1, dy: 0 },
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
+      ].filter((d) => canMove(g.targetX + d.dx, g.targetY + d.dy));
 
-      const nonReverse = dirs.filter(d => !(d.dx === -g.dir.dx && d.dy === -g.dir.dy));
+      const nonReverse = dirs.filter(
+        (d) => !(d.dx === -g.dir.dx && d.dy === -g.dir.dy),
+      );
       const options = nonReverse.length > 0 ? nonReverse : dirs;
 
       if (options.length === 0) return { dx: 0, dy: 0 };
@@ -150,7 +168,10 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
           const nx = g.targetX + d.dx;
           const ny = g.targetY + d.dy;
           const dist = Math.abs(nx - s.px) + Math.abs(ny - s.py);
-          if (dist < bestDist) { bestDist = dist; best = d; }
+          if (dist < bestDist) {
+            bestDist = dist;
+            best = d;
+          }
         }
         return best;
       }
@@ -167,7 +188,8 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
       if (s.progress >= 1) {
         s.px = s.targetX;
         s.py = s.targetY;
-        if (canMove(s.px + s.nextDir.dx, s.py + s.nextDir.dy)) s.currentDir = { ...s.nextDir };
+        if (canMove(s.px + s.nextDir.dx, s.py + s.nextDir.dy))
+          s.currentDir = { ...s.nextDir };
         if (canMove(s.px + s.currentDir.dx, s.py + s.currentDir.dy)) {
           s.targetX = s.px + s.currentDir.dx;
           s.targetY = s.py + s.currentDir.dy;
@@ -175,8 +197,10 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
         }
       } else s.progress = Math.min(1, s.progress + PACMAN_SPEED);
 
-      const pacScreenX = (s.px + (s.targetX - s.px) * s.progress) * CELL + CELL / 2;
-      const pacScreenY = (s.py + (s.targetY - s.py) * s.progress) * CELL + CELL / 2;
+      const pacScreenX =
+        (s.px + (s.targetX - s.px) * s.progress) * CELL + CELL / 2;
+      const pacScreenY =
+        (s.py + (s.targetY - s.py) * s.progress) * CELL + CELL / 2;
 
       s.mouth += s.mouthDir;
       if (s.mouth > 0.3 || s.mouth < 0) s.mouthDir *= -1;
@@ -186,7 +210,7 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
       for (const em of s.emails) {
         if (!em.eaten && cpx === em.x && cpy === em.y) {
           em.eaten = true;
-          const left = s.emails.filter(e => !e.eaten).length;
+          const left = s.emails.filter((e) => !e.eaten).length;
           setEmailsLeft(left);
           if (left === 0) {
             s.running = false;
@@ -213,7 +237,10 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
         const gsx = (g.x + (g.targetX - g.x) * g.progress) * CELL + CELL / 2;
         const gsy = (g.y + (g.targetY - g.y) * g.progress) * CELL + CELL / 2;
 
-        if (Math.abs(pacScreenX - gsx) < CELL * 0.6 && Math.abs(pacScreenY - gsy) < CELL * 0.6) {
+        if (
+          Math.abs(pacScreenX - gsx) < CELL * 0.6 &&
+          Math.abs(pacScreenY - gsy) < CELL * 0.6
+        ) {
           s.running = false;
           onLose();
           return;
@@ -260,8 +287,13 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
         ctx.lineTo(gx + r, gy + r);
         const wave = Math.sin(s.tick * 0.15) * 2;
         for (let i = 0; i < 4; i++) {
-          const wx = gx + r - (r * 2 / 4) * (i + 0.5);
-          ctx.quadraticCurveTo(wx + 2, gy + r + wave * (i % 2 === 0 ? 1 : -1), wx - 2, gy + r);
+          const wx = gx + r - ((r * 2) / 4) * (i + 0.5);
+          ctx.quadraticCurveTo(
+            wx + 2,
+            gy + r + wave * (i % 2 === 0 ? 1 : -1),
+            wx - 2,
+            gy + r,
+          );
         }
         ctx.lineTo(gx - r, gy + r);
         ctx.closePath();
@@ -275,8 +307,20 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
         const angle = Math.atan2(pacScreenY - gy, pacScreenX - gx);
         ctx.fillStyle = "#222";
         ctx.beginPath();
-        ctx.arc(gx - 3 + Math.cos(angle) * 1.5, gy - 3 + Math.sin(angle) * 1.5, 1.5, 0, Math.PI * 2);
-        ctx.arc(gx + 3 + Math.cos(angle) * 1.5, gy - 3 + Math.sin(angle) * 1.5, 1.5, 0, Math.PI * 2);
+        ctx.arc(
+          gx - 3 + Math.cos(angle) * 1.5,
+          gy - 3 + Math.sin(angle) * 1.5,
+          1.5,
+          0,
+          Math.PI * 2,
+        );
+        ctx.arc(
+          gx + 3 + Math.cos(angle) * 1.5,
+          gy - 3 + Math.sin(angle) * 1.5,
+          1.5,
+          0,
+          Math.PI * 2,
+        );
         ctx.fill();
         ctx.fillStyle = "#fff";
         ctx.font = "bold 8px monospace";
@@ -288,10 +332,11 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
       ctx.fillStyle = "#f7d000";
       ctx.beginPath();
       ctx.arc(
-        pacScreenX, pacScreenY,
+        pacScreenX,
+        pacScreenY,
         CELL / 2 - 2,
         pacAngle + s.mouth * Math.PI,
-        pacAngle + (2 - s.mouth) * Math.PI
+        pacAngle + (2 - s.mouth) * Math.PI,
       );
       ctx.lineTo(pacScreenX, pacScreenY);
       ctx.closePath();
@@ -301,7 +346,9 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
       ctx.arc(
         pacScreenX + Math.cos(pacAngle - Math.PI / 4) * 4,
         pacScreenY + Math.sin(pacAngle - Math.PI / 4) * 4,
-        2, 0, Math.PI * 2
+        2,
+        0,
+        Math.PI * 2,
       );
       ctx.fill();
 
@@ -318,8 +365,17 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
   return (
     <div style={{ fontFamily: "Arial, sans-serif", userSelect: "none" }}>
       {/* Info / Emails */}
-      <div className="flex justify-between w-full px-2 py-1" style={{ background: "#0a0a1e" }}>
-        <span style={{ color: "#f7d000", fontFamily: "var(--font-body)", fontSize: 16 }}>
+      <div
+        className="flex justify-between w-full px-2 py-1"
+        style={{ background: "#0a0a1e" }}
+      >
+        <span
+          style={{
+            color: "#f7d000",
+            fontFamily: "var(--font-body)",
+            fontSize: 16,
+          }}
+        >
           Emails: {emailsLeft}
         </span>
       </div>
@@ -333,7 +389,14 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
       />
 
       {/* Status Bar */}
-      <div style={{ background: "#000080", color: "#fff", padding: "2px 6px", fontSize: 12 }}>
+      <div
+        style={{
+          background: "#000080",
+          color: "#fff",
+          padding: "2px 6px",
+          fontSize: 12,
+        }}
+      >
         Avoid the 6 coworkers!
       </div>
     </div>

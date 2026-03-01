@@ -15,15 +15,15 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({
   botAvatar,
 }) => {
   // Physics Constants for perfectly consistent speed
-  const CONSTANT_VX = 4.0; 
+  const CONSTANT_VX = 4.0;
   const MAX_VY = 3.5;
   const BALL_SPEED_Y_START = 2.2;
-  
+
   // Marty Supreme color palette
-  const COLOR_BG = '#0a0a0a';
-  const COLOR_PRIMARY = '#ff8c00';
-  const COLOR_SECONDARY = '#ff4500';
-  const COLOR_UI_TEXT = '#ffffff';
+  const COLOR_BG = "#0a0a0a";
+  const COLOR_PRIMARY = "#ff8c00";
+  const COLOR_SECONDARY = "#ff4500";
+  const COLOR_UI_TEXT = "#ffffff";
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameRef = useRef<{
@@ -76,10 +76,18 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({
       if (!g.running) return;
 
       // Keyboard paddle control (W/S or Up/Down)
-      if (g.keysDown.has("w") || g.keysDown.has("W") || g.keysDown.has("ArrowUp")) {
+      if (
+        g.keysDown.has("w") ||
+        g.keysDown.has("W") ||
+        g.keysDown.has("ArrowUp")
+      ) {
         g.paddleY = Math.max(0, g.paddleY - PADDLE_SPEED);
       }
-      if (g.keysDown.has("s") || g.keysDown.has("S") || g.keysDown.has("ArrowDown")) {
+      if (
+        g.keysDown.has("s") ||
+        g.keysDown.has("S") ||
+        g.keysDown.has("ArrowDown")
+      ) {
         g.paddleY = Math.min(240 - PADDLE_H, g.paddleY + PADDLE_SPEED);
       }
 
@@ -98,11 +106,16 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({
         g.aiY = Math.max(0, g.aiY - AI_PADDLE_SPEED);
 
       // --- Consistent Physics Collision ---
-      
+
       // Player paddle collision (left)
-      if (g.ballX <= 18 && g.ballY >= g.paddleY && g.ballY <= g.paddleY + PADDLE_H) {
+      if (
+        g.ballX <= 18 &&
+        g.ballY >= g.paddleY &&
+        g.ballY <= g.paddleY + PADDLE_H
+      ) {
         g.ballVX = Math.abs(CONSTANT_VX); // Reset to base X speed
-        const hitPoint = (g.ballY - (g.paddleY + PADDLE_H / 2)) / (PADDLE_H / 2);
+        const hitPoint =
+          (g.ballY - (g.paddleY + PADDLE_H / 2)) / (PADDLE_H / 2);
         g.ballVY = hitPoint * MAX_VY; // Y speed depends on where it hit the paddle
       }
 
@@ -122,7 +135,10 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({
           onLose();
           return;
         }
-        g.ballX = 175; g.ballY = 120; g.ballVX = CONSTANT_VX; g.ballVY = BALL_SPEED_Y_START;
+        g.ballX = 175;
+        g.ballY = 120;
+        g.ballVX = CONSTANT_VX;
+        g.ballVY = BALL_SPEED_Y_START;
       }
       if (g.ballX > 350) {
         g.playerScore++;
@@ -132,7 +148,10 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({
           onWin();
           return;
         }
-        g.ballX = 175; g.ballY = 120; g.ballVX = -CONSTANT_VX; g.ballVY = BALL_SPEED_Y_START;
+        g.ballX = 175;
+        g.ballY = 120;
+        g.ballVX = -CONSTANT_VX;
+        g.ballVY = BALL_SPEED_Y_START;
       }
 
       // ── DRAWING ──
@@ -143,16 +162,24 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({
 
       // Center Line
       ctx.setLineDash([5, 5]);
-      ctx.strokeStyle = 'rgba(255,140,0,0.45)';
+      ctx.strokeStyle = "rgba(255,140,0,0.45)";
       ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(175, 0); ctx.lineTo(175, 240); ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(175, 0);
+      ctx.lineTo(175, 240);
+      ctx.stroke();
       ctx.setLineDash([]);
 
       // Left Paddle (Player)
       ctx.save();
       ctx.shadowColor = COLOR_PRIMARY;
       ctx.shadowBlur = 14;
-      const leftGrad = ctx.createLinearGradient(5, g.paddleY, 17, g.paddleY + PADDLE_H);
+      const leftGrad = ctx.createLinearGradient(
+        5,
+        g.paddleY,
+        17,
+        g.paddleY + PADDLE_H,
+      );
       leftGrad.addColorStop(0, COLOR_SECONDARY);
       leftGrad.addColorStop(0.5, COLOR_PRIMARY);
       leftGrad.addColorStop(1, COLOR_SECONDARY);
@@ -164,7 +191,12 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({
       ctx.save();
       ctx.shadowColor = COLOR_PRIMARY;
       ctx.shadowBlur = 12;
-      const rightGrad = ctx.createLinearGradient(333, g.aiY, 345, g.aiY + PADDLE_H);
+      const rightGrad = ctx.createLinearGradient(
+        333,
+        g.aiY,
+        345,
+        g.aiY + PADDLE_H,
+      );
       rightGrad.addColorStop(0, COLOR_SECONDARY);
       rightGrad.addColorStop(0.5, COLOR_PRIMARY);
       rightGrad.addColorStop(1, COLOR_SECONDARY);
@@ -175,24 +207,33 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({
       // Ball
       ctx.save();
       const r = 6;
-      const grad = ctx.createRadialGradient(g.ballX, g.ballY, 1, g.ballX, g.ballY, r + 8);
-      grad.addColorStop(0, 'rgba(255, 245, 230, 1)');
+      const grad = ctx.createRadialGradient(
+        g.ballX,
+        g.ballY,
+        1,
+        g.ballX,
+        g.ballY,
+        r + 8,
+      );
+      grad.addColorStop(0, "rgba(255, 245, 230, 1)");
       grad.addColorStop(0.2, COLOR_PRIMARY);
       grad.addColorStop(0.6, COLOR_SECONDARY);
-      grad.addColorStop(1, 'rgba(255,69,0,0.0)');
+      grad.addColorStop(1, "rgba(255,69,0,0.0)");
       ctx.fillStyle = grad;
       ctx.shadowColor = COLOR_PRIMARY;
       ctx.shadowBlur = 18;
-      ctx.beginPath(); ctx.arc(g.ballX, g.ballY, r, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(g.ballX, g.ballY, r, 0, Math.PI * 2);
+      ctx.fill();
       ctx.restore();
 
       // In-game Scoreboard
       ctx.fillStyle = COLOR_UI_TEXT;
-      ctx.font = '12px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText('You', 140, 18);
-      ctx.fillText('Marty', 200, 18);
-      ctx.font = '24px monospace';
+      ctx.font = "12px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText("You", 140, 18);
+      ctx.fillText("Marty", 200, 18);
+      ctx.font = "24px monospace";
       ctx.fillText(String(g.playerScore), 140, 38);
       ctx.fillText(String(g.aiScore), 200, 38);
 
@@ -217,7 +258,9 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({
             alt="Player avatar"
             className="w-10 h-10 rounded-full border-2 border-primary object-cover"
           />
-        ) : <div className="w-10" />}
+        ) : (
+          <div className="w-10" />
+        )}
 
         {botAvatar && (
           <img
@@ -228,14 +271,20 @@ export const PingPongGame: React.FC<PingPongGameProps> = ({
         )}
       </div>
 
-      <p className="text-xs text-card-foreground">W/S or ↑/↓ to move. First to 3 wins!</p>
-      
+      <p className="text-xs text-card-foreground">
+        W/S or ↑/↓ to move. First to 3 wins!
+      </p>
+
       <canvas
         ref={canvasRef}
         width={350}
         height={240}
         className="border border-border shadow-lg"
-        style={{ border: `2px solid ${COLOR_PRIMARY}`, borderRadius: 10, background: COLOR_BG }}
+        style={{
+          border: `2px solid ${COLOR_PRIMARY}`,
+          borderRadius: 10,
+          background: COLOR_BG,
+        }}
       />
 
       <div className="text-xs text-muted-foreground font-mono">
