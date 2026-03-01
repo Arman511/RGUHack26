@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Globe, Play } from "lucide-react";
+import { Globe } from "lucide-react";
 
 const MAX_BALLS_PER_INNINGS = 90 * 6;
 
@@ -130,6 +130,9 @@ export const ProcrastinationDesktop: React.FC = () => {
         ? "CatVideosNow.tv"
         : "YouTube";
 
+  const browserFavicon =
+    activeTab === "cricket" ? "🏏" : activeTab === "cat" ? "🐱" : "▶️";
+
   const browserUrl =
     activeTab === "cricket"
       ? "https://www.cricketlive.tv/match/ind-vs-aus-2026"
@@ -174,7 +177,7 @@ export const ProcrastinationDesktop: React.FC = () => {
           <div className="flex items-center gap-2">
             <Globe size={14} />
             <span className="text-xs font-bold">
-              Google Chrome - {browserTitle}
+              Google Chrome - {browserFavicon} {browserTitle}
             </span>
           </div>
           <div className="flex gap-1">
@@ -204,7 +207,7 @@ export const ProcrastinationDesktop: React.FC = () => {
               : "bg-[#c0c0c0] border border-[#808080]"
               } px-3 py-1 text-[11px] flex items-center gap-1`}
           >
-            <Globe size={10} /> Cricket Live 🏏
+            🏏 Cricket Live
           </button>
           <button
             type="button"
@@ -214,7 +217,7 @@ export const ProcrastinationDesktop: React.FC = () => {
               : "bg-[#c0c0c0] border border-[#808080]"
               } px-3 py-1 text-[11px] flex items-center gap-1`}
           >
-            <Globe size={10} /> Cat Videos 🐱
+            🐱 Cat Videos
           </button>
           <button
             type="button"
@@ -224,7 +227,7 @@ export const ProcrastinationDesktop: React.FC = () => {
               : "bg-[#c0c0c0] border border-[#808080]"
               } px-3 py-1 text-[11px] flex items-center gap-1`}
           >
-            <Play size={10} /> YouTube
+            ▶️ YouTube
           </button>
         </div>
 
