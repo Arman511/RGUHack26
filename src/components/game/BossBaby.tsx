@@ -62,7 +62,7 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
                   <button className="xp-button-primary" onClick={onDismiss}>
                     {message.toLowerCase().includes("email") ||
                     message.toLowerCase().includes("outlook")
-                      ? "AGH, no..."
+                      ? "AGH, no..." 
                       : "AGH, fine..."}
                   </button>
                 </div>

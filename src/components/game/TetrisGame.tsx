@@ -1,34 +1,25 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const COLS = 10;
-const ROWS = 18;
-const CELL = 20;
-const LABELS = ["BUG", "UI", "DEBT", "FIX", "TEST"];
+const COLS = 7;
+const ROWS = 15;
+const CELL = 22;
 const TIMER_SECONDS = 15;
+// Row index from the top (0 = very top, ROWS-1 = bottom).
+// Overlay fires when any block reaches this row — i.e. stack is (ROWS - DANGER_ROW) tall.
+const DANGER_ROW = 5; // triggers when 10 of 15 rows are stacked
 
 const SHAPES = [
-  [[1, 1, 1, 1]], // I
-  [
-    [1, 1],
-    [1, 1],
-  ], // O
-  [
-    [0, 1, 0],
-    [1, 1, 1],
-  ], // T
-  [
-    [1, 0],
-    [1, 0],
-    [1, 1],
-  ], // L
-  [
-    [0, 1],
-    [0, 1],
-    [1, 1],
-  ], // J
+  [[1,1,1,1],[1,1,1,1]],      // I: 2×4 slab
+  [[1,1,1],[1,1,1],[1,1,1]],  // O: 3×3 square
+  [[0,1,0],[1,1,1],[0,1,0]],  // T: 3×3 cross
+  [[1,1,0],[1,1,1],[1,1,1]],  // L: 3×3 chunky L
+  [[0,1,1],[0,1,1],[1,1,1]],  // J: 3×3 chunky J
 ];
 
-const COLORS = ["#4cc9f0", "#f72585", "#7209b7", "#4361ee", "#4895ef"];
+const PRIORITIES = ["CRIT", "HIGH", "MED", "LOW"];
+const COLORS = ["#ff3333", "#fb5607", "#ffbe0b", "#22c55e"];
+const HIGHLIGHT_COLORS = ["#ff9999", "#fdb080", "#ffe580", "#86efac"];
+const SHADOW_COLORS = ["#7a0000", "#7d2b03", "#806000", "#14532d"];
 
 interface TetrisGameProps {
   onTopReached: () => void;
@@ -40,9 +31,9 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({
   onCleared,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS);
-  const [gameOver, setGameOver] = useState(false);
+  const [flashMsg, setFlashMsg] = useState<string | null>(null);
+  const flashTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -50,12 +41,12 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const grid: (string | null)[][] = Array.from({ length: ROWS }, () =>
+    const grid: (number | null)[][] = Array.from({ length: ROWS }, () =>
       Array(COLS).fill(null),
     );
     let currentPiece: {
       shape: number[][];
-      color: string;
+      colorIdx: number;
       label: string;
       x: number;
       y: number;
@@ -64,19 +55,26 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({
     let dropCounter = 0;
     let lastTime = 0;
     let startTime = performance.now();
+    let piecesPlaced = 0;
+
+    function flash(msg: string) {
+      if (flashTimeout.current) clearTimeout(flashTimeout.current);
+      setFlashMsg(msg);
+      flashTimeout.current = setTimeout(() => setFlashMsg(null), 1300);
+    }
 
     function newPiece() {
-      const idx = Math.floor(Math.random() * SHAPES.length);
+      const shapeIdx = Math.floor(Math.random() * SHAPES.length);
+      const priorityIdx = Math.floor(Math.random() * PRIORITIES.length);
       currentPiece = {
-        shape: SHAPES[idx],
-        color: COLORS[idx],
-        label: LABELS[Math.floor(Math.random() * LABELS.length)],
+        shape: SHAPES[shapeIdx],
+        colorIdx: priorityIdx,
+        label: PRIORITIES[priorityIdx],
         x: Math.floor(COLS / 2) - 1,
         y: 0,
       };
       if (collides(currentPiece)) {
         running = false;
-        setGameOver(true);
         onTopReached();
       }
     }
@@ -89,7 +87,7 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({
             const nx = piece.x + c;
             const ny = piece.y + r;
             if (nx < 0 || nx >= COLS || ny >= ROWS) return true;
-            if (ny >= 0 && grid[ny][nx]) return true;
+            if (ny >= 0 && grid[ny][nx] !== null) return true;
           }
         }
       }
@@ -104,18 +102,25 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({
             const ny = currentPiece.y + r;
             const nx = currentPiece.x + c;
             if (ny >= 0 && ny < ROWS && nx >= 0 && nx < COLS) {
-              grid[ny][nx] = currentPiece.color;
+              grid[ny][nx] = currentPiece.colorIdx;
             }
           }
         }
       }
+      piecesPlaced++;
+      let linesCleared = 0;
       for (let r = ROWS - 1; r >= 0; r--) {
         if (grid[r].every((c) => c !== null)) {
           grid.splice(r, 1);
           grid.unshift(Array(COLS).fill(null));
-          setScore((prev) => prev + 100);
+          linesCleared++;
           r++;
         }
+      }
+      if (linesCleared > 1) {
+        flash("Reassigned to the whole team!");
+      } else if (linesCleared === 1) {
+        flash("Pawned off!");
       }
     }
 
@@ -145,39 +150,73 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({
       if (collides(currentPiece)) currentPiece.shape = old;
     }
 
+    function drawBlock(px: number, py: number, colorIdx: number) {
+      const s = CELL - 1;
+      ctx.fillStyle = COLORS[colorIdx];
+      ctx.fillRect(px, py, s, s);
+      ctx.fillStyle = HIGHLIGHT_COLORS[colorIdx];
+      ctx.fillRect(px, py, s, 3);
+      ctx.fillRect(px, py, 3, s);
+      ctx.fillStyle = SHADOW_COLORS[colorIdx];
+      ctx.fillRect(px, py + s - 3, s, 3);
+      ctx.fillRect(px + s - 3, py, 3, s);
+    }
+
     function draw() {
       ctx.fillStyle = "#0a0a1a";
       ctx.fillRect(0, 0, COLS * CELL, ROWS * CELL);
+
       for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
-          if (grid[r][c]) {
-            ctx.fillStyle = grid[r][c]!;
-            ctx.fillRect(c * CELL, r * CELL, CELL - 1, CELL - 1);
+          if (grid[r][c] !== null) {
+            drawBlock(c * CELL, r * CELL, grid[r][c]!);
           }
         }
       }
+
       if (currentPiece) {
-        ctx.fillStyle = currentPiece.color;
         for (let r = 0; r < currentPiece.shape.length; r++) {
           for (let c = 0; c < currentPiece.shape[r].length; c++) {
             if (currentPiece.shape[r][c]) {
-              ctx.fillRect(
+              drawBlock(
                 (currentPiece.x + c) * CELL,
                 (currentPiece.y + r) * CELL,
-                CELL - 1,
-                CELL - 1,
+                currentPiece.colorIdx,
               );
             }
           }
         }
         ctx.fillStyle = "#fff";
-        ctx.font = "8px monospace";
+        ctx.font = "bold 9px monospace";
         ctx.fillText(
           currentPiece.label,
-          (currentPiece.x + 0.2) * CELL,
-          (currentPiece.y + 1) * CELL,
+          (currentPiece.x + 0.15) * CELL,
+          (currentPiece.y + 1) * CELL - 3,
         );
       }
+
+      // Danger overlay: blocks are stacking into the top zone
+      let isDanger = false;
+      for (let c = 0; c < COLS; c++) {
+        if (grid[DANGER_ROW][c] !== null) {
+          isDanger = true;
+          break;
+        }
+      }
+      if (isDanger) {
+        ctx.fillStyle = "rgba(255, 51, 51, 0.12)";
+        ctx.fillRect(0, 0, COLS * CELL, DANGER_ROW * CELL);
+        ctx.fillStyle = "rgba(255, 51, 51, 0.85)";
+        ctx.font = "bold 11px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(
+          "all yours now...",
+          (COLS * CELL) / 2,
+          DANGER_ROW * CELL - 6,
+        );
+        ctx.textAlign = "left";
+      }
+
       ctx.strokeStyle = "#1a1a3e";
       for (let r = 0; r <= ROWS; r++) {
         ctx.beginPath();
@@ -199,17 +238,17 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({
       lastTime = time;
       dropCounter += delta;
 
-      // Check timer
       const elapsed = (time - startTime) / 1000;
       const remaining = Math.max(0, TIMER_SECONDS - elapsed);
       setTimeLeft(Math.ceil(remaining));
       if (remaining <= 0) {
         running = false;
-        onCleared(); // survived!
+        onCleared();
         return;
       }
 
-      if (dropCounter > 500) {
+      const dropInterval = Math.max(80, 300 - piecesPlaced * 25);
+      if (dropCounter > dropInterval) {
         drop();
         dropCounter = 0;
       }
@@ -233,27 +272,46 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({
     return () => {
       running = false;
       window.removeEventListener("keydown", keyHandler);
+      if (flashTimeout.current) clearTimeout(flashTimeout.current);
     };
   }, [onTopReached, onCleared]);
 
   return (
     <div className="flex flex-col items-center gap-2">
+      <p className="text-[12px] font-semibold text-center text-card-foreground leading-snug w-full">
+        Clear rows to reassign Jiras &mdash; let them stack and{" "}
+        <span className="text-destructive font-bold">they&apos;re all yours</span>
+      </p>
       <div className="flex justify-between w-full px-1">
-        <span className="text-xs text-card-foreground">Score: {score}</span>
+        <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+          <span style={{ color: "#ff3333" }}>■</span> Crit &nbsp;
+          <span style={{ color: "#fb5607" }}>■</span> High &nbsp;
+          <span style={{ color: "#ffbe0b" }}>■</span> Med &nbsp;
+          <span style={{ color: "#22c55e" }}>■</span> Low
+        </span>
         <span
-          className={`text-xs font-bold ${timeLeft <= 10 ? "text-destructive animate-pulse" : "text-card-foreground"}`}
+          className={`text-xs font-bold ${timeLeft <= 5 ? "text-destructive animate-pulse" : "text-card-foreground"}`}
         >
-          ⏱ {timeLeft}s
+          {timeLeft}s
         </span>
       </div>
-      <canvas
-        ref={canvasRef}
-        width={COLS * CELL}
-        height={ROWS * CELL}
-        className="border border-border"
-      />
-      <p className="text-[10px] text-muted-foreground">
-        Survive 30s! Arrow keys to move/rotate.
+      <div className="relative">
+        <canvas
+          ref={canvasRef}
+          width={COLS * CELL}
+          height={ROWS * CELL}
+          className="border-2 border-border"
+        />
+        {flashMsg && (
+          <div className="absolute inset-x-0 bottom-2 flex justify-center pointer-events-none">
+            <span className="bg-green-500 text-black text-[10px] font-bold px-2 py-0.5 rounded">
+              {flashMsg}
+            </span>
+          </div>
+        )}
+      </div>
+      <p className="text-[10px] text-center text-card-foreground/70">
+        ↑ rotate &nbsp;·&nbsp; ← → move &nbsp;·&nbsp; ↓ drop
       </p>
     </div>
   );
