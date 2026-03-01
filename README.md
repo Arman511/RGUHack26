@@ -54,9 +54,16 @@ We are a group of placement students currently being "wonderful" in the real wor
 - **[Charis Drain]** - Head of Corporate Yap
 - **[Himani Patney]** - Jira Ticket Architect
 - **[Vidhi Jalan]** - Boss Baby Handler
+- **[Lemar Tokham]** - Professional Email Ignorer 
 
 ---
 
 ### 🚀 How to Play
 
-1. Navigate your wonderful self to: https://liar.armandev.co.uk/
+Navigate your wonderful self to: https://liar.armandev.co.uk/
+
+### Run it locally
+
+1. Install [bun](https://www.bun.com)
+2. Run `bun install`
+3. Run `bun dev`
