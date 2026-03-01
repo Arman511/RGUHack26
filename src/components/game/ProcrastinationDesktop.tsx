@@ -24,8 +24,13 @@ function formatOvers(ballsFaced: number) {
 function isInningsComplete(innings: InningsState) {
   return innings.wickets >= 10 || innings.balls >= MAX_BALLS_PER_INNINGS;
 }
+interface ProcrastinationDesktopProps {
+  hidden?: boolean;
+}
 
-export const ProcrastinationDesktop: React.FC = () => {
+export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
+  hidden = false,
+}) => {
   const [pos, setPos] = useState({ x: 96, y: 40 });
   const [activeTab, setActiveTab] = useState<"cricket" | "cat" | "youtube">(
     "cricket",
@@ -162,7 +167,7 @@ export const ProcrastinationDesktop: React.FC = () => {
   return (
     <div
       className="fixed z-20"
-      style={{ left: pos.x, top: pos.y }}
+      style={{ left: pos.x, top: pos.y, display: hidden ? "none" : undefined }}
     >
       <div
         className="bg-[#ECE9D8] border-2 border-[#003c74] shadow-2xl flex flex-col"

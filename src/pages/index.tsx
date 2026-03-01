@@ -390,8 +390,8 @@ const Index = () => {
       </div>
       <DesktopIcons />
 
-      {/* Procrastination desktop — stays visible until player loses */}
-      {!showPunishment && <ProcrastinationDesktop />}
+      {/* Keep mounted so internal state (e.g., cricket match) does not reset between stages */}
+      <ProcrastinationDesktop hidden={Boolean(showPunishment)} />
 
       {/* Grey overlay when game is active */}
       {isGameActive && <div className="fixed inset-0 bg-foreground/50 z-30" />}
