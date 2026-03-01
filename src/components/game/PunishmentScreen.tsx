@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Video, MessageCircle, LayoutList } from "lucide-react";
+import { OutlookMockup } from "./OutlookMockup";
 
 interface PunishmentScreenProps {
   onComplete: () => void;
@@ -14,35 +15,47 @@ const PUNISHMENTS = {
     title: "Zoom - All Hands Meeting",
     icon: <Video size={14} />,
     content: (
-      <div className="flex flex-col gap-2 p-2">
-        <div className="grid grid-cols-5 gap-1">
-          {Array.from({ length: 20 }, (_, i) => (
-            <div
-              key={i}
-              className="w-10 h-10 bg-foreground/10 border border-border rounded flex items-center justify-center text-[8px] text-muted-foreground"
-            >
-              {
-                [
-                  "Dev",
-                  "PM",
-                  "QA",
-                  "HR",
-                  "CEO",
-                  "CTO",
-                  "VP",
-                  "Mgr",
-                  "Lead",
-                  "Jr",
-                ][i % 10]
-              }
-            </div>
-          ))}
+  <div className="flex flex-col gap-1 p-2 text-[9px]">
+    {/* Fake XP window header */}
+    <div className="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-2 py-0.5 rounded-sm text-[9px] font-semibold">
+      Skype Call - Sprint Sync
+    </div>
+
+    {/* Video grid */}
+    <div className="grid grid-cols-2 gap-1">
+      {["PM", "Tech Lead", "QA", "You"].map((name, i) => (
+        <div
+          key={name}
+          className="relative h-16 bg-black border border-border rounded overflow-hidden flex items-center justify-center"
+        >
+          {/* Fake webcam noise */}
+          <div className="absolute inset-0 opacity-20 bg-[repeating-linear-gradient(0deg,#ffffff22,#ffffff22_1px,#00000022_2px,#00000022_3px)]" />
+
+          <span className="text-[8px] text-white opacity-80">
+            {i === 3 ? "Camera Off" : "Connecting..."}
+          </span>
+
+          {/* Name label */}
+          <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[8px] px-1">
+            {name}
+          </div>
         </div>
-        <p className="text-[10px] text-muted-foreground text-center animate-pulse">
-          "Can everyone see my screen?" — Someone, always
-        </p>
-      </div>
-    ),
+      ))}
+    </div>
+
+    {/* Call controls */}
+    <div className="flex justify-center gap-2 mt-1">
+      <div className="w-4 h-4 rounded-full bg-green-500 border border-black" />
+      <div className="w-4 h-4 rounded-full bg-yellow-400 border border-black animate-pulse" />
+      <div className="w-4 h-4 rounded-full bg-red-500 border border-black" />
+    </div>
+
+    {/* Classic corporate line */}
+    <p className="text-center text-[8px] text-muted-foreground mt-1 animate-pulse">
+      "You're on mute."
+    </p>
+  </div>
+),
   },
   teams: {
     title: "Microsoft Teams - Sprint Chat",
@@ -170,25 +183,9 @@ const PUNISHMENTS = {
 ),
   },
   email: {
-    title: "Email - Inbox Overflow",
+    title: "Outlook",
     icon: <MessageCircle size={14} />,
-    content: (
-      <div className="flex flex-col gap-1 p-2 text-[10px]">
-        {[
-          "Inbox (99+ unread)",
-          'Subject: "Quick question"',
-          'Subject: "gentle reminder #4"',
-          'Subject: "RE: RE: RE: action needed"',
-          "Attachment: final_v2_REAL_final.pptx",
-          'CC: entire company',
-          "Sent from my iPhone",
-        ].map((msg, i) => (
-          <p key={i} className="text-card-foreground">
-            {msg}
-          </p>
-        ))}
-      </div>
-    ),
+    content: null,
   },
 };
 
@@ -221,26 +218,36 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [onComplete, gameStage]);
+  }, [onComplete, gameStage, punishmentType]);
 
   return (
     <div className="fixed inset-0 z-[60] bg-foreground/60 flex items-center justify-center">
-      <div className="xp-window w-[400px]">
+      <div className={`xp-window ${punishmentType === "email" ? "w-[560px]" : "w-[400px]"}`}>
         <div className="xp-title-bar">
           <div className="flex items-center gap-1.5">
             {punishment.icon}
             <span className="text-xs">{punishment.title}</span>
           </div>
         </div>
-        <div className="xp-window-body">
-          {isPunishment && (
-            <div className="text-center mb-2">
-              <p className="text-xs text-destructive font-bold">
-                ⚠️ PUNISHMENT: You must endure {timer}s of work!
-              </p>
-            </div>
+        <div className="xp-window-body" style={punishmentType === "email" ? { padding: 0 } : undefined}>
+          {punishmentType === "email" ? (
+            <OutlookMockup onPlayAgain={onComplete} />
+          ) : (
+            <>
+              <div className="text-center mb-2">
+                <p className="text-xs text-destructive font-bold">
+                  ⚠️ PUNISHMENT: You must endure {timer}s of work!
+                </p>
+              </div>
+              {punishment.content}
+              <div className="mt-2 bg-muted rounded-full h-2 overflow-hidden">
+                <div
+                  className="bg-primary h-full transition-all duration-1000"
+                  style={{ width: `${((PUNISHMENT_TIME_SECONDS - timer) / PUNISHMENT_TIME_SECONDS) * 100}%` }}
+                />
+              </div>
+            </>
           )}
-          {punishment.content}
         </div>
       </div>
     </div>
