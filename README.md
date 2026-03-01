@@ -1,6 +1,8 @@
 # 🔥 Liar, Cheater, Fired: The Corporate Escape
 > **"The ultimate race to the bottom. Can you get fired before the 5:00 PM whistle?"**
 
+![logo](.assets/startScreen.png)
+
 
 ## 💼 The Concept
 As a team of **"Wonderful Magical Interns"** by day, we decided to spend RGUHack 26 exploring our dark mirrors. 
