@@ -28,7 +28,7 @@ const PUNISHMENTS = {
         <div className="flex-1 p-2 bg-[#f6f4ea]">
           <div className="relative h-full bg-black border border-black">
             <img
-              src="https://picsum.photos/600/400?random=1"
+              src="public/zoomscreenshare.png"
               className="w-full h-full object-cover opacity-90"
             />
 
