@@ -302,7 +302,9 @@ const Index = () => {
       }}
     >
 
-      <FailMeter value={state.meterValue} />
+      <div style={{ position: "fixed", right: 16, top: 16, zIndex: 50 }}>
+        <FailMeter value={state.meterValue} />
+      </div>
       <DesktopIcons />
 
       {/* Procrastination desktop — stays visible until player loses */}
