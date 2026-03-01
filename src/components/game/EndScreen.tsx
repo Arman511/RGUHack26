@@ -42,7 +42,6 @@ export const EndScreen: React.FC<EndScreenProps> = ({ type, onRestart }) => {
         className="fixed inset-0 z-[100] flex items-center justify-center bg-cover bg-center"
         style={{ backgroundImage: "url('/background.png')" }}
       >
-        <div className="absolute inset-0 bg-background/60" />
         {confetti.map((c) => (
           <div
             key={c.id}
@@ -92,7 +91,6 @@ export const EndScreen: React.FC<EndScreenProps> = ({ type, onRestart }) => {
       className="fixed inset-0 z-[100] flex items-center justify-center bg-cover bg-center"
       style={{ backgroundImage: "url('/background.png')" }}
     >
-      <div className="absolute inset-0 bg-background/60" />
       <div className="xp-window w-[min(95vw,680px)] z-10">
         <div className="xp-title-bar-inactive">
           <span>Human Resources</span>

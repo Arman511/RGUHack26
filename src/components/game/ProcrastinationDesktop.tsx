@@ -1,8 +1,124 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Globe, Play } from "lucide-react";
+
+const MAX_BALLS_PER_INNINGS = 90 * 6;
+
+type BattingTeam = "INDIA" | "AUSTRALIA" | "DONE";
+
+interface InningsState {
+  runs: number;
+  wickets: number;
+  balls: number;
+}
+
+interface MatchState {
+  battingTeam: BattingTeam;
+  india: InningsState;
+  australia: InningsState;
+}
+
+function formatOvers(ballsFaced: number) {
+  return `${Math.floor(ballsFaced / 6)}.${ballsFaced % 6}`;
+}
+
+function isInningsComplete(innings: InningsState) {
+  return innings.wickets >= 10 || innings.balls >= MAX_BALLS_PER_INNINGS;
+}
 
 export const ProcrastinationDesktop: React.FC = () => {
   const [pos, setPos] = useState({ x: 96, y: 40 });
+  const [match, setMatch] = useState<MatchState>({
+    battingTeam: "INDIA",
+    india: { runs: 0, wickets: 0, balls: 0 },
+    australia: { runs: 0, wickets: 0, balls: 0 },
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setMatch((prev) => {
+        if (prev.battingTeam === "DONE") return prev;
+
+        const teamKey = prev.battingTeam === "INDIA" ? "india" : "australia";
+        const currentInnings = prev[teamKey];
+
+        if (isInningsComplete(currentInnings)) {
+          if (prev.battingTeam === "INDIA") {
+            return { ...prev, battingTeam: "AUSTRALIA" };
+          }
+          return { ...prev, battingTeam: "DONE" };
+        }
+
+        const outcomeRoll = Math.random();
+        let runDelta = 0;
+        let wicketDelta = 0;
+
+        if (outcomeRoll < 0.04) {
+          wicketDelta = 1;
+        } else if (outcomeRoll < 0.44) {
+          runDelta = 0;
+        } else if (outcomeRoll < 0.79) {
+          runDelta = 1;
+        } else if (outcomeRoll < 0.91) {
+          runDelta = 2;
+        } else if (outcomeRoll < 0.94) {
+          runDelta = 3;
+        } else if (outcomeRoll < 0.995) {
+          runDelta = 4;
+        } else {
+          runDelta = 6;
+        }
+
+        const nextInnings: InningsState = {
+          runs: currentInnings.runs + runDelta,
+          wickets: Math.min(10, currentInnings.wickets + wicketDelta),
+          balls: currentInnings.balls + 1,
+        };
+
+        const nextState: MatchState = {
+          ...prev,
+          [teamKey]: nextInnings,
+        } as MatchState;
+
+        if (isInningsComplete(nextInnings)) {
+          if (prev.battingTeam === "INDIA") {
+            return { ...nextState, battingTeam: "AUSTRALIA" };
+          }
+          return { ...nextState, battingTeam: "DONE" };
+        }
+
+        return nextState;
+      });
+    }, 1900);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const indiaRuns = match.india.runs;
+  const australiaRuns = match.australia.runs;
+
+  const liveLine =
+    match.battingTeam === "INDIA"
+      ? "● LIVE - India 1st innings in progress"
+      : match.battingTeam === "AUSTRALIA"
+        ? indiaRuns === australiaRuns
+          ? "● LIVE - Scores level"
+          : australiaRuns < indiaRuns
+            ? `● LIVE - Australia trail by ${indiaRuns - australiaRuns} runs`
+            : `● LIVE - Australia lead by ${australiaRuns - indiaRuns} runs`
+        : indiaRuns === australiaRuns
+          ? "● RESULT - Match tied after one innings each"
+          : indiaRuns > australiaRuns
+            ? `● RESULT - India lead by ${indiaRuns - australiaRuns} runs after one innings each`
+            : `● RESULT - Australia lead by ${australiaRuns - indiaRuns} runs after one innings each`;
+
+  const statusColorClass =
+    match.battingTeam !== "DONE"
+      ? "text-green-700"
+      : indiaRuns > australiaRuns
+        ? "text-blue-700"
+        : indiaRuns < australiaRuns
+          ? "text-red-700"
+          : "text-gray-700";
 
   const onMouseDown = useCallback(
     (e: React.MouseEvent) => {
@@ -83,19 +199,27 @@ export const ProcrastinationDesktop: React.FC = () => {
             <div className="flex justify-between items-center mb-4">
               <div className="text-center">
                 <p className="text-sm font-bold">INDIA</p>
-                <p className="text-2xl font-bold text-blue-700">287/4</p>
-                <p className="text-xs text-gray-600">(42.3 ov)</p>
+                <p className="text-2xl font-bold text-blue-700">
+                  {match.india.runs}/{match.india.wickets}
+                </p>
+                <p className="text-xs text-gray-600">
+                  ({formatOvers(match.india.balls)} ov)
+                </p>
               </div>
               <div className="text-sm font-bold text-gray-600">vs</div>
               <div className="text-center">
                 <p className="text-sm font-bold">AUSTRALIA</p>
-                <p className="text-2xl font-bold text-red-600">265/10</p>
-                <p className="text-xs text-gray-600">(48.2 ov)</p>
+                <p className="text-2xl font-bold text-red-600">
+                  {match.australia.runs}/{match.australia.wickets}
+                </p>
+                <p className="text-xs text-gray-600">
+                  ({formatOvers(match.australia.balls)} ov)
+                </p>
               </div>
             </div>
             <div className="text-center mt-3">
-              <p className="text-sm font-bold text-green-700">
-                ● LIVE - India need 22 runs from 45 balls
+              <p className={`text-sm font-bold ${statusColorClass}`}>
+                {liveLine}
               </p>
             </div>
           </div>
