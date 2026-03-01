@@ -127,7 +127,9 @@ export const WordleGame: React.FC<WordleGameProps> = ({ onComplete }) => {
           .filter((w) => /^[A-Z]{5}$/.test(w));
         if (!active || words.length === 0) return;
         setValidWords(new Set([...FALLBACK_VALID_WORDS, ...words]));
-      } catch {}
+      } catch {
+        return;
+      }
     };
     loadWords();
     return () => {

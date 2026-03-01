@@ -1,3 +1,4 @@
+import { Monitor } from "lucide-react";
 import React from "react";
 
 interface IntroScreenProps {
@@ -104,7 +105,10 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 xp-taskbar z-20">
-        <div className="xp-start-btn">start</div>
+        <button className="xp-start-btn">
+          <Monitor size={16} />
+          <span>Start</span>
+        </button>
         <div className="ml-3 text-xs text-foreground/80">
           (Disclaimer: This is not representative of us developers; we are very,
           very, very good employees.)

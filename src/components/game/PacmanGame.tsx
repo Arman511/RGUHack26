@@ -37,6 +37,28 @@ interface Ghost {
   dir: { dx: number; dy: number };
 }
 
+interface Email {
+  x: number;
+  y: number;
+  eaten: boolean;
+}
+
+interface GameState {
+  running: boolean;
+  px: number;
+  py: number;
+  targetX: number;
+  targetY: number;
+  progress: number;
+  nextDir: { dx: number; dy: number };
+  currentDir: { dx: number; dy: number };
+  mouth: number;
+  mouthDir: number;
+  emails: Email[];
+  ghosts: Ghost[];
+  tick: number;
+}
+
 const GHOST_CONFIGS = [
   { color: "#e04040", label: "ED" },
   { color: "#e07020", label: "HR" },
@@ -65,7 +87,7 @@ interface PacmanGameProps {
 export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [emailsLeft, setEmailsLeft] = useState(EMAIL_COUNT);
-  const stateRef = useRef<any>(null);
+  const stateRef = useRef<GameState | null>(null);
 
   const initState = useCallback(() => {
     const paths: { x: number; y: number }[] = [];
