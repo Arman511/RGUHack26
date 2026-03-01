@@ -4,9 +4,10 @@ import { Baby } from "lucide-react";
 interface BossBabyProps {
   message: string;
   onDismiss: () => void;
+  autoAdvanceDelay?: number;
 }
 
-export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
+export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss, autoAdvanceDelay }) => {
   const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);
 
@@ -20,6 +21,14 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
       return () => clearTimeout(timeout);
     }
   }, [index, message]);
+
+  // Auto-advance after typing completes
+  useEffect(() => {
+    if (autoAdvanceDelay !== undefined && displayedText === message && message.length > 0) {
+      const t = setTimeout(onDismiss, autoAdvanceDelay);
+      return () => clearTimeout(t);
+    }
+  }, [displayedText, message, autoAdvanceDelay, onDismiss]);
 
   return (
     <div
@@ -56,8 +65,8 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
                 <span className="animate-pulse">▌</span>
               </p>
 
-              {/* Continue Button */}
-              {displayedText === message && (
+              {/* Continue Button — hidden when auto-advancing */}
+              {displayedText === message && autoAdvanceDelay === undefined && (
                 <div className="mt-4 text-right">
                   <button className="xp-button-primary" onClick={onDismiss}>
                     {message.toLowerCase().includes("email") ||

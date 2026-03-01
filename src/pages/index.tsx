@@ -27,6 +27,7 @@ const Index = () => {
   const [skipTutorials, setSkipTutorials] = useState(true);
   const [showBoss, setShowBoss] = useState(false);
   const [bossMsg, setBossMsg] = useState("");
+  const [bossAutoAdvance, setBossAutoAdvance] = useState<number | undefined>(undefined);
   const [nextStageAfterBoss, setNextStageAfterBoss] =
     useState<GameStage | null>(null);
   const [showPunishment, setShowPunishment] = useState<GameStage | null>(null);
@@ -36,6 +37,7 @@ const Index = () => {
   const [loopDone, setLoopDone] = useState(false);
   const [isPunishment, setIsPunishment] = useState(true);
   const delayTimer = useRef<ReturnType<typeof setTimeout>>();
+  const bossOnDismissRef = useRef<(() => void) | null>(null);
 
   // Delayed stage transition (5s gap)
   const delayedStage = useCallback(
@@ -52,8 +54,9 @@ const Index = () => {
     };
   }, []);
 
-  const triggerBoss = useCallback((msg: string, nextStage: GameStage) => {
+  const triggerBoss = useCallback((msg: string, nextStage: GameStage, autoAdvanceDelay?: number) => {
     setBossMsg(msg);
+    setBossAutoAdvance(autoAdvanceDelay);
     setShowBoss(true);
     setNextStageAfterBoss(nextStage);
   }, []);
@@ -71,6 +74,13 @@ const Index = () => {
 
   const dismissBoss = useCallback(() => {
     setShowBoss(false);
+    setBossAutoAdvance(undefined);
+    const cb = bossOnDismissRef.current;
+    bossOnDismissRef.current = null;
+    if (cb) {
+      cb();
+      return;
+    }
     if (nextStageAfterBoss) {
       setStage(nextStageAfterBoss);
       setNextStageAfterBoss(null);
@@ -131,8 +141,13 @@ const Index = () => {
   const handlePongLose = useCallback(() => {
     moveMeter(10); // toward PROMOTED (loss)
     setIsPunishment(true);
-    triggerPunishment("pong-done", "pingpong");
-  }, [moveMeter, triggerPunishment]);
+    bossOnDismissRef.current = () => triggerPunishment("pong-done", "pingpong");
+    triggerBoss(
+      "Ha! You lost to ME?! Guess you have to reply loser. - PLACEHOLDER",
+      "pong-done", // fallback, won't be used
+      1600,
+    );
+  }, [moveMeter, triggerBoss, triggerPunishment]);
 
   const handleMeterOutcome = useCallback(() => {
     if (state.meterValue <= -STAGE_METER_POINT_CUTOF) {
@@ -156,10 +171,8 @@ const Index = () => {
 
       if (skipDoneStageDelay) {
         setSkipDoneStageDelay(false);
-        setStage("zoom");
-      } else {
-        delayedStage("zoom", STAGE_DELAY_MS);
       }
+      delayedStage("zoom", STAGE_DELAY_MS);
     }
   }, [
     state.stage,
@@ -195,7 +208,13 @@ const Index = () => {
         );
       } else {
         moveMeter(10);
-        triggerPunishment("wordle-done", "wordle");
+        setIsPunishment(true);
+        bossOnDismissRef.current = () => triggerPunishment("wordle-done", "wordle");
+        triggerBoss(
+          "Can't even decode corporate buzzwords?! Back to the grind — punishment first, then emails.",
+          "wordle-done", // fallback, won't be used
+          1600,
+        );
       }
     },
     [moveMeter, triggerBoss, triggerPunishment],
@@ -235,8 +254,14 @@ const Index = () => {
 
   const handlePacmanLose = useCallback(() => {
     moveMeter(10);
-    triggerPunishment("pacman-done", "pacman");
-  }, [moveMeter, triggerPunishment]);
+    setIsPunishment(true);
+    bossOnDismissRef.current = () => triggerPunishment("pacman-done", "pacman");
+    triggerBoss(
+      "Eaten by your own coworkers?! Pathetic. That's what happens when you don't clear your inbox. Punishment time!",
+      "pacman-done", // fallback, won't be used
+      1600,
+    );
+  }, [moveMeter, triggerBoss, triggerPunishment]);
 
   useEffect(() => {
     if (state.stage === "pacman-done") {
@@ -246,10 +271,8 @@ const Index = () => {
 
       if (skipDoneStageDelay) {
         setSkipDoneStageDelay(false);
-        setStage("jira");
-      } else {
-        delayedStage("jira", STAGE_DELAY_MS);
       }
+      delayedStage("jira", STAGE_DELAY_MS);
     }
   }, [
     state.stage,
@@ -540,7 +563,7 @@ const Index = () => {
       {showBoss && (
         <>
           <div className="fixed inset-0 bg-foreground/50 z-40" />
-          <BossBaby message={bossMsg} onDismiss={dismissBoss} />
+          <BossBaby message={bossMsg} onDismiss={dismissBoss} autoAdvanceDelay={bossAutoAdvance} />
         </>
       )}
 
