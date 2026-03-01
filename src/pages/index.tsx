@@ -390,8 +390,8 @@ const Index = () => {
       </div>
       <DesktopIcons />
 
-      {/* Procrastination desktop — stays visible until player loses */}
-      {!showPunishment && <ProcrastinationDesktop />}
+      {/* Keep mounted so internal state (e.g., cricket match) does not reset between stages */}
+      <ProcrastinationDesktop hidden={Boolean(showPunishment)} />
 
       {/* Grey overlay when game is active */}
       {isGameActive && <div className="fixed inset-0 bg-foreground/50 z-30" />}
@@ -501,10 +501,10 @@ const Index = () => {
           <HowToPlay
             title="Wordle"
             instructions={[
-              "Guess the 5-letter corporate buzzword in 6 tries",
+              "Guess the 5-letter corporate buzzword in 4 tries",
               "Green = correct letter & position",
               "Yellow = correct letter, wrong position",
-              "Getting it in ≤3 tries = slacking (good!)",
+              "Getting it in ≤4 tries = slacking (good!)",
             ]}
             onStart={() => setStage("wordle")}
           />
