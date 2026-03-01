@@ -31,9 +31,9 @@ export function TeamsNotif({ onDismiss, onJoin }: TeamsNotifProps) {
         <div className="bg-[#ece9d8] px-4 py-3 flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <img
-              src="/profile.jpg"
-              alt="avatar"
-              className="w-10 h-10 rounded-full border border-[#0a246a] object-cover"
+              src="/boss-baby.jpeg"
+              alt="Boss Baby"
+              className="w-14 h-14 rounded-full border border-[#0a246a] object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = "none";
               }}

@@ -31,8 +31,7 @@ export const FailMeter: React.FC<FailMeterProps> = ({ value }) => {
     >
       <div className="xp-titlebar">
         <div className="flex items-center gap-2">
-          <span style={{ fontSize: 14 }}>📊</span>
-          <span>Performance Meter</span>
+          <span>🔥 Fire-O-Meter™</span>
         </div>
       </div>
       <div
@@ -67,7 +66,7 @@ export const FailMeter: React.FC<FailMeterProps> = ({ value }) => {
               textAlign: "center",
             }}
           >
-            EMPLOYEE PERFORMANCE TRACKER
+            AM I GETTING FIRED?
           </div>
 
           {/* viewBox starts at y=-15 to give clearance above the arc top */}
