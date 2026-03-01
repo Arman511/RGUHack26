@@ -26,10 +26,12 @@ function isInningsComplete(innings: InningsState) {
 }
 interface ProcrastinationDesktopProps {
   hidden?: boolean;
+  disabled?: boolean;
 }
 
 export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
   hidden = false,
+  disabled = false,
 }) => {
   const [pos, setPos] = useState({ x: 96, y: 40 });
   const [activeTab, setActiveTab] = useState<"cricket" | "cat" | "youtube">(
@@ -167,7 +169,12 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
   return (
     <div
       className="fixed z-20"
-      style={{ left: pos.x, top: pos.y, display: hidden ? "none" : undefined }}
+      style={{
+        left: pos.x,
+        top: pos.y,
+        display: hidden ? "none" : undefined,
+        pointerEvents: disabled ? "none" : undefined,
+      }}
     >
       <div
         className="bg-[#ECE9D8] border-2 border-[#003c74] shadow-2xl flex flex-col"
