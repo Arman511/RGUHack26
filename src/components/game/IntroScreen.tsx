@@ -1,4 +1,4 @@
-import { Monitor, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import React, { useState } from "react";
 
 interface IntroScreenProps {
@@ -50,17 +50,15 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
             <div className="xp-window w-full max-w-[535px]">
               <div className="xp-title-bar">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold">
-                    BOSS MESSAGE
-                  </span>
+                  <span className="text-xs font-bold">BOSS MESSAGE</span>
                 </div>
               </div>
               <div className="xp-window-body flex flex-col gap-6 p-5">
                 <div className="flex items-center gap-4">
                   <div className="flex flex-col gap-14 flex-1 justify-center">
                     <p className="text-base font-bold leading-relaxed text-left whitespace-pre-wrap">
-                      "I hate liars and cheaters. Why are you hired if you don't do
-                      your job?{" "}
+                      "I hate liars and cheaters. Why are you hired if you don't
+                      do your job?{" "}
                       <span className="text-destructive">Focus on work!</span>"
                     </p>
                     <div className="flex justify-start">
@@ -81,7 +79,9 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
                         className="w-full h-full object-cover rounded-full border-2 border-primary"
                       />
                     </div>
-                    <span className="text-sm font-bold text-card-foreground mt-2">Boss Baby</span>
+                    <span className="text-sm font-bold text-card-foreground mt-2">
+                      Boss Baby
+                    </span>
                   </div>
                 </div>
               </div>
@@ -90,74 +90,82 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
         </div>
       </div>
 
-      {/* Settings — bottom right, above taskbar */}
-      <div className="absolute bottom-[68px] right-6 z-30 flex items-center">
-        {/* Expandable panel slides out to the left, attached to the button */}
+      <div className="absolute bottom-3 left-0 right-0 z-30 flex justify-center px-4">
         <div
+          className="w-full max-w-[900px] flex items-center justify-between gap-3 px-3 py-2"
           style={{
-            overflow: "hidden",
-            width: settingsOpen ? 220 : 0,
-            transition: "width 0.25s ease",
-            whiteSpace: "nowrap",
+            background:
+              "linear-gradient(180deg, hsl(0,0%,100%) 0%, hsl(0,0%,85%) 100%)",
+            border: "2px solid",
+            borderColor:
+              "hsl(0,0%,100%) hsl(220,10%,55%) hsl(220,10%,55%) hsl(0,0%,100%)",
           }}
         >
-          <div
-            style={{
-              width: 220,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              background: "linear-gradient(180deg, hsl(0,0%,100%) 0%, hsl(0,0%,85%) 100%)",
-              border: "2px solid",
-              borderColor: "hsl(0,0%,100%) transparent hsl(220,10%,55%) hsl(0,0%,100%)",
-              padding: "0 10px",
-              height: 40,
-              boxSizing: "border-box",
-            }}
-          >
-            <span className="text-xs font-bold">Tutorials</span>
+          <div className="text-xs text-foreground/80">
+            (Disclaimer: This is not representative of us developers; we are
+            very, very, very good employees.)
+          </div>
+
+          <div className="flex items-center">
+            <div
+              style={{
+                overflow: "hidden",
+                width: settingsOpen ? 220 : 0,
+                transition: "width 0.25s ease",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <div
+                style={{
+                  width: 220,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  background:
+                    "linear-gradient(180deg, hsl(0,0%,100%) 0%, hsl(0,0%,85%) 100%)",
+                  border: "2px solid",
+                  borderColor:
+                    "hsl(0,0%,100%) transparent hsl(220,10%,55%) hsl(0,0%,100%)",
+                  padding: "0 10px",
+                  height: 40,
+                  boxSizing: "border-box",
+                }}
+              >
+                <span className="text-xs font-bold">Tutorials</span>
+                <button
+                  type="button"
+                  className="xp-button text-[11px] px-2 py-0.5"
+                  onClick={() => setSkipTutorials(!skipTutorials)}
+                >
+                  {skipTutorials ? "OFF" : "ON"}
+                </button>
+              </div>
+            </div>
+
             <button
               type="button"
-              className="xp-button text-[11px] px-2 py-0.5"
-              onClick={() => setSkipTutorials(!skipTutorials)}
+              onClick={() => setSettingsOpen(!settingsOpen)}
+              title="Settings"
+              style={{
+                width: 40,
+                height: 40,
+                background:
+                  "linear-gradient(180deg, hsl(0,0%,100%) 0%, hsl(0,0%,85%) 100%)",
+                border: "2px solid",
+                borderColor:
+                  "hsl(0,0%,100%) hsl(220,10%,55%) hsl(220,10%,55%) hsl(0,0%,100%)",
+                borderRadius: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                flexShrink: 0,
+                boxShadow: "1px 1px 2px rgba(0,0,0,0.3)",
+              }}
             >
-              {skipTutorials ? "OFF" : "ON"}
+              <Settings size={20} color="hsl(220,10%,30%)" />
             </button>
           </div>
-        </div>
-
-        {/* Settings icon button */}
-        <button
-          type="button"
-          onClick={() => setSettingsOpen(!settingsOpen)}
-          title="Settings"
-          style={{
-            width: 40,
-            height: 40,
-            background: "linear-gradient(180deg, hsl(0,0%,100%) 0%, hsl(0,0%,85%) 100%)",
-            border: "2px solid",
-            borderColor: "hsl(0,0%,100%) hsl(220,10%,55%) hsl(220,10%,55%) hsl(0,0%,100%)",
-            borderRadius: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            flexShrink: 0,
-            boxShadow: "1px 1px 2px rgba(0,0,0,0.3)",
-          }}
-        >
-          <Settings size={20} color="hsl(220,10%,30%)" />
-        </button>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 xp-taskbar z-20">
-        <button className="xp-start-btn">
-          <Monitor size={16} />
-          <span>Start</span>
-        </button>
-        <div className="ml-3 text-xs text-foreground/80">
-          (Disclaimer: This is not representative of us developers; we are very,
-          very, very good employees.)
         </div>
       </div>
     </div>

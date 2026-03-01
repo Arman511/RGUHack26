@@ -1,36 +1,30 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 const UNREAD_EMAILS = [
   {
     from: "Michael (VP)",
     subject: "RE: RE: RE: Q3 Sprint Planning - URGENT",
-    time: "9:02 AM",
   },
   {
     from: "Sandra (HR)",
     subject: "Mandatory Fun: Team Building Next Friday",
-    time: "9:15 AM",
   },
   {
     from: "Dave (ED)",
     subject: "Quick sync? (will take 2 hrs)",
-    time: "9:23 AM",
   },
   {
     from: "Karen (SE)",
     subject: "Budget cuts - please review ASAP",
-    time: "9:41 AM",
   },
   {
     from: "Brian (VP)",
     subject: "Why is prod down again???",
-    time: "10:05 AM",
   },
-  { from: "Tom (MD)", subject: "Can you stay late tonight?", time: "10:30 AM" },
+  { from: "Tom (MD)", subject: "Can you stay late tonight?" },
   {
     from: "Jenny (ED)",
     subject: "Git blame says this is your fault",
-    time: "11:18 AM",
   },
 ];
 
@@ -69,6 +63,29 @@ interface OutlookMockupProps {
 export const OutlookMockup: React.FC<OutlookMockupProps> = ({
   onPlayAgain,
 }) => {
+  const unreadEmails = useMemo(() => {
+    const now = Date.now();
+    const oneDayMs = 24 * 60 * 60 * 1000;
+    const minOffsetMs = 60 * 1000;
+
+    const withDates = UNREAD_EMAILS.map((email) => {
+      const randomOffset =
+        minOffsetMs + Math.floor(Math.random() * (oneDayMs - minOffsetMs + 1));
+      const timestamp = new Date(now - randomOffset);
+      return { ...email, timestamp };
+    }).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+
+    const formatter = new Intl.DateTimeFormat(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+
+    return withDates.map((email) => ({
+      ...email,
+      time: formatter.format(email.timestamp),
+    }));
+  }, []);
+
   return (
     <div className="flex flex-col" style={{ width: 710 }}>
       {/* Outlook toolbar */}
@@ -122,7 +139,7 @@ export const OutlookMockup: React.FC<OutlookMockupProps> = ({
       {/* Email rows */}
       <div style={{ background: "#fff", height: 350, overflowY: "auto" }}>
         {/* Unread emails */}
-        {UNREAD_EMAILS.map((email, i) => (
+        {unreadEmails.map((email, i) => (
           <div
             key={`unread-${i}`}
             className="grid px-2 py-1"
@@ -229,10 +246,7 @@ export const OutlookMockup: React.FC<OutlookMockupProps> = ({
         }}
       >
         <span>12 Items, 7 Unread</span>
-        <button
-          onClick={onPlayAgain}
-          className="xp-button text-xs px-3 py-0.5"
-        >
+        <button onClick={onPlayAgain} className="xp-button text-xs px-3 py-0.5">
           Close Inbox
         </button>
         <span>Connected to Exchange Server</span>

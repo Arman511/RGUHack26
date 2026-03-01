@@ -35,7 +35,7 @@ Meet your manager: **The Boss Baby**. He is micromanaging your every move.
 
 We used a professional stack to build a very "professional" experience:
 
-- **Framework:** React 18 + Vite
+- **Framework:** React 19 + Vite
 - **Styling:** Tailwind CSS and Lucide React for that sterile, soul-crushing office aesthetic.
 
 ---
@@ -54,7 +54,7 @@ We are a group of placement students currently being "wonderful" in the real wor
 - **[Charis Drain]** - Head of Corporate Yap
 - **[Himani Patney]** - Jira Ticket Architect
 - **[Vidhi Jalan]** - Boss Baby Handler
-- **[Lemar Tokham]** - Professional Email Ignorer 
+- **[Lemar Tokham]** - Professional Email Ignorer
 
 ---
 

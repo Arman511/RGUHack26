@@ -18,8 +18,8 @@ import { TeamsNotif } from "@/components/game/TeamsNotif";
 import { OutlookMockup } from "@/components/game/OutlookMockup";
 import { Video, LayoutList, Mail } from "lucide-react";
 
-const STAGE_DELAY_MS = 3000;
-const SECOND_DELAY_MS = 3000;
+const STAGE_DELAY_MS = 5000;
+const SECOND_DELAY_MS = 5000;
 const STAGE_METER_POINT_CUTOF = 9;
 
 const Index = () => {
@@ -27,9 +27,15 @@ const Index = () => {
   const [skipTutorials, setSkipTutorials] = useState(true);
   const [showBoss, setShowBoss] = useState(false);
   const [bossMsg, setBossMsg] = useState("");
-  const [bossAutoAdvance, setBossAutoAdvance] = useState<number | undefined>(undefined);
-  const [bossAltButton, setBossAltButton] = useState<{ label: string; onAlt: () => void } | undefined>(undefined);
-  const [bossDismissLabel, setBossDismissLabel] = useState<string | undefined>(undefined);
+  const [bossAutoAdvance, setBossAutoAdvance] = useState<number | undefined>(
+    undefined,
+  );
+  const [bossAltButton, setBossAltButton] = useState<
+    { label: string; onAlt: () => void } | undefined
+  >(undefined);
+  const [bossDismissLabel, setBossDismissLabel] = useState<string | undefined>(
+    undefined,
+  );
   const [nextStageAfterBoss, setNextStageAfterBoss] =
     useState<GameStage | null>(null);
   const [showPunishment, setShowPunishment] = useState<GameStage | null>(null);
@@ -56,17 +62,31 @@ const Index = () => {
     };
   }, []);
 
-  const triggerBoss = useCallback((msg: string, nextStage: GameStage, autoAdvanceDelay?: number, altButton?: { label: string; onAlt: () => void }, dismissLabel?: string) => {
-    setBossMsg(msg);
-    setBossAutoAdvance(autoAdvanceDelay);
-    setBossAltButton(altButton);
-    setBossDismissLabel(dismissLabel);
-    setShowBoss(true);
-    setNextStageAfterBoss(nextStage);
-  }, []);
+  const triggerBoss = useCallback(
+    (
+      msg: string,
+      nextStage: GameStage,
+      autoAdvanceDelay?: number,
+      altButton?: { label: string; onAlt: () => void },
+      dismissLabel?: string,
+    ) => {
+      setBossMsg(msg);
+      setBossAutoAdvance(autoAdvanceDelay);
+      setBossAltButton(altButton);
+      setBossDismissLabel(dismissLabel);
+      setShowBoss(true);
+      setNextStageAfterBoss(nextStage);
+    },
+    [],
+  );
 
   const triggerBossWithDelay = useCallback(
-    (msg: string, nextStage: GameStage, delayMs = STAGE_DELAY_MS, altButton?: { label: string; onAlt: () => void }) => {
+    (
+      msg: string,
+      nextStage: GameStage,
+      delayMs = STAGE_DELAY_MS,
+      altButton?: { label: string; onAlt: () => void },
+    ) => {
       const timeout = setTimeout(() => {
         triggerBoss(msg, nextStage, undefined, altButton);
       }, delayMs);
@@ -221,7 +241,8 @@ const Index = () => {
       } else {
         moveMeter(10);
         setIsPunishment(true);
-        bossOnDismissRef.current = () => triggerPunishment("wordle-done", "wordle");
+        bossOnDismissRef.current = () =>
+          triggerPunishment("wordle-done", "wordle");
         triggerBoss(
           "Can't even decode corporate buzzwords?! Seems like you need to attend the meeting after all...",
           "wordle-done", // fallback, won't be used
@@ -245,7 +266,14 @@ const Index = () => {
         "Check your emails! 10 unread messages! You're on prod support!",
         skipTutorials ? "pacman" : "pacman-howto",
         SECOND_DELAY_MS,
-        { label: "Fine.", onAlt: () => { setShowBoss(false); setBossAltButton(undefined); setStage("outlook"); } },
+        {
+          label: "Fine.",
+          onAlt: () => {
+            setShowBoss(false);
+            setBossAltButton(undefined);
+            setStage("outlook");
+          },
+        },
       );
     }
   }, [
@@ -375,6 +403,11 @@ const Index = () => {
     ["pingpong", "wordle", "pacman", "tetris"].includes(state.stage) ||
     state.stage.endsWith("-howto");
 
+  const shouldHideProcrastinationDesktop =
+    Boolean(showPunishment) || isGameActive || state.stage === "outlook";
+  const shouldDisableProcrastinationDesktop =
+    showBoss || state.stage === "teams" || state.stage === "zoom";
+
   return (
     <div
       className="w-screen h-screen overflow-hidden relative bg-background"
@@ -390,17 +423,23 @@ const Index = () => {
       </div>
       <DesktopIcons />
 
-      {/* Procrastination desktop — stays visible until player loses */}
-      {!showPunishment && <ProcrastinationDesktop />}
+      {/* Keep mounted so internal state (e.g., cricket match) does not reset between stages */}
+      <ProcrastinationDesktop
+        hidden={shouldHideProcrastinationDesktop}
+        disabled={shouldDisableProcrastinationDesktop}
+      />
 
       {/* Grey overlay when game is active */}
       {isGameActive && <div className="fixed inset-0 bg-foreground/50 z-30" />}
 
       {/* Teams Notification */}
       {state.stage === "teams" && (
-        <div className="teams-notification">
-          <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsJoin} />
-        </div>
+        <>
+          <div className="fixed inset-0 z-40" />
+          <div className="teams-notification">
+            <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsJoin} />
+          </div>
+        </>
       )}
 
       {/* Pong How-To */}
@@ -501,10 +540,10 @@ const Index = () => {
           <HowToPlay
             title="Wordle"
             instructions={[
-              "Guess the 5-letter corporate buzzword in 6 tries",
+              "Guess the 5-letter corporate buzzword in 4 tries",
               "Green = correct letter & position",
               "Yellow = correct letter, wrong position",
-              "Getting it in ≤3 tries = slacking (good!)",
+              "Getting it in ≤4 tries = slacking (good!)",
             ]}
             onStart={() => setStage("wordle")}
           />
@@ -596,7 +635,13 @@ const Index = () => {
       {showBoss && (
         <>
           <div className="fixed inset-0 bg-foreground/50 z-40" />
-          <BossBaby message={bossMsg} onDismiss={dismissBoss} autoAdvanceDelay={bossAutoAdvance} altButton={bossAltButton} dismissLabel={bossDismissLabel} />
+          <BossBaby
+            message={bossMsg}
+            onDismiss={dismissBoss}
+            autoAdvanceDelay={bossAutoAdvance}
+            altButton={bossAltButton}
+            dismissLabel={bossDismissLabel}
+          />
         </>
       )}
 
