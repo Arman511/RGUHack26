@@ -4,6 +4,7 @@ import { Video, MessageCircle, LayoutList } from "lucide-react";
 interface PunishmentScreenProps {
   onComplete: () => void;
   gameStage: string;
+  isPunishment: boolean;
 }
 
 const PUNISHMENT_TIME_SECONDS = 5;
@@ -211,7 +212,9 @@ const GAME_STAGE_PUNISHMENT_MAP: Record<string, keyof typeof PUNISHMENTS> = {
 };
 
 export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
-  onComplete, gameStage
+  onComplete,
+  gameStage,
+  isPunishment,
 }) => {
   const [timer, setTimer] = useState(PUNISHMENT_TIME_SECONDS);
   const punishmentType = GAME_STAGE_PUNISHMENT_MAP[gameStage.toLowerCase()] ?? "zoom";
@@ -242,18 +245,14 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
           </div>
         </div>
         <div className="xp-window-body">
-          <div className="text-center mb-2">
-            <p className="text-xs text-destructive font-bold">
-              ⚠️ PUNISHMENT: You must endure {timer}s of work!
-            </p>
-          </div>
+          {isPunishment && (
+            <div className="text-center mb-2">
+              <p className="text-xs text-destructive font-bold">
+                ⚠️ PUNISHMENT: You must endure {timer}s of work!
+              </p>
+            </div>
+          )}
           {punishment.content}
-          <div className="mt-2 bg-muted rounded-full h-2 overflow-hidden">
-            <div
-              className="bg-primary h-full transition-all duration-1000"
-              style={{ width: `${((PUNISHMENT_TIME_SECONDS - timer) / PUNISHMENT_TIME_SECONDS) * 100}%` }}
-            />
-          </div>
         </div>
       </div>
     </div>
