@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 const CELL = 24;
 const COLS = 21;
 const ROWS = 17;
-const EMAIL_COUNT = 10;
+const EMAIL_COUNT = 7;
 
 const MAZE: number[][] = [
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -38,11 +38,12 @@ interface Ghost {
 }
 
 const GHOST_CONFIGS = [
-  { color: "#e04040", label: "PM" },
+  { color: "#e04040", label: "ED" },
   { color: "#e07020", label: "HR" },
-  { color: "#40a0e0", label: "CEO" },
-  { color: "#e040a0", label: "CFO" },
-  { color: "#40c080", label: "CTO" },
+  { color: "#40a0e0", label: "MD" },
+  { color: "#e040a0", label: "SE" },
+  { color: "#40c080", label: "CEO" },
+  { color: "#f7d000", label: "VP" },
 ];
 
 const GHOST_SPAWNS = [
@@ -128,7 +129,7 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
     };
     window.addEventListener("keydown", keyHandler);
 
-    const PACMAN_SPEED = 0.045;
+    const PACMAN_SPEED = 0.05;
 
     const chooseGhostDir = (g: Ghost) => {
       const dirs = [
