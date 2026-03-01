@@ -5,6 +5,7 @@ import { OutlookMockup } from "./OutlookMockup";
 interface PunishmentScreenProps {
   onComplete: () => void;
   gameStage: string;
+  isPunishment: boolean;
 }
 
 const PUNISHMENT_TIME_SECONDS = 5;
@@ -48,62 +49,126 @@ const PUNISHMENTS = {
     title: "Microsoft Teams - Sprint Chat",
     icon: <MessageCircle size={14} />,
     content: (
-      <div className="flex flex-col gap-1 p-2 text-[10px]">
-        {[
-          'PM: "Quick sync?"',
-          'Dev: "Sure"',
-          "PM: *shares 47 slides*",
-          'Dev: "..."',
-          'PM: "This should only take 5 mins"',
-          "(45 minutes later)",
-          'PM: "Let\'s continue offline"',
-        ].map((msg, i) => (
-          <p key={i} className="text-card-foreground">
-            {msg}
-          </p>
-        ))}
+  <div className="flex flex-col p-2 text-[10px] bg-card border border-border rounded gap-1">
+    {/* Header */}
+    <div className="text-[9px] font-semibold text-muted-foreground border-b border-border pb-1 mb-1">
+      # Engineering
+    </div>
+
+    {/* Messages */}
+    <div className="flex flex-col gap-1">
+      <div className="flex flex-col">
+        <span className="text-[9px] font-semibold text-card-foreground">
+          Sarah
+        </span>
+        <div className="bg-muted px-1.5 py-1 rounded w-fit max-w-[90%]">
+          Prod DB connections are high.
+        </div>
       </div>
-    ),
+
+      <div className="flex flex-col items-end">
+        <span className="text-[9px] font-semibold text-primary">You</span>
+        <div className="bg-primary/20 px-1.5 py-1 rounded w-fit max-w-[90%]">
+          Do we need to scale?
+        </div>
+      </div>
+
+      <div className="flex flex-col">
+        <span className="text-[9px] font-semibold text-card-foreground">
+          Michael
+        </span>
+        <div className="bg-muted px-1.5 py-1 rounded w-fit max-w-[90%]">
+          API looks slow too.
+        </div>
+      </div>
+
+      <div className="flex flex-col">
+        <span className="text-[9px] font-semibold text-card-foreground">
+          Sarah
+        </span>
+        <div className="bg-muted px-1.5 py-1 rounded w-fit max-w-[90%]">
+          Found a connection leak. Rolling back.
+        </div>
+      </div>
+
+      <div className="text-center text-[8px] text-muted-foreground mt-1 animate-pulse">
+        typing...
+      </div>
+    </div>
+  </div>
+),
   },
   jira: {
     title: "Jira - Sprint Board",
     icon: <LayoutList size={14} />,
     content: (
-      <div className="grid grid-cols-3 gap-1 p-2 text-[8px]">
-        <div className="bg-foreground/5 p-1 border border-border">
-          <p className="font-bold text-card-foreground mb-1">TO DO (47)</p>
-          {["Fix prod", "Update docs", "Code review", "Sprint retro"].map(
-            (t) => (
-              <div
-                key={t}
-                className="bg-card border border-border p-0.5 mb-0.5 text-card-foreground"
-              >
-                {t}
-              </div>
-            ),
-          )}
-        </div>
-        <div className="bg-foreground/5 p-1 border border-border">
-          <p className="font-bold text-card-foreground mb-1">
-            IN PROGRESS (12)
-          </p>
-          {["Refactor API", "DB migration"].map((t) => (
-            <div
-              key={t}
-              className="bg-warning/20 border border-warning/40 p-0.5 mb-0.5 text-card-foreground"
-            >
-              {t}
-            </div>
-          ))}
-        </div>
-        <div className="bg-foreground/5 p-1 border border-border">
-          <p className="font-bold text-card-foreground mb-1">DONE (2)</p>
-          <div className="bg-success/20 border border-success/40 p-0.5 mb-0.5 text-card-foreground">
-            Update README
+  <div className="flex flex-col gap-1 p-2 text-[9px]">
+    {/* Header */}
+    <div className="text-[9px] font-semibold text-muted-foreground border-b border-border pb-1">
+      Sprint Board
+    </div>
+
+    {/* Columns */}
+    <div className="grid grid-cols-3 gap-1">
+      
+      {/* TO DO */}
+      <div className="bg-muted/40 border border-border rounded p-1">
+        <p className="font-bold text-[8px] mb-1 text-muted-foreground">
+          TO DO (3)
+        </p>
+
+        {[
+          "Fix mobile layout",
+          "Update docs",
+          "Add dark mode",
+        ].map((t) => (
+          <div
+            key={t}
+            className="bg-card border border-border rounded px-1 py-0.5 mb-1 text-card-foreground"
+          >
+            {t}
           </div>
+        ))}
+      </div>
+
+      {/* IN PROGRESS */}
+      <div className="bg-muted/40 border border-border rounded p-1">
+        <p className="font-bold text-[8px] mb-1 text-warning">
+          IN PROGRESS (2)
+        </p>
+
+        {[
+          "Refactor API",
+          "Auth flow",
+        ].map((t) => (
+          <div
+            key={t}
+            className="bg-warning/20 border border-warning/40 rounded px-1 py-0.5 mb-1 text-card-foreground"
+          >
+            {t}
+          </div>
+        ))}
+      </div>
+
+      {/* DONE */}
+      <div className="bg-muted/40 border border-border rounded p-1">
+        <p className="font-bold text-[8px] mb-1 text-success">
+          DONE (1)
+        </p>
+
+        <div className="bg-success/20 border border-success/40 rounded px-1 py-0.5 text-card-foreground">
+          Update README
         </div>
       </div>
-    ),
+
+    </div>
+
+    {/* Joke footer */}
+    <div className="text-center text-[8px] text-muted-foreground mt-1 animate-pulse">
+      Sprint ends in 3 minutes...
+    </div>
+  </div>
+),
   },
   email: {
     title: "Outlook",
@@ -120,7 +185,9 @@ const GAME_STAGE_PUNISHMENT_MAP: Record<string, keyof typeof PUNISHMENTS> = {
 };
 
 export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
-  onComplete, gameStage
+  onComplete,
+  gameStage,
+  isPunishment,
 }) => {
   const [timer, setTimer] = useState(PUNISHMENT_TIME_SECONDS);
   const punishmentType = GAME_STAGE_PUNISHMENT_MAP[gameStage.toLowerCase()] ?? "zoom";
