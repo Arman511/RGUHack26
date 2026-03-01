@@ -51,7 +51,7 @@ const Index = () => {
     };
   }, []);
 
-  const triggerBoss = useCallback((msg: string, nextStage: GameStage, delayMs: number = 0) => {
+  const triggerBoss = useCallback((msg: string, nextStage: GameStage) => {
     setBossMsg(msg);
     setShowBoss(true);
     setNextStageAfterBoss(nextStage);
@@ -186,20 +186,12 @@ const Index = () => {
       } else {
         triggerBoss(
           "Check your emails! 10 unread messages! You're on prod support!",
-          skipTutorials ? "pacman" : "pacman-howto", STAGE_DELAY_MS
+          skipTutorials ? "pacman" : "pacman-howto",
         );
       }
 
     }
-  }, [
-    skipTutorials,
-    state.stage,
-    triggerBoss,
-    loopDone,
-    handleMeterOutcome,
-    skipDoneStageDelay,
-    setStage,
-  ]);
+  }, [skipTutorials, state.stage, triggerBoss, loopDone, handleMeterOutcome]);
 
   const handlePacmanWin = useCallback(() => {
     moveMeter(-30);
@@ -246,7 +238,7 @@ const Index = () => {
   const handleTetrisTopReached = useCallback(() => {
     moveMeter(10); // failed work = toward fired
     triggerBoss(
-      "Ha got you, better luck next time, pay attention during the zoom! Moving toward PROMOTED...",
+      "Ha got you, better luck next time, pay attention during the Jira Refinement! You can have some points for doing work...",
       "tetris-done",
     );
   }, [moveMeter]);
@@ -261,9 +253,6 @@ const Index = () => {
 
   useEffect(() => {
     if (state.stage === "tetris-done") {
-      if (skipDoneStageDelay) {
-        setSkipDoneStageDelay(false);
-      }
       if (handleMeterOutcome()) {
         return;
       }
@@ -303,14 +292,15 @@ const Index = () => {
     state.stage.endsWith("-howto");
 
   return (
-    <div className="w-screen h-screen overflow-hidden relative bg-background">
-      <div
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 20% 80%, hsl(213 80% 40%) 0%, transparent 50%), radial-gradient(circle at 80% 20%, hsl(220 70% 30%) 0%, transparent 50%)",
-        }}
-      />
+    <div
+      className="w-screen h-screen overflow-hidden relative bg-background"
+      style={{
+        backgroundImage: "url('/background.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
 
       <FailMeter value={state.meterValue} />
       <DesktopIcons />
@@ -324,7 +314,7 @@ const Index = () => {
       {/* Teams Notification */}
       {state.stage === "teams" && (
         <div className="teams-notification">
-          <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsJoin} />
+          <TeamsNotif onDismiss={handleTeamsClose} />
         </div>
       )}
 
@@ -480,8 +470,8 @@ const Index = () => {
             instructions={[
               "Survive for 30 seconds!",
               "Arrow keys: ←→ move, ↑ rotate, ↓ drop",
-              "Let blocks pile up to get fired!",
-              "Surviving = too productive = PROMOTED",
+              "Surviving = you're actively avoiding work = moving toward FIRED",
+              "If you let the tasks pile up... You will be forced to do the work and get some points...",
             ]}
             onStart={() => setStage("tetris")}
           />

@@ -42,11 +42,11 @@ export const FailMeter: React.FC<FailMeterProps> = ({ value }) => {
               strokeWidth="18"
               strokeLinecap="round"
             />
-            {/* FIRED zone (left - green, 40%) */}
+            {/* FIRED zone (left - red, 40%) */}
             <path
               d="M 20 110 A 100 100 0 0 1 89.1 14.9"
               fill="none"
-              stroke="hsl(var(--success))"
+              stroke="hsl(var(--demerit))"
               strokeWidth="18"
               strokeLinecap="round"
             />
@@ -58,11 +58,11 @@ export const FailMeter: React.FC<FailMeterProps> = ({ value }) => {
               strokeWidth="18"
               strokeLinecap="round"
             />
-            {/* PROMOTED zone (right - red, 40%) */}
+            {/* PROMOTED zone (right - green, 40%) */}
             <path
               d="M 150.9 14.9 A 100 100 0 0 1 220 110"
               fill="none"
-              stroke="hsl(var(--demerit))"
+              stroke="hsl(var(--success))"
               strokeWidth="18"
               strokeLinecap="round"
             />
@@ -85,7 +85,7 @@ export const FailMeter: React.FC<FailMeterProps> = ({ value }) => {
               y="138"
               fontSize="10"
               fontWeight="bold"
-              fill="hsl(var(--success))"
+              fill="hsl(var(--demerit))"
               fontFamily="Tahoma"
             >
               🎉 FIRED
@@ -96,7 +96,7 @@ export const FailMeter: React.FC<FailMeterProps> = ({ value }) => {
               textAnchor="end"
               fontSize="10"
               fontWeight="bold"
-              fill="hsl(var(--demerit))"
+              fill="hsl(var(--success))"
               fontFamily="Tahoma"
             >
               PROMOTED 😱
