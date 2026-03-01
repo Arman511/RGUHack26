@@ -19,6 +19,7 @@ import { Video, LayoutList, Mail } from "lucide-react";
 import { set } from "react-hook-form";
 
 const STAGE_DELAY_MS = 3000;
+const SECOND_DELAY_MS = 3000;
 const STAGE_METER_POINT_CUTOF = 9;
 
 const Index = () => {
@@ -57,6 +58,17 @@ const Index = () => {
     setNextStageAfterBoss(nextStage);
   }, []);
 
+  const triggerBossWithDelay = useCallback(
+    (msg: string, nextStage: GameStage, delayMs = STAGE_DELAY_MS) => {
+      const timeout = setTimeout(() => {
+        triggerBoss(msg, nextStage);
+      }, delayMs);
+
+      return () => clearTimeout(timeout);
+    },
+    [triggerBoss],
+  );
+
   const dismissBoss = useCallback(() => {
     setShowBoss(false);
     if (nextStageAfterBoss) {
@@ -65,11 +77,18 @@ const Index = () => {
     }
   }, [nextStageAfterBoss, setStage]);
 
-  const triggerPunishment = useCallback((nextStage: GameStage, punishmentStage: GameStage, isPunishment: boolean = true) => {
-    setShowPunishment(punishmentStage);
-    setStageAfterPunishment(nextStage);
-    setIsPunishment(isPunishment);
-  }, []);
+  const triggerPunishment = useCallback(
+    (
+      nextStage: GameStage,
+      punishmentStage: GameStage,
+      isPunishment: boolean = true,
+    ) => {
+      setShowPunishment(punishmentStage);
+      setStageAfterPunishment(nextStage);
+      setIsPunishment(isPunishment);
+    },
+    [],
+  );
 
   const handlePunishmentDone = useCallback(() => {
     setShowPunishment(null);
@@ -91,14 +110,14 @@ const Index = () => {
     setIsPunishment(true);
     triggerBoss(
       "Ignoring my pings? Fine. If you won't reply, then you'll rebound. Put your paddle where your mouse is and let's see if you can keep up.",
-      skipTutorials ? 'pingpong' : 'pong-howto'
+      skipTutorials ? "pingpong" : "pong-howto",
     );
   }, [skipTutorials, triggerBoss]);
 
   const handleTeamsJoin = useCallback(() => {
     moveMeter(10);
-    setIsPunishment(true);
-    triggerPunishment("pong-done", "pingpong");
+    setIsPunishment(false);
+    triggerPunishment("pong-done", "pingpong", false);
   }, [moveMeter, triggerPunishment]);
 
   const handlePongWin = useCallback(() => {
@@ -142,12 +161,19 @@ const Index = () => {
         delayedStage("zoom", STAGE_DELAY_MS);
       }
     }
-  }, [state.stage, skipDoneStageDelay, delayedStage, setStage, loopDone, handleMeterOutcome]);
+  }, [
+    state.stage,
+    skipDoneStageDelay,
+    delayedStage,
+    setStage,
+    loopDone,
+    handleMeterOutcome,
+  ]);
 
   const handleZoomJoin = useCallback(() => {
     moveMeter(20); // did work = toward promoted
     setIsPunishment(false);
-    triggerPunishment("wordle-done", "wordle");
+    triggerPunishment("wordle-done", "wordle", false);
   }, [moveMeter, triggerPunishment]);
 
   const handleZoomDecline = useCallback(() => {
@@ -182,16 +208,22 @@ const Index = () => {
       }
       if (skipDoneStageDelay) {
         setSkipDoneStageDelay(false);
-        setStage("pacman");
-      } else {
-        triggerBoss(
-          "Check your emails! 10 unread messages! You're on prod support!",
-          skipTutorials ? "pacman" : "pacman-howto",
-        );
       }
 
+      return triggerBossWithDelay(
+        "Check your emails! 10 unread messages! You're on prod support!",
+        skipTutorials ? "pacman" : "pacman-howto",
+        SECOND_DELAY_MS,
+      );
     }
-  }, [skipTutorials, state.stage, triggerBoss, loopDone, handleMeterOutcome]);
+  }, [
+    skipTutorials,
+    state.stage,
+    loopDone,
+    handleMeterOutcome,
+    triggerBossWithDelay,
+    setStage,
+  ]);
 
   const handlePacmanWin = useCallback(() => {
     moveMeter(-30);
@@ -219,7 +251,14 @@ const Index = () => {
         delayedStage("jira", STAGE_DELAY_MS);
       }
     }
-  }, [state.stage, skipDoneStageDelay, delayedStage, setStage, loopDone, handleMeterOutcome]);
+  }, [
+    state.stage,
+    skipDoneStageDelay,
+    delayedStage,
+    setStage,
+    loopDone,
+    handleMeterOutcome,
+  ]);
 
   const handleJiraNotification = useCallback(() => {
     triggerBoss(
@@ -230,10 +269,13 @@ const Index = () => {
 
   useEffect(() => {
     if (state.stage === "jira") {
-      const t = setTimeout(handleJiraNotification, 100);
-      return () => clearTimeout(t);
+      return triggerBossWithDelay(
+        "The sprint is on fire! It's all your fault for not working! Survive the backlog of tasks!",
+        skipTutorials ? "tetris" : "tetris-howto",
+        100,
+      );
     }
-  }, [state.stage, handleJiraNotification]);
+  }, [state.stage, skipTutorials, triggerBossWithDelay]);
 
   const handleTetrisTopReached = useCallback(() => {
     moveMeter(10); // failed work = toward fired
@@ -316,7 +358,7 @@ const Index = () => {
       {/* Teams Notification */}
       {state.stage === "teams" && (
         <div className="teams-notification">
-          <TeamsNotif onDismiss={handleTeamsClose} />
+          <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsJoin} />
         </div>
       )}
 
@@ -340,7 +382,7 @@ const Index = () => {
       )}
 
       {/* Ping Pong */}
-      {state.stage === 'pingpong' && (
+      {state.stage === "pingpong" && (
         <DraggableWindow
           title="Work Avoidance.exe"
           width={400}
@@ -357,7 +399,7 @@ const Index = () => {
             onWin={handlePongWin}
             onLose={handlePongLose}
             playerAvatar="/sword.jpeg"
-            botAvatar='/marty.jpeg'
+            botAvatar="/marty.jpeg"
             playerName="Marty Supreme"
           />
         </DraggableWindow>

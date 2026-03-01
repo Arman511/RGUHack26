@@ -15,172 +15,129 @@ const PUNISHMENTS = {
     title: "Zoom - All Hands Meeting",
     icon: <Video size={14} />,
     content: (
-  <div className="flex flex-col gap-1 p-2 text-[9px]">
-    {/* Fake XP window header */}
-    <div className="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-2 py-0.5 rounded-sm text-[9px] font-semibold">
-      Skype Call - Sprint Sync
-    </div>
+      <div className="flex flex-col h-[420px] text-[11px] bg-[#ece9d8] border border-[#7f9db9]">
+        {/* Menu */}
+        <div className="bg-[#d4d0c8] border-b border-[#7f9db9] px-2 py-[2px] flex gap-4">
+          <span>Call</span>
+          <span>View</span>
+          <span>Tools</span>
+          <span>Help</span>
+        </div>
 
-    {/* Video grid */}
-    <div className="grid grid-cols-2 gap-1">
-      {["PM", "Tech Lead", "QA", "You"].map((name, i) => (
-        <div
-          key={name}
-          className="relative h-16 bg-black border border-border rounded overflow-hidden flex items-center justify-center"
-        >
-          {/* Fake webcam noise */}
-          <div className="absolute inset-0 opacity-20 bg-[repeating-linear-gradient(0deg,#ffffff22,#ffffff22_1px,#00000022_2px,#00000022_3px)]" />
+        {/* Main video */}
+        <div className="flex-1 p-2 bg-[#f6f4ea]">
+          <div className="relative h-full bg-black border border-black">
+            <img
+              src="public/zoomscreenshare.png"
+              className="w-full h-full object-cover opacity-90"
+            />
 
-          <span className="text-[8px] text-white opacity-80">
-            {i === 3 ? "Camera Off" : "Connecting..."}
-          </span>
-
-          {/* Name label */}
-          <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[8px] px-1">
-            {name}
+            <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white px-2 py-[2px]">
+              PM – Screen Sharing (Poor Connection)
+            </div>
           </div>
         </div>
-      ))}
-    </div>
 
-    {/* Call controls */}
-    <div className="flex justify-center gap-2 mt-1">
-      <div className="w-4 h-4 rounded-full bg-green-500 border border-black" />
-      <div className="w-4 h-4 rounded-full bg-yellow-400 border border-black animate-pulse" />
-      <div className="w-4 h-4 rounded-full bg-red-500 border border-black" />
-    </div>
+        {/* Participant strip */}
+        <div className="grid grid-cols-4 gap-1 p-2 border-t border-[#7f9db9] bg-[#ece9d8]">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-16 border border-black bg-black" />
+          ))}
+        </div>
 
-    {/* Classic corporate line */}
-    <p className="text-center text-[8px] text-muted-foreground mt-1 animate-pulse">
-      "You're on mute."
-    </p>
-  </div>
-),
+        {/* Status */}
+        <div className="bg-[#d4d0c8] border-t border-[#7f9db9] px-2 py-[2px]">
+          Connected • 12 participants
+        </div>
+      </div>
+    ),
   },
   teams: {
     title: "Microsoft Teams - Sprint Chat",
     icon: <MessageCircle size={14} />,
     content: (
-  <div className="flex flex-col p-2 text-[10px] bg-card border border-border rounded gap-1">
-    {/* Header */}
-    <div className="text-[9px] font-semibold text-muted-foreground border-b border-border pb-1 mb-1">
-      # Engineering
-    </div>
+      <div className="flex h-[420px] text-[11px] bg-[#ece9d8] border border-[#7f9db9]">
+        {/* Sidebar */}
+        <div className="w-36 border-r border-[#7f9db9] bg-[#f6f4ea] p-2">
+          <div className="font-bold mb-1">Channels</div>
+          <div># General</div>
+          <div className="font-bold"># Engineering</div>
+          <div># Incidents</div>
+        </div>
 
-    {/* Messages */}
-    <div className="flex flex-col gap-1">
-      <div className="flex flex-col">
-        <span className="text-[9px] font-semibold text-card-foreground">
-          Sarah
-        </span>
-        <div className="bg-muted px-1.5 py-1 rounded w-fit max-w-[90%]">
-          Prod DB connections are high.
+        {/* Chat */}
+        <div className="flex-1 flex flex-col">
+          <div className="bg-[#d4d0c8] border-b border-[#7f9db9] px-2 py-[2px]">
+            Engineering Chat
+          </div>
+
+          <div className="flex-1 p-2 space-y-2 bg-[#f6f4ea]">
+            <p>
+              <b>Sarah:</b> Prod DB connections high.
+            </p>
+            <p>
+              <b>Michael:</b> API latency increasing.
+            </p>
+            <p>
+              <b>You:</b> Scaling pool?
+            </p>
+            <p>
+              <b>Sarah:</b> Rolling back deployment.
+            </p>
+          </div>
+
+          <div className="border-t border-[#7f9db9] bg-white px-2 py-1 text-[10px] text-gray-400">
+            Type a message...
+          </div>
         </div>
       </div>
-
-      <div className="flex flex-col items-end">
-        <span className="text-[9px] font-semibold text-primary">You</span>
-        <div className="bg-primary/20 px-1.5 py-1 rounded w-fit max-w-[90%]">
-          Do we need to scale?
-        </div>
-      </div>
-
-      <div className="flex flex-col">
-        <span className="text-[9px] font-semibold text-card-foreground">
-          Michael
-        </span>
-        <div className="bg-muted px-1.5 py-1 rounded w-fit max-w-[90%]">
-          API looks slow too.
-        </div>
-      </div>
-
-      <div className="flex flex-col">
-        <span className="text-[9px] font-semibold text-card-foreground">
-          Sarah
-        </span>
-        <div className="bg-muted px-1.5 py-1 rounded w-fit max-w-[90%]">
-          Found a connection leak. Rolling back.
-        </div>
-      </div>
-
-      <div className="text-center text-[8px] text-muted-foreground mt-1 animate-pulse">
-        typing...
-      </div>
-    </div>
-  </div>
-),
+    ),
   },
   jira: {
     title: "Jira - Sprint Board",
     icon: <LayoutList size={14} />,
     content: (
-  <div className="flex flex-col gap-1 p-2 text-[9px]">
-    {/* Header */}
-    <div className="text-[9px] font-semibold text-muted-foreground border-b border-border pb-1">
-      Sprint Board
-    </div>
+      <div className="flex flex-col h-[420px] text-[11px] bg-[#ece9d8] border border-[#7f9db9]">
+        {/* Toolbar */}
+        <div className="bg-[#d4d0c8] border-b border-[#7f9db9] px-2 py-[2px]">
+          Project Dashboard
+        </div>
 
-    {/* Columns */}
-    <div className="grid grid-cols-3 gap-1">
-      
-      {/* TO DO */}
-      <div className="bg-muted/40 border border-border rounded p-1">
-        <p className="font-bold text-[8px] mb-1 text-muted-foreground">
-          TO DO (3)
-        </p>
+        {/* Board */}
+        <div className="flex flex-1 gap-2 p-2 bg-[#f6f4ea]">
+          {[
+            { title: "TO DO", items: ["Fix mobile", "Docs", "Dark mode"] },
+            { title: "IN PROGRESS", items: ["Auth flow", "Refactor API"] },
+            { title: "DONE", items: ["Update README"] },
+          ].map((col) => (
+            <div
+              key={col.title}
+              className="flex-1 border border-[#7f9db9] bg-white"
+            >
+              <div className="bg-[#d4d0c8] border-b border-[#7f9db9] px-1 font-bold">
+                {col.title}
+              </div>
 
-        {[
-          "Fix mobile layout",
-          "Update docs",
-          "Add dark mode",
-        ].map((t) => (
-          <div
-            key={t}
-            className="bg-card border border-border rounded px-1 py-0.5 mb-1 text-card-foreground"
-          >
-            {t}
-          </div>
-        ))}
-      </div>
+              <div className="p-1 space-y-1">
+                {col.items.map((i) => (
+                  <div
+                    key={i}
+                    className="border border-[#c0c0c0] bg-[#ffffe1] px-1 py-[2px]"
+                  >
+                    {i}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
 
-      {/* IN PROGRESS */}
-      <div className="bg-muted/40 border border-border rounded p-1">
-        <p className="font-bold text-[8px] mb-1 text-warning">
-          IN PROGRESS (2)
-        </p>
-
-        {[
-          "Refactor API",
-          "Auth flow",
-        ].map((t) => (
-          <div
-            key={t}
-            className="bg-warning/20 border border-warning/40 rounded px-1 py-0.5 mb-1 text-card-foreground"
-          >
-            {t}
-          </div>
-        ))}
-      </div>
-
-      {/* DONE */}
-      <div className="bg-muted/40 border border-border rounded p-1">
-        <p className="font-bold text-[8px] mb-1 text-success">
-          DONE (1)
-        </p>
-
-        <div className="bg-success/20 border border-success/40 rounded px-1 py-0.5 text-card-foreground">
-          Update README
+        {/* Status */}
+        <div className="bg-[#d4d0c8] border-t border-[#7f9db9] px-2 py-[2px]">
+          47 issues remaining
         </div>
       </div>
-
-    </div>
-
-    {/* Joke footer */}
-    <div className="text-center text-[8px] text-muted-foreground mt-1 animate-pulse">
-      Sprint ends in 3 minutes...
-    </div>
-  </div>
-),
+    ),
   },
   email: {
     title: "Outlook",
@@ -202,7 +159,8 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
   isPunishment,
 }) => {
   const [timer, setTimer] = useState(PUNISHMENT_TIME_SECONDS);
-  const punishmentType = GAME_STAGE_PUNISHMENT_MAP[gameStage.toLowerCase()] ?? "zoom";
+  const punishmentType =
+    GAME_STAGE_PUNISHMENT_MAP[gameStage.toLowerCase()] ?? "zoom";
   const punishment = PUNISHMENTS[punishmentType];
 
   useEffect(() => {
@@ -220,32 +178,34 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
     return () => clearInterval(interval);
   }, [onComplete, gameStage, punishmentType]);
 
+  // Unified window size: wide and tall, not fullscreen
+  const windowWidth = "w-[700px]";
+  const windowHeight = "h-[520px]";
   return (
     <div className="fixed inset-0 z-[60] bg-foreground/60 flex items-center justify-center">
-      <div className={`xp-window ${punishmentType === "email" ? "w-[716px]" : "w-[400px]"}`}>
+      <div className={`xp-window ${windowWidth} ${windowHeight}`}>
         <div className="xp-title-bar">
           <div className="flex items-center gap-1.5">
             {punishment.icon}
             <span className="text-xs">{punishment.title}</span>
           </div>
         </div>
-        <div className="xp-window-body" style={punishmentType === "email" ? { padding: 0 } : undefined}>
+        <div
+          className="xp-window-body"
+          style={punishmentType === "email" ? { padding: 0 } : undefined}
+        >
           {punishmentType === "email" ? (
             <OutlookMockup onPlayAgain={onComplete} />
           ) : (
             <>
-              <div className="text-center mb-2">
-                <p className="text-xs text-destructive font-bold">
-                  ⚠️ PUNISHMENT: You must endure {timer}s of work!
-                </p>
-              </div>
+              {isPunishment && (
+                <div className="text-center mb-2">
+                  <p className="text-xs text-destructive font-bold">
+                    ⚠️ PUNISHMENT!
+                  </p>
+                </div>
+              )}
               {punishment.content}
-              <div className="mt-2 bg-muted rounded-full h-2 overflow-hidden">
-                <div
-                  className="bg-primary h-full transition-all duration-1000"
-                  style={{ width: `${((PUNISHMENT_TIME_SECONDS - timer) / PUNISHMENT_TIME_SECONDS) * 100}%` }}
-                />
-              </div>
             </>
           )}
         </div>
