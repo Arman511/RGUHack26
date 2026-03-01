@@ -71,7 +71,7 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
 
             {/* Right: Character */}
             <div className="flex flex-col items-center w-[130px]">
-              <div className="w-24 h-24 border-2 border-black overflow-hidden rounded-full">
+              <div className="w-24 h-24 border-2 border-primary overflow-hidden rounded-full">
                 <img
                   src="/boss-baby.jpeg"
                   alt="Boss Baby"
@@ -80,9 +80,7 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss }) => {
               </div>
 
               {/* Name Tag */}
-              <div className="mt-2 px-3 py-1 bg-[#245edb] text-white text-xs font-bold border border-black shadow">
-                Manager
-              </div>
+              <span className="text-sm font-bold text-card-foreground mt-2">Boss Baby</span>
             </div>
           </div>
         </div>
