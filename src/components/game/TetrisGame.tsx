@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const COLS = 7;
-const ROWS = 15;
+const COLS = 11;
+const ROWS = 20;
 const CELL = 22;
 const TIMER_SECONDS = 15;
 // Row index from the top (0 = very top, ROWS-1 = bottom).
 // Overlay fires when any block reaches this row — i.e. stack is (ROWS - DANGER_ROW) tall.
-const DANGER_ROW = 5; // triggers when 10 of 15 rows are stacked
+const DANGER_ROW = 7; // triggers when 10 of 15 rows are stacked
 
 const SHAPES = [
   [[1,1,1,1],[1,1,1,1]],      // I: 2×4 slab
