@@ -1,11 +1,16 @@
+@import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Pixelify+Sans:wght@400;700&family=Press+Start+2P&display=swap");
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@config "../tailwind.config.ts";
 
 /* Override Tailwind cursor-pointer utility and any other cursor changes */
-button, a, [role="button"], .cursor-pointer, input, select, textarea {
+button,
+a,
+[role="button"],
+.cursor-pointer,
+input,
+select,
+textarea {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M5 1 L5 26 L10 20 L14 30 L18 28 L14 18 L21 18 Z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 1, default !important;
 }
 
@@ -81,11 +86,12 @@ button, a, [role="button"], .cursor-pointer, input, select, textarea {
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
     font-family: "Tahoma", "Segoe UI", Geneva, Verdana, sans-serif;
     font-size: 12px;
     overflow: hidden;
@@ -93,11 +99,16 @@ button, a, [role="button"], .cursor-pointer, input, select, textarea {
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M5 1 L5 26 L10 20 L14 30 L18 28 L14 18 L21 18 Z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 1, default;
   }
 
-  button, a, [role="button"], .cursor-pointer {
+  button,
+  a,
+  [role="button"],
+  .cursor-pointer {
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M5 1 L5 26 L10 20 L14 30 L18 28 L14 18 L21 18 Z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 1, default;
   }
 
-  [style*="cursor: grab"], [style*="cursor:grab"], .cursor-grab {
+  [style*="cursor: grab"],
+  [style*="cursor:grab"],
+  .cursor-grab {
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M12 8 C12 6 14 5 16 6 L16 12 M16 6 C16 4 18 3 20 5 L20 12 M20 5 C20 3 22 3 23 5 L23 12 M10 10 C9 8 10 6 12 8 L12 14 M10 10 L10 16 C10 20 14 23 18 23 L20 23 C24 23 26 20 26 16 L26 12 L23 12 L20 12 L16 12 L12 12 L12 14' fill='white' stroke='black' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E") 16 10, grab;
   }
 }
@@ -105,7 +116,13 @@ button, a, [role="button"], .cursor-pointer, input, select, textarea {
 /* XP Window styles */
 @layer components {
   .xp-button {
-    @apply px-4 py-1 bg-muted border-2 text-sm font-normal active:translate-y-px;
+    padding: 0.25rem 1rem;
+    border-width: 2px;
+    border-style: solid;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+    background-color: hsl(var(--muted));
     border-color: hsl(0 0% 95%) hsl(0 0% 50%) hsl(0 0% 50%) hsl(0 0% 95%);
     min-width: 75px;
     text-align: center;
@@ -113,47 +130,77 @@ button, a, [role="button"], .cursor-pointer, input, select, textarea {
   }
 
   .xp-button:active {
+    transform: translateY(1px);
     border-color: hsl(0 0% 50%) hsl(0 0% 95%) hsl(0 0% 95%) hsl(0 0% 50%);
   }
 
   .xp-button-primary {
-    @apply xp-button;
+    padding: 0.25rem 1rem;
+    border-width: 2px;
+    border-style: solid;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+    background-color: hsl(var(--muted));
+    border-color: hsl(0 0% 95%) hsl(0 0% 50%) hsl(0 0% 50%) hsl(0 0% 95%);
+    min-width: 75px;
+    text-align: center;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M5 1 L5 26 L10 20 L14 30 L18 28 L14 18 L21 18 Z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 1, default !important;
     border: 2px solid hsl(var(--primary));
     outline: 1px dotted hsl(0 0% 0%);
     outline-offset: -4px;
   }
 
   .xp-window {
-    @apply border border-border shadow-lg;
+    border-style: solid;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     border-color: hsl(213 60% 60%);
     border-width: 3px;
     border-radius: 8px 8px 0 0;
   }
 
   .xp-title-bar {
-    background: linear-gradient(
-      180deg,
-      hsl(var(--xp-title-start)) 0%,
-      hsl(213 75% 45%) 40%,
-      hsl(var(--xp-title-end)) 100%
-    );
-    @apply px-2 py-1 flex items-center justify-between text-primary-foreground font-bold text-sm;
+    background: linear-gradient(180deg,
+        hsl(var(--xp-title-start)) 0%,
+        hsl(213 75% 45%) 40%,
+        hsl(var(--xp-title-end)) 100%);
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: hsl(var(--primary-foreground));
     border-radius: 5px 5px 0 0;
   }
 
   .xp-title-bar-inactive {
-    background: linear-gradient(
-      180deg,
-      hsl(0 0% 72%) 0%,
-      hsl(0 0% 58%) 40%,
-      hsl(0 0% 48%) 100%
-    );
-    @apply px-2 py-1 flex items-center justify-between text-primary-foreground font-bold text-sm;
+    background: linear-gradient(180deg,
+        hsl(0 0% 72%) 0%,
+        hsl(0 0% 58%) 40%,
+        hsl(0 0% 48%) 100%);
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: hsl(var(--primary-foreground));
     border-radius: 5px 5px 0 0;
   }
 
   .xp-close-btn {
-    @apply w-5 h-5 flex items-center justify-center text-xs font-bold rounded-sm;
+    width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    border-radius: 0.125rem;
     background: linear-gradient(180deg, hsl(0 70% 60%) 0%, hsl(0 65% 45%) 100%);
     color: white;
     border: 1px solid hsl(0 0% 30%);
@@ -165,42 +212,56 @@ button, a, [role="button"], .cursor-pointer, input, select, textarea {
   }
 
   .xp-window-body {
-    @apply bg-card p-3;
+    padding: 0.75rem;
+    background-color: hsl(var(--card));
   }
 
   .xp-taskbar {
-    background: linear-gradient(
-      180deg,
-      hsl(213 40% 80%) 0%,
-      hsl(213 30% 68%) 5%,
-      hsl(213 25% 72%) 50%,
-      hsl(213 20% 60%) 100%
-    );
-    @apply h-10 flex items-center px-1 border-t-2;
+    background: linear-gradient(180deg,
+        hsl(213 40% 80%) 0%,
+        hsl(213 30% 68%) 5%,
+        hsl(213 25% 72%) 50%,
+        hsl(213 20% 60%) 100%);
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    border-top-width: 2px;
+    border-top-style: solid;
     border-color: hsl(0 0% 90%);
   }
 
   .xp-start-btn {
-    background: linear-gradient(
-      180deg,
-      hsl(120 55% 45%) 0%,
-      hsl(120 55% 30%) 100%
-    );
-    @apply px-3 h-8 flex items-center gap-1 text-primary-foreground font-bold text-sm rounded-r-lg;
+    background: linear-gradient(180deg,
+        hsl(120 55% 45%) 0%,
+        hsl(120 55% 30%) 100%);
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    color: hsl(var(--primary-foreground));
     border: 1px solid hsl(120 40% 20%);
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M5 1 L5 26 L10 20 L14 30 L18 28 L14 18 L21 18 Z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 1, default !important;
   }
 
   .xp-start-btn:hover {
-    background: linear-gradient(
-      180deg,
-      hsl(120 55% 50%) 0%,
-      hsl(120 55% 35%) 100%
-    );
+    background: linear-gradient(180deg,
+        hsl(120 55% 50%) 0%,
+        hsl(120 55% 35%) 100%);
   }
 
   .teams-notification {
-    @apply fixed bottom-20 left-4 z-50;
+    position: fixed;
+    bottom: 5rem;
+    left: 1rem;
+    z-index: 50;
   }
 
   .confetti-piece {
@@ -219,7 +280,13 @@ button, a, [role="button"], .cursor-pointer, input, select, textarea {
 
   .intro-disclaimer {
     /* larger and wider disclaimer, pushed further down */
-    @apply text-xl text-primary-foreground/70 text-center mt-12 italic max-w-6xl;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    text-align: center;
+    margin-top: 3rem;
+    font-style: italic;
+    max-width: 72rem;
+    color: hsl(var(--primary-foreground) / 0.7);
   }
 }
 
@@ -228,6 +295,7 @@ button, a, [role="button"], .cursor-pointer, input, select, textarea {
     transform: translateX(120%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
@@ -239,6 +307,7 @@ button, a, [role="button"], .cursor-pointer, input, select, textarea {
     transform: translateY(-100vh) rotate(0deg);
     opacity: 1;
   }
+
   100% {
     transform: translateY(100vh) rotate(720deg);
     opacity: 0;
@@ -250,10 +319,12 @@ button, a, [role="button"], .cursor-pointer, input, select, textarea {
     transform: scale(0) rotate(-20deg);
     opacity: 0;
   }
+
   60% {
     transform: scale(1.15) rotate(5deg);
     opacity: 1;
   }
+
   100% {
     transform: scale(1) rotate(0deg);
     opacity: 1;
@@ -261,10 +332,12 @@ button, a, [role="button"], .cursor-pointer, input, select, textarea {
 }
 
 @keyframes shake {
+
   0%,
   100% {
     transform: translateX(0);
   }
+
   10%,
   30%,
   50%,
@@ -272,6 +345,7 @@ button, a, [role="button"], .cursor-pointer, input, select, textarea {
   90% {
     transform: translateX(-4px);
   }
+
   20%,
   40%,
   60%,
@@ -281,10 +355,12 @@ button, a, [role="button"], .cursor-pointer, input, select, textarea {
 }
 
 @keyframes blink {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0;
   }
