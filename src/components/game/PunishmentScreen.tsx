@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Video, MessageCircle, LayoutList } from "lucide-react";
+import { OutlookMockup } from "./OutlookMockup";
 
 interface PunishmentScreenProps {
   onComplete: () => void;
@@ -105,25 +106,9 @@ const PUNISHMENTS = {
     ),
   },
   email: {
-    title: "Email - Inbox Overflow",
+    title: "Outlook",
     icon: <MessageCircle size={14} />,
-    content: (
-      <div className="flex flex-col gap-1 p-2 text-[10px]">
-        {[
-          "Inbox (99+ unread)",
-          'Subject: "Quick question"',
-          'Subject: "gentle reminder #4"',
-          'Subject: "RE: RE: RE: action needed"',
-          "Attachment: final_v2_REAL_final.pptx",
-          'CC: entire company',
-          "Sent from my iPhone",
-        ].map((msg, i) => (
-          <p key={i} className="text-card-foreground">
-            {msg}
-          </p>
-        ))}
-      </div>
-    ),
+    content: null,
   },
 };
 
@@ -154,30 +139,36 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [onComplete, gameStage]);
+  }, [onComplete, gameStage, punishmentType]);
 
   return (
     <div className="fixed inset-0 z-[60] bg-foreground/60 flex items-center justify-center">
-      <div className="xp-window w-[400px]">
+      <div className={`xp-window ${punishmentType === "email" ? "w-[560px]" : "w-[400px]"}`}>
         <div className="xp-title-bar">
           <div className="flex items-center gap-1.5">
             {punishment.icon}
             <span className="text-xs">{punishment.title}</span>
           </div>
         </div>
-        <div className="xp-window-body">
-          <div className="text-center mb-2">
-            <p className="text-xs text-destructive font-bold">
-              ⚠️ PUNISHMENT: You must endure {timer}s of work!
-            </p>
-          </div>
-          {punishment.content}
-          <div className="mt-2 bg-muted rounded-full h-2 overflow-hidden">
-            <div
-              className="bg-primary h-full transition-all duration-1000"
-              style={{ width: `${((PUNISHMENT_TIME_SECONDS - timer) / PUNISHMENT_TIME_SECONDS) * 100}%` }}
-            />
-          </div>
+        <div className="xp-window-body" style={punishmentType === "email" ? { padding: 0 } : undefined}>
+          {punishmentType === "email" ? (
+            <OutlookMockup onPlayAgain={onComplete} />
+          ) : (
+            <>
+              <div className="text-center mb-2">
+                <p className="text-xs text-destructive font-bold">
+                  ⚠️ PUNISHMENT: You must endure {timer}s of work!
+                </p>
+              </div>
+              {punishment.content}
+              <div className="mt-2 bg-muted rounded-full h-2 overflow-hidden">
+                <div
+                  className="bg-primary h-full transition-all duration-1000"
+                  style={{ width: `${((PUNISHMENT_TIME_SECONDS - timer) / PUNISHMENT_TIME_SECONDS) * 100}%` }}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
