@@ -145,7 +145,7 @@ const Index = () => {
     triggerBoss(
       "Ha! You lost to ME?! Guess you have to reply loser. - PLACEHOLDER",
       "pong-done", // fallback, won't be used
-      1600,
+      1500,
     );
   }, [moveMeter, triggerBoss, triggerPunishment]);
 
@@ -213,7 +213,7 @@ const Index = () => {
         triggerBoss(
           "Can't even decode corporate buzzwords?! Back to the grind — punishment first, then emails.",
           "wordle-done", // fallback, won't be used
-          1600,
+          1500,
         );
       }
     },
@@ -259,7 +259,7 @@ const Index = () => {
     triggerBoss(
       "Eaten by your own coworkers?! Pathetic. That's what happens when you don't clear your inbox. Punishment time!",
       "pacman-done", // fallback, won't be used
-      1600,
+      1500,
     );
   }, [moveMeter, triggerBoss, triggerPunishment]);
 
