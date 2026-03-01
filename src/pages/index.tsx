@@ -561,7 +561,7 @@ const Index = () => {
             title="Backlog Tetris"
             instructions={[
               "Survive for 30 seconds!",
-              "Arrow keys: ←→ move, ↑ rotate, ↓ drop",
+              "Arrow keys or WASD: ←/A →/D move, ↑/W rotate, ↓/S drop",
               "Surviving = you're actively avoiding work = moving toward FIRED",
               "If you let the tasks pile up... You will be forced to do the work and get some points...",
             ]}
