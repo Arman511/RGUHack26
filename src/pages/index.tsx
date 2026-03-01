@@ -27,9 +27,15 @@ const Index = () => {
   const [skipTutorials, setSkipTutorials] = useState(true);
   const [showBoss, setShowBoss] = useState(false);
   const [bossMsg, setBossMsg] = useState("");
-  const [bossAutoAdvance, setBossAutoAdvance] = useState<number | undefined>(undefined);
-  const [bossAltButton, setBossAltButton] = useState<{ label: string; onAlt: () => void } | undefined>(undefined);
-  const [bossDismissLabel, setBossDismissLabel] = useState<string | undefined>(undefined);
+  const [bossAutoAdvance, setBossAutoAdvance] = useState<number | undefined>(
+    undefined,
+  );
+  const [bossAltButton, setBossAltButton] = useState<
+    { label: string; onAlt: () => void } | undefined
+  >(undefined);
+  const [bossDismissLabel, setBossDismissLabel] = useState<string | undefined>(
+    undefined,
+  );
   const [nextStageAfterBoss, setNextStageAfterBoss] =
     useState<GameStage | null>(null);
   const [showPunishment, setShowPunishment] = useState<GameStage | null>(null);
@@ -56,17 +62,31 @@ const Index = () => {
     };
   }, []);
 
-  const triggerBoss = useCallback((msg: string, nextStage: GameStage, autoAdvanceDelay?: number, altButton?: { label: string; onAlt: () => void }, dismissLabel?: string) => {
-    setBossMsg(msg);
-    setBossAutoAdvance(autoAdvanceDelay);
-    setBossAltButton(altButton);
-    setBossDismissLabel(dismissLabel);
-    setShowBoss(true);
-    setNextStageAfterBoss(nextStage);
-  }, []);
+  const triggerBoss = useCallback(
+    (
+      msg: string,
+      nextStage: GameStage,
+      autoAdvanceDelay?: number,
+      altButton?: { label: string; onAlt: () => void },
+      dismissLabel?: string,
+    ) => {
+      setBossMsg(msg);
+      setBossAutoAdvance(autoAdvanceDelay);
+      setBossAltButton(altButton);
+      setBossDismissLabel(dismissLabel);
+      setShowBoss(true);
+      setNextStageAfterBoss(nextStage);
+    },
+    [],
+  );
 
   const triggerBossWithDelay = useCallback(
-    (msg: string, nextStage: GameStage, delayMs = STAGE_DELAY_MS, altButton?: { label: string; onAlt: () => void }) => {
+    (
+      msg: string,
+      nextStage: GameStage,
+      delayMs = STAGE_DELAY_MS,
+      altButton?: { label: string; onAlt: () => void },
+    ) => {
       const timeout = setTimeout(() => {
         triggerBoss(msg, nextStage, undefined, altButton);
       }, delayMs);
@@ -221,7 +241,8 @@ const Index = () => {
       } else {
         moveMeter(10);
         setIsPunishment(true);
-        bossOnDismissRef.current = () => triggerPunishment("wordle-done", "wordle");
+        bossOnDismissRef.current = () =>
+          triggerPunishment("wordle-done", "wordle");
         triggerBoss(
           "Can't even decode corporate buzzwords?! Seems like you need to attend the meeting after all...",
           "wordle-done", // fallback, won't be used
@@ -245,7 +266,14 @@ const Index = () => {
         "Check your emails! 10 unread messages! You're on prod support!",
         skipTutorials ? "pacman" : "pacman-howto",
         SECOND_DELAY_MS,
-        { label: "Fine.", onAlt: () => { setShowBoss(false); setBossAltButton(undefined); setStage("outlook"); } },
+        {
+          label: "Fine.",
+          onAlt: () => {
+            setShowBoss(false);
+            setBossAltButton(undefined);
+            setStage("outlook");
+          },
+        },
       );
     }
   }, [
@@ -607,7 +635,13 @@ const Index = () => {
       {showBoss && (
         <>
           <div className="fixed inset-0 bg-foreground/50 z-40" />
-          <BossBaby message={bossMsg} onDismiss={dismissBoss} autoAdvanceDelay={bossAutoAdvance} altButton={bossAltButton} dismissLabel={bossDismissLabel} />
+          <BossBaby
+            message={bossMsg}
+            onDismiss={dismissBoss}
+            autoAdvanceDelay={bossAutoAdvance}
+            altButton={bossAltButton}
+            dismissLabel={bossDismissLabel}
+          />
         </>
       )}
 

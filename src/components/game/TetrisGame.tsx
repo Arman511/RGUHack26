@@ -9,11 +9,30 @@ const TIMER_SECONDS = 15;
 const DANGER_ROW = 7; // triggers when 10 of 15 rows are stacked
 
 const SHAPES = [
-  [[1, 1, 1, 1], [1, 1, 1, 1]],      // I: 2×4 slab
-  [[1, 1, 1], [1, 1, 1], [1, 1, 1]],  // O: 3×3 square
-  [[0, 1, 0], [1, 1, 1], [0, 1, 0]],  // T: 3×3 cross
-  [[1, 1, 0], [1, 1, 1], [1, 1, 1]],  // L: 3×3 chunky L
-  [[0, 1, 1], [0, 1, 1], [1, 1, 1]],  // J: 3×3 chunky J
+  [
+    [1, 1, 1, 1],
+    [1, 1, 1, 1],
+  ], // I: 2×4 slab
+  [
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+  ], // O: 3×3 square
+  [
+    [0, 1, 0],
+    [1, 1, 1],
+    [0, 1, 0],
+  ], // T: 3×3 cross
+  [
+    [1, 1, 0],
+    [1, 1, 1],
+    [1, 1, 1],
+  ], // L: 3×3 chunky L
+  [
+    [0, 1, 1],
+    [0, 1, 1],
+    [1, 1, 1],
+  ], // J: 3×3 chunky J
 ];
 
 const PRIORITIES = ["CRIT", "HIGH", "MED", "LOW"];
@@ -280,7 +299,9 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({
     <div className="flex flex-col items-center gap-2">
       <p className="text-[12px] font-semibold text-center text-card-foreground leading-snug w-full">
         Clear rows to reassign Jiras &mdash; let them stack and{" "}
-        <span className="text-destructive font-bold">they&apos;re all yours</span>
+        <span className="text-destructive font-bold">
+          they&apos;re all yours
+        </span>
       </p>
       <div className="flex justify-between w-full px-1">
         <span className="text-[10px] text-muted-foreground flex items-center gap-1">

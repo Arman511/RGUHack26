@@ -50,17 +50,15 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
             <div className="xp-window w-full max-w-[535px]">
               <div className="xp-title-bar">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold">
-                    BOSS MESSAGE
-                  </span>
+                  <span className="text-xs font-bold">BOSS MESSAGE</span>
                 </div>
               </div>
               <div className="xp-window-body flex flex-col gap-6 p-5">
                 <div className="flex items-center gap-4">
                   <div className="flex flex-col gap-14 flex-1 justify-center">
                     <p className="text-base font-bold leading-relaxed text-left whitespace-pre-wrap">
-                      "I hate liars and cheaters. Why are you hired if you don't do
-                      your job?{" "}
+                      "I hate liars and cheaters. Why are you hired if you don't
+                      do your job?{" "}
                       <span className="text-destructive">Focus on work!</span>"
                     </p>
                     <div className="flex justify-start">
@@ -81,7 +79,9 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
                         className="w-full h-full object-cover rounded-full border-2 border-primary"
                       />
                     </div>
-                    <span className="text-sm font-bold text-card-foreground mt-2">Boss Baby</span>
+                    <span className="text-sm font-bold text-card-foreground mt-2">
+                      Boss Baby
+                    </span>
                   </div>
                 </div>
               </div>
@@ -94,14 +94,16 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
         <div
           className="w-full max-w-[900px] flex items-center justify-between gap-3 px-3 py-2"
           style={{
-            background: "linear-gradient(180deg, hsl(0,0%,100%) 0%, hsl(0,0%,85%) 100%)",
+            background:
+              "linear-gradient(180deg, hsl(0,0%,100%) 0%, hsl(0,0%,85%) 100%)",
             border: "2px solid",
-            borderColor: "hsl(0,0%,100%) hsl(220,10%,55%) hsl(220,10%,55%) hsl(0,0%,100%)",
+            borderColor:
+              "hsl(0,0%,100%) hsl(220,10%,55%) hsl(220,10%,55%) hsl(0,0%,100%)",
           }}
         >
           <div className="text-xs text-foreground/80">
-            (Disclaimer: This is not representative of us developers; we are very,
-            very, very good employees.)
+            (Disclaimer: This is not representative of us developers; we are
+            very, very, very good employees.)
           </div>
 
           <div className="flex items-center">
@@ -119,9 +121,11 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  background: "linear-gradient(180deg, hsl(0,0%,100%) 0%, hsl(0,0%,85%) 100%)",
+                  background:
+                    "linear-gradient(180deg, hsl(0,0%,100%) 0%, hsl(0,0%,85%) 100%)",
                   border: "2px solid",
-                  borderColor: "hsl(0,0%,100%) transparent hsl(220,10%,55%) hsl(0,0%,100%)",
+                  borderColor:
+                    "hsl(0,0%,100%) transparent hsl(220,10%,55%) hsl(0,0%,100%)",
                   padding: "0 10px",
                   height: 40,
                   boxSizing: "border-box",
@@ -145,9 +149,11 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
               style={{
                 width: 40,
                 height: 40,
-                background: "linear-gradient(180deg, hsl(0,0%,100%) 0%, hsl(0,0%,85%) 100%)",
+                background:
+                  "linear-gradient(180deg, hsl(0,0%,100%) 0%, hsl(0,0%,85%) 100%)",
                 border: "2px solid",
-                borderColor: "hsl(0,0%,100%) hsl(220,10%,55%) hsl(220,10%,55%) hsl(0,0%,100%)",
+                borderColor:
+                  "hsl(0,0%,100%) hsl(220,10%,55%) hsl(220,10%,55%) hsl(0,0%,100%)",
                 borderRadius: 0,
                 display: "flex",
                 alignItems: "center",

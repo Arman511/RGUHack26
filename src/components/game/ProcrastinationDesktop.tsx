@@ -178,7 +178,11 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
     >
       <div
         className="bg-[#ECE9D8] border-2 border-[#003c74] shadow-2xl flex flex-col"
-        style={{ width: "700px", fontFamily: "Tahoma, sans-serif", maxHeight: "500px" }}
+        style={{
+          width: "700px",
+          fontFamily: "Tahoma, sans-serif",
+          maxHeight: "500px",
+        }}
       >
         {/* Title Bar — drag handle */}
         <div
@@ -193,9 +197,15 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
             </span>
           </div>
           <div className="flex gap-1">
-            <div className="w-5 h-5 bg-[#d4d0c8] text-black text-[10px] flex items-center justify-center border border-black">_</div>
-            <div className="w-5 h-5 bg-[#d4d0c8] text-black text-[10px] flex items-center justify-center border border-black">□</div>
-            <div className="w-5 h-5 bg-[#d4d0c8] text-black text-[10px] flex items-center justify-center border border-black">✕</div>
+            <div className="w-5 h-5 bg-[#d4d0c8] text-black text-[10px] flex items-center justify-center border border-black">
+              _
+            </div>
+            <div className="w-5 h-5 bg-[#d4d0c8] text-black text-[10px] flex items-center justify-center border border-black">
+              □
+            </div>
+            <div className="w-5 h-5 bg-[#d4d0c8] text-black text-[10px] flex items-center justify-center border border-black">
+              ✕
+            </div>
           </div>
         </div>
 
@@ -214,30 +224,33 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab("cricket")}
-            className={`${activeTab === "cricket"
-              ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
-              : "bg-[#c0c0c0] border border-[#808080]"
-              } px-3 py-1 text-[11px] flex items-center gap-1`}
+            className={`${
+              activeTab === "cricket"
+                ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
+                : "bg-[#c0c0c0] border border-[#808080]"
+            } px-3 py-1 text-[11px] flex items-center gap-1`}
           >
             🏏 Cricket Live
           </button>
           <button
             type="button"
             onClick={() => setActiveTab("cat")}
-            className={`${activeTab === "cat"
-              ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
-              : "bg-[#c0c0c0] border border-[#808080]"
-              } px-3 py-1 text-[11px] flex items-center gap-1`}
+            className={`${
+              activeTab === "cat"
+                ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
+                : "bg-[#c0c0c0] border border-[#808080]"
+            } px-3 py-1 text-[11px] flex items-center gap-1`}
           >
             🐱 Cat Videos
           </button>
           <button
             type="button"
             onClick={() => setActiveTab("youtube")}
-            className={`${activeTab === "youtube"
-              ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
-              : "bg-[#c0c0c0] border border-[#808080]"
-              } px-3 py-1 text-[11px] flex items-center gap-1`}
+            className={`${
+              activeTab === "youtube"
+                ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
+                : "bg-[#c0c0c0] border border-[#808080]"
+            } px-3 py-1 text-[11px] flex items-center gap-1`}
           >
             ▶️ YouTube
           </button>
@@ -279,7 +292,9 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
                 </div>
               </div>
               <div className="flex justify-center gap-6 text-xs mt-6">
-                <span className="underline cursor-pointer">Live Chat (2.4k)</span>
+                <span className="underline cursor-pointer">
+                  Live Chat (2.4k)
+                </span>
                 <span className="underline cursor-pointer">Scorecard</span>
                 <span className="underline cursor-pointer">Commentary</span>
               </div>
@@ -288,7 +303,9 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
 
           {activeTab === "cat" && (
             <div className="h-full flex flex-col items-center justify-center gap-4">
-              <h2 className="text-lg font-bold text-center">🐱 Cat Videos - LIVE</h2>
+              <h2 className="text-lg font-bold text-center">
+                🐱 Cat Videos - LIVE
+              </h2>
               <img
                 src="/cats.gif"
                 alt="Funny cat video"
