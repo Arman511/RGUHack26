@@ -15,18 +15,8 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden font-sans">
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: "url('/background.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      />
-
-      <div className="absolute inset-0 bg-foreground/35" />
+    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden font-sans bg-background">
+      <div className="absolute inset-0 bg-foreground/10" />
 
       <div className="relative z-10 flex flex-col items-center justify-center gap-6 px-6 text-center w-full">
         <div className="xp-window w-[680px] max-w-[95vw]">
