@@ -17,6 +17,7 @@ export type GameStage =
   | "pacman-howto"
   | "pacman"
   | "pacman-done"
+  | "outlook"
   | "jira"
   | "tetris-howto"
   | "tetris"

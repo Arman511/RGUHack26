@@ -15,6 +15,7 @@ import { FailMeter } from "@/components/game/FailMeter";
 import { HowToPlay } from "@/components/game/HowToPlay";
 import { PunishmentScreen } from "@/components/game/PunishmentScreen";
 import { TeamsNotif } from "@/components/game/TeamsNotif";
+import { OutlookMockup } from "@/components/game/OutlookMockup";
 import { Video, LayoutList, Mail } from "lucide-react";
 import { set } from "react-hook-form";
 
@@ -27,6 +28,8 @@ const Index = () => {
   const [skipTutorials, setSkipTutorials] = useState(true);
   const [showBoss, setShowBoss] = useState(false);
   const [bossMsg, setBossMsg] = useState("");
+  const [bossAutoAdvance, setBossAutoAdvance] = useState<number | undefined>(undefined);
+  const [bossAltButton, setBossAltButton] = useState<{ label: string; onAlt: () => void } | undefined>(undefined);
   const [nextStageAfterBoss, setNextStageAfterBoss] =
     useState<GameStage | null>(null);
   const [showPunishment, setShowPunishment] = useState<GameStage | null>(null);
@@ -36,6 +39,7 @@ const Index = () => {
   const [loopDone, setLoopDone] = useState(false);
   const [isPunishment, setIsPunishment] = useState(true);
   const delayTimer = useRef<ReturnType<typeof setTimeout>>();
+  const bossOnDismissRef = useRef<(() => void) | null>(null);
 
   // Delayed stage transition (5s gap)
   const delayedStage = useCallback(
@@ -52,16 +56,18 @@ const Index = () => {
     };
   }, []);
 
-  const triggerBoss = useCallback((msg: string, nextStage: GameStage) => {
+  const triggerBoss = useCallback((msg: string, nextStage: GameStage, autoAdvanceDelay?: number, altButton?: { label: string; onAlt: () => void }) => {
     setBossMsg(msg);
+    setBossAutoAdvance(autoAdvanceDelay);
+    setBossAltButton(altButton);
     setShowBoss(true);
     setNextStageAfterBoss(nextStage);
   }, []);
 
   const triggerBossWithDelay = useCallback(
-    (msg: string, nextStage: GameStage, delayMs = STAGE_DELAY_MS) => {
+    (msg: string, nextStage: GameStage, delayMs = STAGE_DELAY_MS, altButton?: { label: string; onAlt: () => void }) => {
       const timeout = setTimeout(() => {
-        triggerBoss(msg, nextStage);
+        triggerBoss(msg, nextStage, undefined, altButton);
       }, delayMs);
 
       return () => clearTimeout(timeout);
@@ -71,6 +77,14 @@ const Index = () => {
 
   const dismissBoss = useCallback(() => {
     setShowBoss(false);
+    setBossAutoAdvance(undefined);
+    setBossAltButton(undefined);
+    const cb = bossOnDismissRef.current;
+    bossOnDismissRef.current = null;
+    if (cb) {
+      cb();
+      return;
+    }
     if (nextStageAfterBoss) {
       setStage(nextStageAfterBoss);
       setNextStageAfterBoss(null);
@@ -131,8 +145,13 @@ const Index = () => {
   const handlePongLose = useCallback(() => {
     moveMeter(10); // toward PROMOTED (loss)
     setIsPunishment(true);
-    triggerPunishment("pong-done", "pingpong");
-  }, [moveMeter, triggerPunishment]);
+    bossOnDismissRef.current = () => triggerPunishment("pong-done", "pingpong");
+    triggerBoss(
+      "Ha! You lost to ME?! Guess you have to reply loser. - PLACEHOLDER",
+      "pong-done", // fallback, won't be used
+      1500,
+    );
+  }, [moveMeter, triggerBoss, triggerPunishment]);
 
   const handleMeterOutcome = useCallback(() => {
     if (state.meterValue <= -STAGE_METER_POINT_CUTOF) {
@@ -156,10 +175,8 @@ const Index = () => {
 
       if (skipDoneStageDelay) {
         setSkipDoneStageDelay(false);
-        setStage("zoom");
-      } else {
-        delayedStage("zoom", STAGE_DELAY_MS);
       }
+      delayedStage("zoom", STAGE_DELAY_MS);
     }
   }, [
     state.stage,
@@ -195,7 +212,13 @@ const Index = () => {
         );
       } else {
         moveMeter(10);
-        triggerPunishment("wordle-done", "wordle");
+        setIsPunishment(true);
+        bossOnDismissRef.current = () => triggerPunishment("wordle-done", "wordle");
+        triggerBoss(
+          "Can't even decode corporate buzzwords?! Back to the grind — punishment first, then emails.",
+          "wordle-done", // fallback, won't be used
+          1500,
+        );
       }
     },
     [moveMeter, triggerBoss, triggerPunishment],
@@ -214,6 +237,7 @@ const Index = () => {
         "Check your emails! 10 unread messages! You're on prod support!",
         skipTutorials ? "pacman" : "pacman-howto",
         SECOND_DELAY_MS,
+        { label: "Fine.", onAlt: () => { setShowBoss(false); setBossAltButton(undefined); setStage("outlook"); } },
       );
     }
   }, [
@@ -225,6 +249,13 @@ const Index = () => {
     setStage,
   ]);
 
+  useEffect(() => {
+    if (state.stage === "outlook") {
+      const t = setTimeout(() => setStage("jira"), STAGE_DELAY_MS);
+      return () => clearTimeout(t);
+    }
+  }, [state.stage, setStage]);
+
   const handlePacmanWin = useCallback(() => {
     moveMeter(-30);
     triggerBoss(
@@ -235,8 +266,14 @@ const Index = () => {
 
   const handlePacmanLose = useCallback(() => {
     moveMeter(10);
-    triggerPunishment("pacman-done", "pacman");
-  }, [moveMeter, triggerPunishment]);
+    setIsPunishment(true);
+    bossOnDismissRef.current = () => triggerPunishment("pacman-done", "pacman");
+    triggerBoss(
+      "Eaten by your own coworkers?! Pathetic. That's what happens when you don't clear your inbox. Punishment time!",
+      "pacman-done", // fallback, won't be used
+      1500,
+    );
+  }, [moveMeter, triggerBoss, triggerPunishment]);
 
   useEffect(() => {
     if (state.stage === "pacman-done") {
@@ -246,10 +283,8 @@ const Index = () => {
 
       if (skipDoneStageDelay) {
         setSkipDoneStageDelay(false);
-        setStage("jira");
-      } else {
-        delayedStage("jira", STAGE_DELAY_MS);
       }
+      delayedStage("jira", STAGE_DELAY_MS);
     }
   }, [
     state.stage,
@@ -272,7 +307,7 @@ const Index = () => {
       return triggerBossWithDelay(
         "The sprint is on fire! It's all your fault for not working! Survive the backlog of tasks!",
         skipTutorials ? "tetris" : "tetris-howto",
-        100,
+        1000,
       );
     }
   }, [state.stage, skipTutorials, triggerBossWithDelay]);
@@ -435,6 +470,20 @@ const Index = () => {
         </DraggableWindow>
       )}
 
+      {/* Outlook Mockup (Fine path from Zoom) */}
+      {state.stage === "outlook" && (
+        <DraggableWindow
+          title="Outlook - Inbox"
+          icon={<Mail size={14} />}
+          width={730}
+          closable={true}
+          onClose={() => setStage("jira")}
+          bodyStyle={{ padding: 0 }}
+        >
+          <OutlookMockup onPlayAgain={() => setStage("jira")} />
+        </DraggableWindow>
+      )}
+
       {/* Wordle How-To */}
       {state.stage === "wordle-howto" && (
         <DraggableWindow
@@ -540,7 +589,7 @@ const Index = () => {
       {showBoss && (
         <>
           <div className="fixed inset-0 bg-foreground/50 z-40" />
-          <BossBaby message={bossMsg} onDismiss={dismissBoss} />
+          <BossBaby message={bossMsg} onDismiss={dismissBoss} autoAdvanceDelay={bossAutoAdvance} altButton={bossAltButton} />
         </>
       )}
 
