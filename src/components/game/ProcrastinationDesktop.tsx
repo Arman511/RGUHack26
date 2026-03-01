@@ -123,6 +123,20 @@ export const ProcrastinationDesktop: React.FC = () => {
           ? "text-red-700"
           : "text-gray-700";
 
+  const browserTitle =
+    activeTab === "cricket"
+      ? "CricketLiveScore.tv"
+      : activeTab === "cat"
+        ? "CatVideosNow.tv"
+        : "YouTube";
+
+  const browserUrl =
+    activeTab === "cricket"
+      ? "https://www.cricketlive.tv/match/ind-vs-aus-2026"
+      : activeTab === "cat"
+        ? "https://www.catvideosnow.tv/watch/funniest-cats"
+        : "https://www.youtube.com/watch?v=minecraft-live";
+
   const onMouseDown = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
@@ -160,7 +174,7 @@ export const ProcrastinationDesktop: React.FC = () => {
           <div className="flex items-center gap-2">
             <Globe size={14} />
             <span className="text-xs font-bold">
-              Google Chrome - CricketLiveScore.tv
+              Google Chrome - {browserTitle}
             </span>
           </div>
           <div className="flex gap-1">
@@ -176,7 +190,7 @@ export const ProcrastinationDesktop: React.FC = () => {
           <span className="text-xs">→</span>
           <span className="text-xs">⟳</span>
           <div className="flex-1 bg-white border border-[#808080] px-2 py-0.5 text-[11px]">
-            https://www.cricketlive.tv/match/ind-vs-aus-2026
+            {browserUrl}
           </div>
         </div>
 
