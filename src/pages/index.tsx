@@ -262,7 +262,7 @@ const Index = () => {
 
   const handleJiraNotification = useCallback(() => {
     triggerBoss(
-      "The sprint is on fire! It's all your fault for not working! Survive the backlog of tasks!",
+      "It's all your fault for not working! Every line of this backlog is about to be assigned to an individual... MAKE SURE YOU HAVE SOME WORK!!!",
       skipTutorials ? "tetris" : "tetris-howto",
     );
   }, [skipTutorials, triggerBoss]);
@@ -288,7 +288,7 @@ const Index = () => {
   const handleTetrisSurvived = useCallback(() => {
     moveMeter(-30); // survived = too productive
     triggerBoss(
-      "You survived the backlog?! I'll get you next time! Moving toward FIRED!",
+      "Wait... NO WORK ASSIGNED TO YOU?! You survived the backlog without lifting a finger?! You absolute DEAD WEIGHT! 😤 I’ll get you next time, Slacker..",
       "tetris-done",
     );
   }, [moveMeter, triggerBoss]);
@@ -343,7 +343,9 @@ const Index = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <FailMeter value={state.meterValue} />
+      <div style={{ position: "fixed", right: 16, top: 16, zIndex: 50 }}>
+        <FailMeter value={state.meterValue} />
+      </div>
       <DesktopIcons />
 
       {/* Procrastination desktop — stays visible until player loses */}

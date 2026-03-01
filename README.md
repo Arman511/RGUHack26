@@ -1,46 +1,69 @@
-![logo](.assets/final-logo.svg)
+# 🔥 Liar, Cheater, Fired: The Corporate Escape
 
-# Welcome to RGU Hack 26!
+> **"The ultimate race to the bottom. Can you get fired before the 5:00 PM whistle?"**
 
-### This is the repo for your team
+![logo](.assets/startScreen.png)
 
-### At the end of the hack make sure to put all of your code into here for judging!
+## 💼 The Concept
 
-If you have any issues come to the help desk!
+As a team of **"Wonderful Magical Interns"** by day, we decided to spend RGUHack 26 exploring our dark mirrors.
 
----
-
-# The Challenges
-
-The challenges for this year that have been chosen by our sponsors are below, pick one and get started using any languages or frameworks you like!
-
-Challenges sponsored by:
-
-<a href="challenges/Core29.pdf">
-<img src=".assets/core29-endorsed.png" width="150" height="100" alt="Thumbnail" />
-</a>
-<a href="challenges/SalusTechnical.pdf">
-<img src=".assets/salus.png" width="150" height="100" alt="Thumbnail" /> 
-</a>
-<a href="challenges/Sword.pdf">
-<img src=".assets/sword.png" width="150" height="100" alt="Thumbnail" />
-</a>
-<a href="challenges/SOCET.pdf">
-  <img src=".assets/socet.png" width="150" height="100" alt="Thumbnail" />
-</a>
-
-Click on a sponsor or checkout the [Challenges Folder](challenges/)
-
-#### [Nao Documentation](http://doc.aldebaran.com/2-1/nao/nao-connecting.html#nao-connecting)
-
-#### [Nao Repo from SoCET](https://github.com/RGU-Computing/pepper)
+In **Liar, Cheater, Fired**, the traditional "Escape Room" logic is flipped on its head. You aren't escaping a room; you are escaping a **career**. You play as a catastrophically bad employee. Your goal? **Get fired.** The ultimate "Fail State"? **A Promotion.** If you accidentally show competence, you’ll be locked in a corner office with a 60-hour work week. You must sabotage your way to freedom!
 
 ---
 
-<img width="200" height="147" alt="image" src="https://github.com/user-attachments/assets/6e5e8b95-4d36-43e5-82b8-71b3ad1fef09" />
+## 🧩 The "Work" (Puzzles)
 
-<!-- Spectre7651 -->
+To meet the **Sword Group** challenge requirements, we’ve built a suite of anti-productivity puzzles that test your ability to do absolutely nothing:
 
-#### Join our discord server [https://discord.gg/MuntB88f](https://discord.gg/MuntB88f) and tag us on LinkedIn [#rguhack](https://www.linkedin.com/search/results/all/?keywords=%23rguhack)
+- **🔤 Corporate Yap Wordle:** Decipher the most annoying corporate buzzwords. Guess "Scope" or "Scrum" and you risk looking like a high-performer. Guess the "slacker" words to tank the meeting.
+- **🧱 Jira Ticket Tetris:** The backlog is crazy! In sprint planning battle, your goal is to avoid being important. Every line of the backlog is being assigned to an individual, and if you aren't careful, you'll end up with a big project. Stay "Dead Weight" and keep your board clear to dodge the workload.
+- **🏓 Marty Pong & Slacker Pacman:** Classic time-wasters dodging your Boss's Microsoft Teams pings. One hit and you’re stuck in a "Quick Sync" that lasts three hours. Then in Pacman Navigate the cubicle maze while running from unread emails.Stay alert, stay silent, stay unemployed!
 
-# Good Luck! 🎉
+---
+
+## 👶 The Boss Baby (The Antagonist)
+
+Meet your manager: **The Boss Baby**. He is micromanaging your every move.
+
+- **The Goal:** Aggravate him until he hands you your P45.
+- **The Risk:** If you solve his "Training Challenges" too efficiently, he might think you're "Management Material." Avoid the promotion at all costs!
+
+---
+
+## 🛠️ The "Unprofessional" Stack
+
+We used a professional stack to build a very "professional" experience:
+
+- **Framework:** React 18 + Vite
+- **Styling:** Tailwind CSS and Lucide React for that sterile, soul-crushing office aesthetic.
+
+---
+
+## 🏗️ The "Hacker" Win
+
+The biggest challenge was creating a game where **Winning = Losing** and **Losing = Winning**. We had to decouple traditional game rewards (points/levels) and replace them with disciplinary write-ups and HR complaints.
+
+---
+
+## 👥 The "Magical Interns" (The Team)
+
+We are a group of placement students currently being "wonderful" in the real world, but "terrible" in this repo:
+
+- **[Arman Shaikh]** - Chief Sabotage Officer
+- **[Charis Drain]** - Head of Corporate Yap
+- **[Himani Patney]** - Jira Ticket Architect
+- **[Vidhi Jalan]** - Boss Baby Handler
+- **[Lemar Tokham]** - Professional Email Ignorer 
+
+---
+
+### 🚀 How to Play
+
+Navigate your wonderful self to: https://liar.armandev.co.uk/
+
+### Run it locally
+
+1. Install [bun](https://www.bun.com)
+2. Run `bun install`
+3. Run `bun dev`
