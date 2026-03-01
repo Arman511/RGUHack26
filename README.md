@@ -27,9 +27,8 @@ Meet your manager: **The Boss Baby**. He is micromanaging your every move.
 
 ## 🛠️ The "Unprofessional" Stack
 We used a professional stack to build a very "professional" experience:
-* **Frontend:** [Insert your Framework, e.g., React / Vite]
-* **Logic:** Custom State Machine to track the "Disciplinary Meter" vs. "Career Growth."
-* **Styling:** Tailwind CSS for that sterile, soul-crushing office aesthetic.
+* **Framework:** React 18 + Vite
+* **Styling:** Tailwind CSS and Lucide React for that sterile, soul-crushing office aesthetic.
 
 ---
 
