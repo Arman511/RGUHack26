@@ -303,14 +303,15 @@ const Index = () => {
     state.stage.endsWith("-howto");
 
   return (
-    <div className="w-screen h-screen overflow-hidden relative bg-background">
-      <div
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 20% 80%, hsl(213 80% 40%) 0%, transparent 50%), radial-gradient(circle at 80% 20%, hsl(220 70% 30%) 0%, transparent 50%)",
-        }}
-      />
+    <div
+      className="w-screen h-screen overflow-hidden relative bg-background"
+      style={{
+        backgroundImage: "url('/background.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
 
       <FailMeter value={state.meterValue} />
       <DesktopIcons />
