@@ -15,6 +15,7 @@ import { FailMeter } from "@/components/game/FailMeter";
 import { HowToPlay } from "@/components/game/HowToPlay";
 import { PunishmentScreen } from "@/components/game/PunishmentScreen";
 import { TeamsNotif } from "@/components/game/TeamsNotif";
+import { OutlookMockup } from "@/components/game/OutlookMockup";
 import { Video, LayoutList, Mail } from "lucide-react";
 import { set } from "react-hook-form";
 
@@ -28,6 +29,7 @@ const Index = () => {
   const [showBoss, setShowBoss] = useState(false);
   const [bossMsg, setBossMsg] = useState("");
   const [bossAutoAdvance, setBossAutoAdvance] = useState<number | undefined>(undefined);
+  const [bossAltButton, setBossAltButton] = useState<{ label: string; onAlt: () => void } | undefined>(undefined);
   const [nextStageAfterBoss, setNextStageAfterBoss] =
     useState<GameStage | null>(null);
   const [showPunishment, setShowPunishment] = useState<GameStage | null>(null);
@@ -54,17 +56,18 @@ const Index = () => {
     };
   }, []);
 
-  const triggerBoss = useCallback((msg: string, nextStage: GameStage, autoAdvanceDelay?: number) => {
+  const triggerBoss = useCallback((msg: string, nextStage: GameStage, autoAdvanceDelay?: number, altButton?: { label: string; onAlt: () => void }) => {
     setBossMsg(msg);
     setBossAutoAdvance(autoAdvanceDelay);
+    setBossAltButton(altButton);
     setShowBoss(true);
     setNextStageAfterBoss(nextStage);
   }, []);
 
   const triggerBossWithDelay = useCallback(
-    (msg: string, nextStage: GameStage, delayMs = STAGE_DELAY_MS) => {
+    (msg: string, nextStage: GameStage, delayMs = STAGE_DELAY_MS, altButton?: { label: string; onAlt: () => void }) => {
       const timeout = setTimeout(() => {
-        triggerBoss(msg, nextStage);
+        triggerBoss(msg, nextStage, undefined, altButton);
       }, delayMs);
 
       return () => clearTimeout(timeout);
@@ -75,6 +78,7 @@ const Index = () => {
   const dismissBoss = useCallback(() => {
     setShowBoss(false);
     setBossAutoAdvance(undefined);
+    setBossAltButton(undefined);
     const cb = bossOnDismissRef.current;
     bossOnDismissRef.current = null;
     if (cb) {
@@ -233,6 +237,7 @@ const Index = () => {
         "Check your emails! 10 unread messages! You're on prod support!",
         skipTutorials ? "pacman" : "pacman-howto",
         SECOND_DELAY_MS,
+        { label: "Fine.", onAlt: () => { setShowBoss(false); setBossAltButton(undefined); setStage("outlook"); } },
       );
     }
   }, [
@@ -243,6 +248,13 @@ const Index = () => {
     triggerBossWithDelay,
     setStage,
   ]);
+
+  useEffect(() => {
+    if (state.stage === "outlook") {
+      const t = setTimeout(() => setStage("jira"), STAGE_DELAY_MS);
+      return () => clearTimeout(t);
+    }
+  }, [state.stage, setStage]);
 
   const handlePacmanWin = useCallback(() => {
     moveMeter(-30);
@@ -295,7 +307,7 @@ const Index = () => {
       return triggerBossWithDelay(
         "The sprint is on fire! It's all your fault for not working! Survive the backlog of tasks!",
         skipTutorials ? "tetris" : "tetris-howto",
-        100,
+        1000,
       );
     }
   }, [state.stage, skipTutorials, triggerBossWithDelay]);
@@ -458,6 +470,20 @@ const Index = () => {
         </DraggableWindow>
       )}
 
+      {/* Outlook Mockup (Fine path from Zoom) */}
+      {state.stage === "outlook" && (
+        <DraggableWindow
+          title="Outlook - Inbox"
+          icon={<Mail size={14} />}
+          width={730}
+          closable={true}
+          onClose={() => setStage("jira")}
+          bodyStyle={{ padding: 0 }}
+        >
+          <OutlookMockup onPlayAgain={() => setStage("jira")} />
+        </DraggableWindow>
+      )}
+
       {/* Wordle How-To */}
       {state.stage === "wordle-howto" && (
         <DraggableWindow
@@ -563,7 +589,7 @@ const Index = () => {
       {showBoss && (
         <>
           <div className="fixed inset-0 bg-foreground/50 z-40" />
-          <BossBaby message={bossMsg} onDismiss={dismissBoss} autoAdvanceDelay={bossAutoAdvance} />
+          <BossBaby message={bossMsg} onDismiss={dismissBoss} autoAdvanceDelay={bossAutoAdvance} altButton={bossAltButton} />
         </>
       )}
 

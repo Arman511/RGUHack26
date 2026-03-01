@@ -5,9 +5,10 @@ interface BossBabyProps {
   message: string;
   onDismiss: () => void;
   autoAdvanceDelay?: number;
+  altButton?: { label: string; onAlt: () => void };
 }
 
-export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss, autoAdvanceDelay }) => {
+export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss, autoAdvanceDelay, altButton }) => {
   const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);
 
@@ -67,7 +68,12 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss, autoAdva
 
               {/* Continue Button — hidden when auto-advancing */}
               {displayedText === message && autoAdvanceDelay === undefined && (
-                <div className="mt-4 text-right">
+                <div className="mt-4 flex justify-end gap-2">
+                  {altButton && (
+                    <button className="xp-button" onClick={altButton.onAlt}>
+                      {altButton.label}
+                    </button>
+                  )}
                   <button className="xp-button-primary" onClick={onDismiss}>
                     {message.toLowerCase().includes("email") ||
                     message.toLowerCase().includes("outlook")

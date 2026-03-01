@@ -229,6 +229,12 @@ export const OutlookMockup: React.FC<OutlookMockupProps> = ({
         }}
       >
         <span>12 Items, 7 Unread</span>
+        <button
+          onClick={onPlayAgain}
+          className="xp-button text-xs px-3 py-0.5"
+        >
+          Close Inbox
+        </button>
         <span>Connected to Exchange Server</span>
       </div>
     </div>
