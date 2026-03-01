@@ -375,6 +375,11 @@ const Index = () => {
     ["pingpong", "wordle", "pacman", "tetris"].includes(state.stage) ||
     state.stage.endsWith("-howto");
 
+  const shouldHideProcrastinationDesktop =
+    Boolean(showPunishment) || isGameActive || state.stage === "outlook";
+  const shouldDisableProcrastinationDesktop =
+    showBoss || state.stage === "teams" || state.stage === "zoom";
+
   return (
     <div
       className="w-screen h-screen overflow-hidden relative bg-background"
@@ -391,16 +396,22 @@ const Index = () => {
       <DesktopIcons />
 
       {/* Keep mounted so internal state (e.g., cricket match) does not reset between stages */}
-      <ProcrastinationDesktop hidden={Boolean(showPunishment)} />
+      <ProcrastinationDesktop
+        hidden={shouldHideProcrastinationDesktop}
+        disabled={shouldDisableProcrastinationDesktop}
+      />
 
       {/* Grey overlay when game is active */}
       {isGameActive && <div className="fixed inset-0 bg-foreground/50 z-30" />}
 
       {/* Teams Notification */}
       {state.stage === "teams" && (
-        <div className="teams-notification">
-          <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsJoin} />
-        </div>
+        <>
+          <div className="fixed inset-0 z-40" />
+          <div className="teams-notification">
+            <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsJoin} />
+          </div>
+        </>
       )}
 
       {/* Pong How-To */}
