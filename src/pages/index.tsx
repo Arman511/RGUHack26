@@ -378,7 +378,7 @@ const Index = () => {
   const shouldHideProcrastinationDesktop =
     Boolean(showPunishment) || isGameActive || state.stage === "outlook";
   const shouldDisableProcrastinationDesktop =
-    showBoss || state.stage === "teams" || state.stage === "zoom";
+    showBoss;
 
   return (
     <div
