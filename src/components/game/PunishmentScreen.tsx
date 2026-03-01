@@ -127,7 +127,7 @@ content: (
         </div>
       ))}
 
-    </div>
+        </div>
 
     {/* Status */}
     <div className="bg-[#d4d0c8] border-t border-[#7f9db9] px-2 py-[2px]">
@@ -192,18 +192,14 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
             <OutlookMockup onPlayAgain={onComplete} />
           ) : (
             <>
-              <div className="text-center mb-2">
-                <p className="text-xs text-destructive font-bold">
-                  ⚠️ PUNISHMENT: You must endure {timer}s of work!
-                </p>
-              </div>
+              {isPunishment && (
+                <div className="text-center mb-2">
+                  <p className="text-xs text-destructive font-bold">
+                    ⚠️ PUNISHMENT!
+                  </p>
+                </div>
+              )}
               {punishment.content}
-              <div className="mt-2 bg-muted rounded-full h-2 overflow-hidden">
-                <div
-                  className="bg-primary h-full transition-all duration-1000"
-                  style={{ width: `${((PUNISHMENT_TIME_SECONDS - timer) / PUNISHMENT_TIME_SECONDS) * 100}%` }}
-                />
-              </div>
             </>
           )}
         </div>

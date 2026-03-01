@@ -97,8 +97,8 @@ const Index = () => {
 
   const handleTeamsJoin = useCallback(() => {
     moveMeter(10);
-    setIsPunishment(true);
-    triggerPunishment("pong-done", "pingpong");
+    setIsPunishment(false);
+    triggerPunishment("pong-done", "pingpong", false);
   }, [moveMeter, triggerPunishment]);
 
   const handlePongWin = useCallback(() => {
@@ -147,7 +147,7 @@ const Index = () => {
   const handleZoomJoin = useCallback(() => {
     moveMeter(20); // did work = toward promoted
     setIsPunishment(false);
-    triggerPunishment("wordle-done", "wordle");
+    triggerPunishment("wordle-done", "wordle", false);
   }, [moveMeter, triggerPunishment]);
 
   const handleZoomDecline = useCallback(() => {
@@ -314,7 +314,7 @@ const Index = () => {
       {/* Teams Notification */}
       {state.stage === "teams" && (
         <div className="teams-notification">
-          <TeamsNotif onDismiss={handleTeamsClose} />
+          <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsJoin} />
         </div>
       )}
 
