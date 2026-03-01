@@ -85,7 +85,10 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
           )}
         </div>
       </div>
-      <div className="xp-window-body" style={{ ...(height ? { height } : {}), ...bodyStyle }}>
+      <div
+        className="xp-window-body"
+        style={{ ...(height ? { height } : {}), ...bodyStyle }}
+      >
         {children}
       </div>
     </div>

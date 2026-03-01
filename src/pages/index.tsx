@@ -16,8 +16,10 @@ import { HowToPlay } from "@/components/game/HowToPlay";
 import { PunishmentScreen } from "@/components/game/PunishmentScreen";
 import { TeamsNotif } from "@/components/game/TeamsNotif";
 import { Video, LayoutList, Mail } from "lucide-react";
+import { set } from "react-hook-form";
 
 const STAGE_DELAY_MS = 3000;
+const SECOND_DELAY_MS = 3000;
 const STAGE_METER_POINT_CUTOF = 9;
 
 const Index = () => {
@@ -32,6 +34,7 @@ const Index = () => {
     useState<GameStage | null>(null);
   const [skipDoneStageDelay, setSkipDoneStageDelay] = useState(false);
   const [loopDone, setLoopDone] = useState(false);
+  const [isPunishment, setIsPunishment] = useState(true);
   const delayTimer = useRef<ReturnType<typeof setTimeout>>();
 
   // Delayed stage transition (5s gap)
@@ -55,6 +58,17 @@ const Index = () => {
     setNextStageAfterBoss(nextStage);
   }, []);
 
+  const triggerBossWithDelay = useCallback(
+    (msg: string, nextStage: GameStage, delayMs = STAGE_DELAY_MS) => {
+      const timeout = setTimeout(() => {
+        triggerBoss(msg, nextStage);
+      }, delayMs);
+
+      return () => clearTimeout(timeout);
+    },
+    [triggerBoss],
+  );
+
   const dismissBoss = useCallback(() => {
     setShowBoss(false);
     if (nextStageAfterBoss) {
@@ -63,10 +77,18 @@ const Index = () => {
     }
   }, [nextStageAfterBoss, setStage]);
 
-  const triggerPunishment = useCallback((nextStage: GameStage, punishmentStage: GameStage) => {
-    setShowPunishment(punishmentStage);
-    setStageAfterPunishment(nextStage);
-  }, []);
+  const triggerPunishment = useCallback(
+    (
+      nextStage: GameStage,
+      punishmentStage: GameStage,
+      isPunishment: boolean = true,
+    ) => {
+      setShowPunishment(punishmentStage);
+      setStageAfterPunishment(nextStage);
+      setIsPunishment(isPunishment);
+    },
+    [],
+  );
 
   const handlePunishmentDone = useCallback(() => {
     setShowPunishment(null);
@@ -85,11 +107,18 @@ const Index = () => {
   }, [setStage, delayedStage]);
 
   const handleTeamsClose = useCallback(() => {
+    setIsPunishment(true);
     triggerBoss(
       "Ignoring my pings? Fine. If you won't reply, then you'll rebound. Put your paddle where your mouse is and let's see if you can keep up.",
-      skipTutorials ? 'pingpong' : 'pong-howto'
+      skipTutorials ? "pingpong" : "pong-howto",
     );
   }, [skipTutorials, triggerBoss]);
+
+  const handleTeamsJoin = useCallback(() => {
+    moveMeter(10);
+    setIsPunishment(false);
+    triggerPunishment("pong-done", "pingpong", false);
+  }, [moveMeter, triggerPunishment]);
 
   const handlePongWin = useCallback(() => {
     moveMeter(-30); // toward FIRED (victory)
@@ -101,6 +130,7 @@ const Index = () => {
 
   const handlePongLose = useCallback(() => {
     moveMeter(10); // toward PROMOTED (loss)
+    setIsPunishment(true);
     triggerPunishment("pong-done", "pingpong");
   }, [moveMeter, triggerPunishment]);
 
@@ -131,18 +161,24 @@ const Index = () => {
         delayedStage("zoom", STAGE_DELAY_MS);
       }
     }
-  }, [state.stage, skipDoneStageDelay, delayedStage, setStage, loopDone, handleMeterOutcome]);
+  }, [
+    state.stage,
+    skipDoneStageDelay,
+    delayedStage,
+    setStage,
+    loopDone,
+    handleMeterOutcome,
+  ]);
 
   const handleZoomJoin = useCallback(() => {
     moveMeter(20); // did work = toward promoted
-    triggerBoss(
-      "Good employee! You joined the meeting. But that moves you toward PROMOTED...",
-      "wordle-done",
-    );
-  }, [moveMeter, triggerBoss]);
+    setIsPunishment(false);
+    triggerPunishment("wordle-done", "wordle", false);
+  }, [moveMeter, triggerPunishment]);
 
   const handleZoomDecline = useCallback(() => {
     moveMeter(-15); // declined meeting = toward fired
+    setIsPunishment(true);
     triggerBoss(
       "Think you can skip the standup? Decode this corporate jargon!",
       skipTutorials ? "wordle" : "wordle-howto",
@@ -172,16 +208,22 @@ const Index = () => {
       }
       if (skipDoneStageDelay) {
         setSkipDoneStageDelay(false);
-        setStage("pacman");
-      } else {
-        triggerBoss(
-          "Check your emails! 10 unread messages! You're on prod support!",
-          skipTutorials ? "pacman" : "pacman-howto",
-        );
       }
 
+      return triggerBossWithDelay(
+        "Check your emails! 10 unread messages! You're on prod support!",
+        skipTutorials ? "pacman" : "pacman-howto",
+        SECOND_DELAY_MS,
+      );
     }
-  }, [skipTutorials, state.stage, triggerBoss, loopDone, handleMeterOutcome]);
+  }, [
+    skipTutorials,
+    state.stage,
+    loopDone,
+    handleMeterOutcome,
+    triggerBossWithDelay,
+    setStage,
+  ]);
 
   const handlePacmanWin = useCallback(() => {
     moveMeter(-30);
@@ -209,7 +251,14 @@ const Index = () => {
         delayedStage("jira", STAGE_DELAY_MS);
       }
     }
-  }, [state.stage, skipDoneStageDelay, delayedStage, setStage, loopDone, handleMeterOutcome]);
+  }, [
+    state.stage,
+    skipDoneStageDelay,
+    delayedStage,
+    setStage,
+    loopDone,
+    handleMeterOutcome,
+  ]);
 
   const handleJiraNotification = useCallback(() => {
     triggerBoss(
@@ -220,15 +269,18 @@ const Index = () => {
 
   useEffect(() => {
     if (state.stage === "jira") {
-      const t = setTimeout(handleJiraNotification, 100);
-      return () => clearTimeout(t);
+      return triggerBossWithDelay(
+        "The sprint is on fire! It's all your fault for not working! Survive the backlog of tasks!",
+        skipTutorials ? "tetris" : "tetris-howto",
+        100,
+      );
     }
-  }, [state.stage, handleJiraNotification]);
+  }, [state.stage, skipTutorials, triggerBossWithDelay]);
 
   const handleTetrisTopReached = useCallback(() => {
     moveMeter(10); // failed work = toward fired
     triggerBoss(
-      "Ha got you, better luck next time, pay attention during the zoom! Moving toward PROMOTED...",
+      "Ha got you, better luck next time, pay attention during the Jira Refinement! You can have some points for doing work...",
       "tetris-done",
     );
   }, [moveMeter]);
@@ -282,15 +334,15 @@ const Index = () => {
     state.stage.endsWith("-howto");
 
   return (
-    <div className="w-screen h-screen overflow-hidden relative bg-background">
-      <div
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 20% 80%, hsl(213 80% 40%) 0%, transparent 50%), radial-gradient(circle at 80% 20%, hsl(220 70% 30%) 0%, transparent 50%)",
-        }}
-      />
-
+    <div
+      className="w-screen h-screen overflow-hidden relative bg-background"
+      style={{
+        backgroundImage: "url('/background.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <FailMeter value={state.meterValue} />
       <DesktopIcons />
 
@@ -303,7 +355,7 @@ const Index = () => {
       {/* Teams Notification */}
       {state.stage === "teams" && (
         <div className="teams-notification">
-          <TeamsNotif onDismiss={handleTeamsClose} />
+          <TeamsNotif onDismiss={handleTeamsClose} onJoin={handleTeamsJoin} />
         </div>
       )}
 
@@ -327,7 +379,7 @@ const Index = () => {
       )}
 
       {/* Ping Pong */}
-      {state.stage === 'pingpong' && (
+      {state.stage === "pingpong" && (
         <DraggableWindow
           title="Work Avoidance.exe"
           width={400}
@@ -344,7 +396,7 @@ const Index = () => {
             onWin={handlePongWin}
             onLose={handlePongLose}
             playerAvatar="/sword.jpeg"
-            botAvatar='/marty.jpeg'
+            botAvatar="/marty.jpeg"
             playerName="Marty Supreme"
           />
         </DraggableWindow>
@@ -459,8 +511,8 @@ const Index = () => {
             instructions={[
               "Survive for 30 seconds!",
               "Arrow keys: ←→ move, ↑ rotate, ↓ drop",
-              "Let blocks pile up to get fired!",
-              "Surviving = too productive = PROMOTED",
+              "Surviving = you're actively avoiding work = moving toward FIRED",
+              "If you let the tasks pile up... You will be forced to do the work and get some points...",
             ]}
             onStart={() => setStage("tetris")}
           />
@@ -495,6 +547,7 @@ const Index = () => {
         <PunishmentScreen
           onComplete={handlePunishmentDone}
           gameStage={showPunishment}
+          isPunishment={isPunishment}
         />
       )}
 

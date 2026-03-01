@@ -16,10 +16,10 @@ export const DesktopIcons: React.FC = () => {
           key={item.label}
           className="flex flex-col items-center gap-1 w-16 cursor-pointer group"
         >
-          <div className="text-primary-foreground drop-shadow-md group-hover:brightness-125">
+          <div className="text-black drop-shadow-md group-hover:brightness-125">
             {item.icon}
           </div>
-          <span className="text-[11px] text-primary-foreground text-center drop-shadow-md leading-tight px-0.5">
+          <span className="text-[11px] text-black text-center drop-shadow-md leading-tight px-0.5">
             {item.label}
           </span>
         </div>
