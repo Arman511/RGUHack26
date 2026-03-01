@@ -210,7 +210,7 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
 
   return (
     <div className="fixed inset-0 z-[60] bg-foreground/60 flex items-center justify-center">
-      <div className={`xp-window ${punishmentType === "email" ? "w-[560px]" : "w-[400px]"}`}>
+      <div className={`xp-window ${punishmentType === "email" ? "w-[716px]" : "w-[400px]"}`}>
         <div className="xp-title-bar">
           <div className="flex items-center gap-1.5">
             {punishment.icon}

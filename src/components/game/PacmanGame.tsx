@@ -82,7 +82,7 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
         x: spawn.x, y: spawn.y,
         targetX: spawn.x, targetY: spawn.y,
         progress: 1,
-        speed: 0.015 + Math.random() * 0.008,
+        speed: 0.018 + Math.random() * 0.004,
         color: cfg.color,
         label: cfg.label,
         dir: { dx: 0, dy: 0 },
@@ -129,7 +129,7 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
     };
     window.addEventListener("keydown", keyHandler);
 
-    const PACMAN_SPEED = 0.05;
+    const PACMAN_SPEED = 0.06;
 
     const chooseGhostDir = (g: Ghost) => {
       const dirs = [
@@ -334,7 +334,7 @@ export const PacmanGame: React.FC<PacmanGameProps> = ({ onWin, onLose }) => {
 
       {/* Status Bar */}
       <div style={{ background: "#000080", color: "#fff", padding: "2px 6px", fontSize: 12 }}>
-        Avoid the coworkers!
+        Avoid the 6 coworkers!
       </div>
     </div>
   );
