@@ -20,6 +20,8 @@ To meet the **Sword Group** challenge requirements, we’ve built a suite of ant
 - **🧱 Jira Ticket Tetris:** The backlog is crazy! In sprint planning battle, your goal is to avoid being important. Every line of the backlog is being assigned to an individual, and if you aren't careful, you'll end up with a big project. Stay "Dead Weight" and keep your board clear to dodge the workload.
 - **🏓 Marty Pong & Slacker Pacman:** Classic time-wasters dodging your Boss's Microsoft Teams pings. One hit and you’re stuck in a "Quick Sync" that lasts three hours. Then in Pacman Navigate the cubicle maze while running from unread emails.Stay alert, stay silent, stay unemployed!
 
+![Games](.assets/games.png)
+
 ---
 
 ## 👶 The Boss Baby (The Antagonist)
@@ -44,6 +46,8 @@ We used a professional stack to build a very "professional" experience:
 
 The biggest challenge was creating a game where **Winning = Losing** and **Losing = Winning**. We had to decouple traditional game rewards (points/levels) and replace them with disciplinary write-ups and HR complaints.
 
+![Paths](.assets/paths.png)
+
 ---
 
 ## 👥 The "Magical Interns" (The Team)
@@ -67,3 +71,5 @@ Navigate your wonderful self to: https://liar.armandev.co.uk/
 1. Install [bun](https://www.bun.com)
 2. Run `bun install`
 3. Run `bun dev`
+
+![Meme](.assets/meme.png)

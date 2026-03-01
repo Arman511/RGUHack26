@@ -34,3 +34,4 @@ docker-compose.local.yml
 # OS files
 .DS_Store
 Thumbs.db
+.pdf
