@@ -70,8 +70,7 @@ export const OutlookMockup: React.FC<OutlookMockupProps> = ({
 
     const withDates = UNREAD_EMAILS.map((email) => {
       const randomOffset =
-        minOffsetMs +
-        Math.floor(Math.random() * (oneDayMs - minOffsetMs + 1));
+        minOffsetMs + Math.floor(Math.random() * (oneDayMs - minOffsetMs + 1));
       const timestamp = new Date(now - randomOffset);
       return { ...email, timestamp };
     }).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
@@ -247,10 +246,7 @@ export const OutlookMockup: React.FC<OutlookMockupProps> = ({
         }}
       >
         <span>12 Items, 7 Unread</span>
-        <button
-          onClick={onPlayAgain}
-          className="xp-button text-xs px-3 py-0.5"
-        >
+        <button onClick={onPlayAgain} className="xp-button text-xs px-3 py-0.5">
           Close Inbox
         </button>
         <span>Connected to Exchange Server</span>

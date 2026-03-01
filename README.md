@@ -54,7 +54,7 @@ We are a group of placement students currently being "wonderful" in the real wor
 - **[Charis Drain]** - Head of Corporate Yap
 - **[Himani Patney]** - Jira Ticket Architect
 - **[Vidhi Jalan]** - Boss Baby Handler
-- **[Lemar Tokham]** - Professional Email Ignorer 
+- **[Lemar Tokham]** - Professional Email Ignorer
 
 ---
 

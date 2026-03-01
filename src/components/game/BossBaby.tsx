@@ -9,7 +9,13 @@ interface BossBabyProps {
   dismissLabel?: string;
 }
 
-export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss, autoAdvanceDelay, altButton, dismissLabel }) => {
+export const BossBaby: React.FC<BossBabyProps> = ({
+  message,
+  onDismiss,
+  autoAdvanceDelay,
+  altButton,
+  dismissLabel,
+}) => {
   const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);
 
@@ -26,7 +32,11 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss, autoAdva
 
   // Auto-advance after typing completes
   useEffect(() => {
-    if (autoAdvanceDelay !== undefined && displayedText === message && message.length > 0) {
+    if (
+      autoAdvanceDelay !== undefined &&
+      displayedText === message &&
+      message.length > 0
+    ) {
       const t = setTimeout(onDismiss, autoAdvanceDelay);
       return () => clearTimeout(t);
     }
@@ -97,7 +107,9 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss, autoAdva
               </div>
 
               {/* Name Tag */}
-              <span className="text-sm font-bold text-card-foreground mt-2">Boss Baby</span>
+              <span className="text-sm font-bold text-card-foreground mt-2">
+                Boss Baby
+              </span>
             </div>
           </div>
         </div>

@@ -140,9 +140,7 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
           {punishmentType === "email" ? (
             <OutlookMockup onPlayAgain={onComplete} />
           ) : (
-            <>
-              {punishment.content}
-            </>
+            <>{punishment.content}</>
           )}
         </div>
       </div>
