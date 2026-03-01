@@ -28,7 +28,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
 
       <div className="absolute inset-0 bg-foreground/35" />
 
-      <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center">
+      <div className="relative z-10 flex flex-col items-center justify-center gap-6 px-6 text-center w-full">
         <div className="xp-window w-[560px] max-w-[95vw]">
           <div className="xp-title-bar">
             <div className="flex items-center gap-1.5">
