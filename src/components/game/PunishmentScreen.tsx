@@ -141,13 +141,6 @@ export const PunishmentScreen: React.FC<PunishmentScreenProps> = ({
             <OutlookMockup onPlayAgain={onComplete} />
           ) : (
             <>
-              {isPunishment && (
-                <div className="text-center mb-2">
-                  <p className="text-xs text-destructive font-bold">
-                    ⚠️ PUNISHMENT!
-                  </p>
-                </div>
-              )}
               {punishment.content}
             </>
           )}
