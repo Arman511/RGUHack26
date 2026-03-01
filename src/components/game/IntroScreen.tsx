@@ -125,13 +125,13 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
               boxSizing: "border-box",
             }}
           >
-            <span className="text-xs font-bold">Skip tutorials</span>
+            <span className="text-xs font-bold">Tutorials</span>
             <button
               type="button"
               className="xp-button text-[11px] px-2 py-0.5"
               onClick={() => setSkipTutorials(!skipTutorials)}
             >
-              {skipTutorials ? "ON" : "OFF"}
+              {skipTutorials ? "OFF" : "ON"}
             </button>
           </div>
         </div>

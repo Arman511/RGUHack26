@@ -38,11 +38,14 @@ export const EndScreen: React.FC<EndScreenProps> = ({ type, onRestart }) => {
 
   if (type === "fired") {
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-foreground/90">
+      <div
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-cover bg-center"
+        style={{ backgroundImage: "url('/background.png')" }}
+      >
         {confetti.map((c) => (
           <div
             key={c.id}
-            className="confetti-piece"
+            className="confetti-piece z-10"
             style={{
               left: `${c.x}%`,
               top: "-20px",
@@ -54,53 +57,68 @@ export const EndScreen: React.FC<EndScreenProps> = ({ type, onRestart }) => {
             }}
           />
         ))}
-        <div className="flex flex-col items-center gap-6 z-10">
-          <h1
-            className="pixel-text text-6xl md:text-8xl font-bold text-destructive"
-            style={{ animation: "shake 0.5s ease-in-out infinite" }}
-          >
-            YOU'RE FIRED!
-          </h1>
-          <PartyPopper size={64} className="text-warning" />
-          <p className="text-xl text-primary-foreground font-bold text-center max-w-md">
-            🎉 Congratulations! You successfully avoided all productivity and
-            earned your freedom! 🎉
-          </p>
-          <button
-            className="xp-button-primary text-lg px-8 py-2"
-            onClick={onRestart}
-          >
-            🕊️ Freedom (Play Again)
-          </button>
+        <div className="xp-window w-[min(95vw,680px)] z-20">
+          <div className="xp-title-bar">
+            <span>Office Simulator.exe</span>
+            <div className="xp-close-btn">×</div>
+          </div>
+          <div className="xp-window-body flex flex-col items-center gap-5 py-8 px-6 text-center">
+            <PartyPopper size={60} className="text-warning" />
+            <h1
+              className="pixel-text text-3xl md:text-5xl font-bold text-destructive"
+              style={{ animation: "shake 0.5s ease-in-out infinite" }}
+            >
+              YOU'RE FIRED!
+            </h1>
+            <p className="text-lg text-card-foreground font-bold max-w-lg leading-relaxed">
+              Congratulations! You successfully avoided all productivity and
+              earned your freedom.
+            </p>
+            <button
+              className="xp-button-primary text-base px-8 py-2 mt-2"
+              onClick={onRestart}
+            >
+              Freedom (Play Again)
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-card">
-      <div className="flex flex-col items-center gap-6">
-        <Frown size={64} className="text-muted-foreground" />
-        <h1 className="pixel-text text-4xl md:text-6xl font-bold text-card-foreground text-center">
-          CONGRATULATIONS
-        </h1>
-        <p className="text-lg text-muted-foreground text-center max-w-md leading-relaxed">
-          You were <strong>too good</strong> at your job. You've been promoted
-          to
-          <br />
-          <span className="text-destructive font-bold text-xl">
-            Senior Vice President of Meetings
-          </span>
-        </p>
-        <p className="text-sm text-muted-foreground italic">
-          You are trapped here forever.
-        </p>
-        <button
-          className="xp-button-primary text-lg px-8 py-2"
-          onClick={onRestart}
-        >
-          Try Again (Escape)
-        </button>
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: "url('/background.png')" }}
+    >
+      <div className="xp-window w-[min(95vw,680px)] z-10">
+        <div className="xp-title-bar-inactive">
+          <span>Human Resources</span>
+          <div className="xp-close-btn">×</div>
+        </div>
+        <div className="xp-window-body flex flex-col items-center gap-5 py-8 px-6 text-center">
+          <Frown size={56} className="text-muted-foreground" />
+          <h1 className="pixel-text text-2xl md:text-4xl font-bold text-card-foreground">
+            WOW. CONGRATULATIONS.
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
+            You were <strong>way too competent</strong> at your job. As a
+            reward, you've been promoted to
+            <br />
+            <span className="text-destructive font-bold text-xl">
+              Senior Vice President of Meetings
+            </span>
+          </p>
+          <p className="text-sm text-muted-foreground italic">
+            Dream big. Now spend forever in back-to-back status calls.
+          </p>
+          <button
+            className="xp-button-primary text-base px-8 py-2 mt-2"
+            onClick={onRestart}
+          >
+            Try Again (Escape)
+          </button>
+        </div>
       </div>
     </div>
   );

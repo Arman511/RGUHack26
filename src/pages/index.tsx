@@ -17,19 +17,19 @@ import { PunishmentScreen } from "@/components/game/PunishmentScreen";
 import { TeamsNotif } from "@/components/game/TeamsNotif";
 import { OutlookMockup } from "@/components/game/OutlookMockup";
 import { Video, LayoutList, Mail } from "lucide-react";
-import { set } from "react-hook-form";
 
 const STAGE_DELAY_MS = 3000;
 const SECOND_DELAY_MS = 3000;
 const STAGE_METER_POINT_CUTOF = 9;
 
 const Index = () => {
-  const { state, setStage, moveMeter, setBossMessage } = useGameState();
+  const { state, setStage, moveMeter } = useGameState();
   const [skipTutorials, setSkipTutorials] = useState(true);
   const [showBoss, setShowBoss] = useState(false);
   const [bossMsg, setBossMsg] = useState("");
   const [bossAutoAdvance, setBossAutoAdvance] = useState<number | undefined>(undefined);
   const [bossAltButton, setBossAltButton] = useState<{ label: string; onAlt: () => void } | undefined>(undefined);
+  const [bossDismissLabel, setBossDismissLabel] = useState<string | undefined>(undefined);
   const [nextStageAfterBoss, setNextStageAfterBoss] =
     useState<GameStage | null>(null);
   const [showPunishment, setShowPunishment] = useState<GameStage | null>(null);
@@ -38,7 +38,7 @@ const Index = () => {
   const [skipDoneStageDelay, setSkipDoneStageDelay] = useState(false);
   const [loopDone, setLoopDone] = useState(false);
   const [isPunishment, setIsPunishment] = useState(true);
-  const delayTimer = useRef<ReturnType<typeof setTimeout>>();
+  const delayTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bossOnDismissRef = useRef<(() => void) | null>(null);
 
   // Delayed stage transition (5s gap)
@@ -56,10 +56,11 @@ const Index = () => {
     };
   }, []);
 
-  const triggerBoss = useCallback((msg: string, nextStage: GameStage, autoAdvanceDelay?: number, altButton?: { label: string; onAlt: () => void }) => {
+  const triggerBoss = useCallback((msg: string, nextStage: GameStage, autoAdvanceDelay?: number, altButton?: { label: string; onAlt: () => void }, dismissLabel?: string) => {
     setBossMsg(msg);
     setBossAutoAdvance(autoAdvanceDelay);
     setBossAltButton(altButton);
+    setBossDismissLabel(dismissLabel);
     setShowBoss(true);
     setNextStageAfterBoss(nextStage);
   }, []);
@@ -79,6 +80,7 @@ const Index = () => {
     setShowBoss(false);
     setBossAutoAdvance(undefined);
     setBossAltButton(undefined);
+    setBossDismissLabel(undefined);
     const cb = bossOnDismissRef.current;
     bossOnDismissRef.current = null;
     if (cb) {
@@ -139,6 +141,9 @@ const Index = () => {
     triggerBoss(
       "You WON?! Instead of working?! The meter moves toward FIRED. Now get to the standup!",
       "pong-done",
+      undefined,
+      undefined,
+      "wtv.",
     );
   }, [moveMeter, triggerBoss]);
 
@@ -147,7 +152,7 @@ const Index = () => {
     setIsPunishment(true);
     bossOnDismissRef.current = () => triggerPunishment("pong-done", "pingpong");
     triggerBoss(
-      "Ha! You lost to ME?! Guess you have to reply loser. - PLACEHOLDER",
+      "Damn, you're out of practice! Guess you've been working... Let's see you work on that ",
       "pong-done", // fallback, won't be used
       1500,
     );
@@ -207,15 +212,18 @@ const Index = () => {
       if (guesses <= 6) {
         moveMeter(-25);
         triggerBoss(
-          `Decoded in ${guesses} tries?! You are trying to escape work, aren't you? The meter moves toward FIRED!`,
+          `Decoded in ${guesses} tries?! Bet you cheated using AI... Moving towards FIRED!`,
           "wordle-done",
+          undefined,
+          undefined,
+          "wtv.",
         );
       } else {
         moveMeter(10);
         setIsPunishment(true);
         bossOnDismissRef.current = () => triggerPunishment("wordle-done", "wordle");
         triggerBoss(
-          "Can't even decode corporate buzzwords?! Back to the grind — punishment first, then emails.",
+          "Can't even decode corporate buzzwords?! Seems like you need to attend the meeting after all...",
           "wordle-done", // fallback, won't be used
           1500,
         );
@@ -261,6 +269,9 @@ const Index = () => {
     triggerBoss(
       "You are AVOIDING work?! Impressive slacking! Keep it up and you might get FIRED!",
       "pacman-done",
+      undefined,
+      undefined,
+      "wtv.",
     );
   }, [moveMeter, triggerBoss]);
 
@@ -269,7 +280,7 @@ const Index = () => {
     setIsPunishment(true);
     bossOnDismissRef.current = () => triggerPunishment("pacman-done", "pacman");
     triggerBoss(
-      "Eaten by your own coworkers?! Pathetic. That's what happens when you don't clear your inbox. Punishment time!",
+      "Eaten by your own coworkers?! Pathetic. That's what happens when you don't clear your inbox. Organisation time!",
       "pacman-done", // fallback, won't be used
       1500,
     );
@@ -295,13 +306,6 @@ const Index = () => {
     handleMeterOutcome,
   ]);
 
-  const handleJiraNotification = useCallback(() => {
-    triggerBoss(
-      "It's all your fault for not working! Every line of this backlog is about to be assigned to an individual... MAKE SURE YOU HAVE SOME WORK!!!",
-      skipTutorials ? "tetris" : "tetris-howto",
-    );
-  }, [skipTutorials, triggerBoss]);
-
   useEffect(() => {
     if (state.stage === "jira") {
       return triggerBossWithDelay(
@@ -325,6 +329,9 @@ const Index = () => {
     triggerBoss(
       "Wait... NO WORK ASSIGNED TO YOU?! You survived the backlog without lifting a finger?! You absolute DEAD WEIGHT! 😤 I’ll get you next time, Slacker..",
       "tetris-done",
+      undefined,
+      undefined,
+      "wtv.",
     );
   }, [moveMeter, triggerBoss]);
 
@@ -554,14 +561,14 @@ const Index = () => {
         <DraggableWindow
           title="Jira Backlog Refinement"
           icon={<LayoutList size={14} />}
-          width={260}
+          width={470}
           closable={false}
         >
           <HowToPlay
             title="Backlog Tetris"
             instructions={[
               "Survive for 30 seconds!",
-              "Arrow keys: ←→ move, ↑ rotate, ↓ drop",
+              "Arrow keys or WASD: ←/A →/D move, ↑/W rotate, ↓/S drop",
               "Surviving = you're actively avoiding work = moving toward FIRED",
               "If you let the tasks pile up... You will be forced to do the work and get some points...",
             ]}
@@ -575,7 +582,7 @@ const Index = () => {
         <DraggableWindow
           title="Jira Backlog Refinement"
           icon={<LayoutList size={14} />}
-          width={275}
+          width={470}
           closable={false}
         >
           <TetrisGame
@@ -589,7 +596,7 @@ const Index = () => {
       {showBoss && (
         <>
           <div className="fixed inset-0 bg-foreground/50 z-40" />
-          <BossBaby message={bossMsg} onDismiss={dismissBoss} autoAdvanceDelay={bossAutoAdvance} altButton={bossAltButton} />
+          <BossBaby message={bossMsg} onDismiss={dismissBoss} autoAdvanceDelay={bossAutoAdvance} altButton={bossAltButton} dismissLabel={bossDismissLabel} />
         </>
       )}
 

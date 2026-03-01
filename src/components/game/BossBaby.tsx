@@ -6,9 +6,10 @@ interface BossBabyProps {
   onDismiss: () => void;
   autoAdvanceDelay?: number;
   altButton?: { label: string; onAlt: () => void };
+  dismissLabel?: string;
 }
 
-export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss, autoAdvanceDelay, altButton }) => {
+export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss, autoAdvanceDelay, altButton, dismissLabel }) => {
   const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);
 
@@ -75,10 +76,11 @@ export const BossBaby: React.FC<BossBabyProps> = ({ message, onDismiss, autoAdva
                     </button>
                   )}
                   <button className="xp-button-primary" onClick={onDismiss}>
-                    {message.toLowerCase().includes("email") ||
-                    message.toLowerCase().includes("outlook")
-                      ? "AGH, no..." 
-                      : "AGH, fine..."}
+                    {dismissLabel ??
+                      (message.toLowerCase().includes("email") ||
+                      message.toLowerCase().includes("outlook")
+                        ? "AGH, no..."
+                        : "AGH, fine...")}
                   </button>
                 </div>
               )}

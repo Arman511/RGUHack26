@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const COLS = 11;
-const ROWS = 20;
+const COLS = 20;
+const ROWS = 12;
 const CELL = 22;
 const TIMER_SECONDS = 15;
 // Row index from the top (0 = very top, ROWS-1 = bottom).
@@ -9,11 +9,11 @@ const TIMER_SECONDS = 15;
 const DANGER_ROW = 7; // triggers when 10 of 15 rows are stacked
 
 const SHAPES = [
-  [[1,1,1,1],[1,1,1,1]],      // I: 2×4 slab
-  [[1,1,1],[1,1,1],[1,1,1]],  // O: 3×3 square
-  [[0,1,0],[1,1,1],[0,1,0]],  // T: 3×3 cross
-  [[1,1,0],[1,1,1],[1,1,1]],  // L: 3×3 chunky L
-  [[0,1,1],[0,1,1],[1,1,1]],  // J: 3×3 chunky J
+  [[1, 1, 1, 1], [1, 1, 1, 1]],      // I: 2×4 slab
+  [[1, 1, 1], [1, 1, 1], [1, 1, 1]],  // O: 3×3 square
+  [[0, 1, 0], [1, 1, 1], [0, 1, 0]],  // T: 3×3 cross
+  [[1, 1, 0], [1, 1, 1], [1, 1, 1]],  // L: 3×3 chunky L
+  [[0, 1, 1], [0, 1, 1], [1, 1, 1]],  // J: 3×3 chunky J
 ];
 
 const PRIORITIES = ["CRIT", "HIGH", "MED", "LOW"];
@@ -258,10 +258,10 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({
 
     const keyHandler = (e: KeyboardEvent) => {
       if (!running) return;
-      if (e.key === "ArrowLeft") move(-1);
-      if (e.key === "ArrowRight") move(1);
-      if (e.key === "ArrowDown") drop();
-      if (e.key === "ArrowUp") rotate();
+      if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") move(-1);
+      if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") move(1);
+      if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") drop();
+      if (e.key === "ArrowUp" || e.key.toLowerCase() === "w") rotate();
     };
 
     window.addEventListener("keydown", keyHandler);
