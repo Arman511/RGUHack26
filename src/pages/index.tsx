@@ -19,6 +19,7 @@ import { Video, LayoutList, Mail } from "lucide-react";
 import { set } from "react-hook-form";
 
 const STAGE_DELAY_MS = 3000;
+const SECOND_DELAY_MS = 3000;
 const STAGE_METER_POINT_CUTOF = 9;
 
 const Index = () => {
@@ -56,6 +57,17 @@ const Index = () => {
     setShowBoss(true);
     setNextStageAfterBoss(nextStage);
   }, []);
+
+  const triggerBossWithDelay = useCallback(
+    (msg: string, nextStage: GameStage, delayMs = STAGE_DELAY_MS) => {
+      const timeout = setTimeout(() => {
+        triggerBoss(msg, nextStage);
+      }, delayMs);
+
+      return () => clearTimeout(timeout);
+    },
+    [triggerBoss],
+  );
 
   const dismissBoss = useCallback(() => {
     setShowBoss(false);
@@ -182,16 +194,16 @@ const Index = () => {
       }
       if (skipDoneStageDelay) {
         setSkipDoneStageDelay(false);
-        setStage("pacman");
-      } else {
-        triggerBoss(
-          "Check your emails! 10 unread messages! You're on prod support!",
-          skipTutorials ? "pacman" : "pacman-howto",
-        );
       }
 
+      return triggerBossWithDelay(
+        "Check your emails! 10 unread messages! You're on prod support!",
+        skipTutorials ? "pacman" : "pacman-howto",
+        SECOND_DELAY_MS,
+      );
+
     }
-  }, [skipTutorials, state.stage, triggerBoss, loopDone, handleMeterOutcome]);
+  }, [skipTutorials, state.stage, loopDone, handleMeterOutcome, triggerBossWithDelay, setStage]);
 
   const handlePacmanWin = useCallback(() => {
     moveMeter(-30);
@@ -230,10 +242,13 @@ const Index = () => {
 
   useEffect(() => {
     if (state.stage === "jira") {
-      const t = setTimeout(handleJiraNotification, 100);
-      return () => clearTimeout(t);
+      return triggerBossWithDelay(
+        "The sprint is on fire! It's all your fault for not working! Survive the backlog of tasks!",
+        skipTutorials ? "tetris" : "tetris-howto",
+        100,
+      );
     }
-  }, [state.stage, handleJiraNotification]);
+  }, [state.stage, skipTutorials, triggerBossWithDelay]);
 
   const handleTetrisTopReached = useCallback(() => {
     moveMeter(10); // failed work = toward fired
