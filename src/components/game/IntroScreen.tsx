@@ -5,12 +5,16 @@ interface IntroScreenProps {
   onStart: () => void;
   skipTutorials: boolean;
   setSkipTutorials: (skip: boolean) => void;
+  volume: number;
+  setVolume: (value: number) => void;
 }
 
 export const IntroScreen: React.FC<IntroScreenProps> = ({
   onStart,
   skipTutorials,
   setSkipTutorials,
+  volume,
+  setVolume,
 }) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
@@ -110,35 +114,53 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
             <div
               style={{
                 overflow: "hidden",
-                width: settingsOpen ? 220 : 0,
+                width: settingsOpen ? 320 : 0,
                 transition: "width 0.25s ease",
-                whiteSpace: "nowrap",
               }}
             >
               <div
                 style={{
-                  width: 220,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  width: 320,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 4,
                   background:
                     "linear-gradient(180deg, hsl(0,0%,100%) 0%, hsl(0,0%,85%) 100%)",
                   border: "2px solid",
                   borderColor:
                     "hsl(0,0%,100%) transparent hsl(220,10%,55%) hsl(0,0%,100%)",
-                  padding: "0 10px",
-                  height: 40,
+                  padding: "6px 10px",
+                  minHeight: 40,
                   boxSizing: "border-box",
                 }}
               >
-                <span className="text-xs font-bold">Tutorials</span>
-                <button
-                  type="button"
-                  className="xp-button text-[11px] px-2 py-0.5"
-                  onClick={() => setSkipTutorials(!skipTutorials)}
-                >
-                  {skipTutorials ? "OFF" : "ON"}
-                </button>
+                <div className="flex items-center justify-between h-8">
+                  <span className="text-xs font-bold">Tutorials</span>
+                  <button
+                    type="button"
+                    className="xp-button text-[11px] px-2 py-0.5"
+                    onClick={() => setSkipTutorials(!skipTutorials)}
+                  >
+                    {skipTutorials ? "OFF" : "ON"}
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 h-8">
+                  <span className="text-xs font-bold">Volume</span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    value={Math.round(volume * 100)}
+                    onChange={(event) =>
+                      setVolume(Number(event.target.value) / 100)
+                    }
+                    className="w-32 accent-primary"
+                  />
+                  <span className="text-[11px] font-bold w-9 text-right">
+                    {Math.round(volume * 100)}%
+                  </span>
+                </div>
               </div>
             </div>
 

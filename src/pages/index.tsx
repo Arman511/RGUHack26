@@ -18,13 +18,15 @@ import { TeamsNotif } from "@/components/game/TeamsNotif";
 import { OutlookMockup } from "@/components/game/OutlookMockup";
 import { Video, LayoutList, Mail } from "lucide-react";
 
-const STAGE_DELAY_MS = 5000;
-const SECOND_DELAY_MS = 5000;
-const STAGE_METER_POINT_CUTOF = 9;
+const STAGE_DELAY_MS = 10000;
+const SECOND_DELAY_MS = 10000;
+const STAGE_METER_POINT_CUTOF = 50;
+export { STAGE_METER_POINT_CUTOF };
 
 const Index = () => {
   const { state, setStage, moveMeter } = useGameState();
   const [skipTutorials, setSkipTutorials] = useState(true);
+  const [volume, setVolume] = useState(0.5);
   const [showBoss, setShowBoss] = useState(false);
   const [bossMsg, setBossMsg] = useState("");
   const [bossAutoAdvance, setBossAutoAdvance] = useState<number | undefined>(
@@ -46,6 +48,42 @@ const Index = () => {
   const [isPunishment, setIsPunishment] = useState(true);
   const delayTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bossOnDismissRef = useRef<(() => void) | null>(null);
+  const bgAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  const isAudioRunning = !["fired", "promoted"].includes(state.stage);
+
+  useEffect(() => {
+    const audio = new Audio("/background.mp3");
+    audio.loop = true;
+    audio.preload = "auto";
+    audio.volume = volume;
+    bgAudioRef.current = audio;
+
+    return () => {
+      audio.pause();
+      bgAudioRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (bgAudioRef.current) {
+      bgAudioRef.current.volume = volume;
+    }
+  }, [volume]);
+
+  useEffect(() => {
+    const audio = bgAudioRef.current;
+    if (!audio) return;
+
+    if (isAudioRunning) {
+      void audio.play().catch(() => {
+      });
+      return;
+    }
+
+    audio.pause();
+    audio.currentTime = 0;
+  }, [isAudioRunning]);
 
   // Delayed stage transition (5s gap)
   const delayedStage = useCallback(
@@ -157,7 +195,7 @@ const Index = () => {
   }, [moveMeter, triggerPunishment]);
 
   const handlePongWin = useCallback(() => {
-    moveMeter(-30); // toward FIRED (victory)
+    moveMeter(-15); // toward FIRED (victory)
     triggerBoss(
       "You WON?! Instead of working?! The meter moves toward FIRED. Now get to the standup!",
       "pong-done",
@@ -168,7 +206,7 @@ const Index = () => {
   }, [moveMeter, triggerBoss]);
 
   const handlePongLose = useCallback(() => {
-    moveMeter(10); // toward PROMOTED (loss)
+    moveMeter(25); // toward PROMOTED (loss)
     setIsPunishment(true);
     bossOnDismissRef.current = () => triggerPunishment("pong-done", "pingpong");
     triggerBoss(
@@ -230,7 +268,7 @@ const Index = () => {
   const handleWordleComplete = useCallback(
     (guesses: number) => {
       if (guesses <= 6) {
-        moveMeter(-25);
+        moveMeter(-15);
         triggerBoss(
           `Decoded in ${guesses} tries?! Bet you cheated using AI... Moving towards FIRED!`,
           "wordle-done",
@@ -239,7 +277,7 @@ const Index = () => {
           "wtv.",
         );
       } else {
-        moveMeter(10);
+        moveMeter(20);
         setIsPunishment(true);
         bossOnDismissRef.current = () =>
           triggerPunishment("wordle-done", "wordle");
@@ -293,7 +331,7 @@ const Index = () => {
   }, [state.stage, setStage]);
 
   const handlePacmanWin = useCallback(() => {
-    moveMeter(-30);
+    moveMeter(-25);
     triggerBoss(
       "You are AVOIDING work?! Impressive slacking! Keep it up and you might get FIRED!",
       "pacman-done",
@@ -304,7 +342,7 @@ const Index = () => {
   }, [moveMeter, triggerBoss]);
 
   const handlePacmanLose = useCallback(() => {
-    moveMeter(10);
+    moveMeter(30);
     setIsPunishment(true);
     bossOnDismissRef.current = () => triggerPunishment("pacman-done", "pacman");
     triggerBoss(
@@ -345,7 +383,7 @@ const Index = () => {
   }, [state.stage, skipTutorials, triggerBossWithDelay]);
 
   const handleTetrisTopReached = useCallback(() => {
-    moveMeter(10); // failed work = toward fired
+    moveMeter(25); // failed work = toward fired
     triggerBoss(
       "Ha got you, better luck next time, pay attention during the Jira Refinement! You can have some points for doing work...",
       "tetris-done",
@@ -353,7 +391,7 @@ const Index = () => {
   }, [moveMeter]);
 
   const handleTetrisSurvived = useCallback(() => {
-    moveMeter(-30); // survived = too productive
+    moveMeter(-15); // survived = too productive
     triggerBoss(
       "Wait... NO WORK ASSIGNED TO YOU?! You survived the backlog without lifting a finger?! You absolute DEAD WEIGHT! 😤 I’ll get you next time, Slacker..",
       "tetris-done",
@@ -388,6 +426,8 @@ const Index = () => {
         onStart={handleIntroStart}
         skipTutorials={skipTutorials}
         setSkipTutorials={setSkipTutorials}
+        volume={volume}
+        setVolume={setVolume}
       />
     );
   }
@@ -654,7 +694,10 @@ const Index = () => {
         />
       )}
 
-      <Taskbar meterValue={state.meterValue} />
+      <Taskbar
+        volume={volume}
+        setVolume={setVolume}
+      />
     </div>
   );
 };

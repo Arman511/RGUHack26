@@ -1,4 +1,5 @@
 import React from "react";
+import { STAGE_METER_POINT_CUTOF } from "@/pages/index";
 
 interface FailMeterProps {
   value: number; // -100 (FIRED) to +100 (PROMOTED)
@@ -15,12 +16,12 @@ export const FailMeter: React.FC<FailMeterProps> = ({ value }) => {
   const needleY = cy - r * 0.82 * Math.sin(radians);
 
   const status =
-    value <= -11 ? "CRITICAL" : value <= 11 ? "NEUTRAL" : "EXCELLENT";
+    value <= -STAGE_METER_POINT_CUTOF ? "CRITICAL" : value <= STAGE_METER_POINT_CUTOF ? "NEUTRAL" : "EXCELLENT";
 
   const statusColor =
-    value <= -11
+    value <= -STAGE_METER_POINT_CUTOF
       ? "hsl(0, 70%, 50%)"
-      : value <= 11
+      : value <= STAGE_METER_POINT_CUTOF
         ? "hsl(45, 90%, 50%)"
         : "hsl(120, 60%, 40%)";
 
