@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 
-const MAX_GUESSES = 4;
+const MAX_GUESSES = 6;
 
 const FALLBACK_VALID_WORDS = [
   "SYNCS",

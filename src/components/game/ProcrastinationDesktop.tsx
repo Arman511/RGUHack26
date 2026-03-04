@@ -98,7 +98,7 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
 
         return nextState;
       });
-    }, 1900);
+    }, 1500);
 
     return () => clearInterval(timer);
   }, []);
@@ -224,33 +224,30 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab("cricket")}
-            className={`${
-              activeTab === "cricket"
+            className={`${activeTab === "cricket"
                 ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
                 : "bg-[#c0c0c0] border border-[#808080]"
-            } px-3 py-1 text-[11px] flex items-center gap-1`}
+              } px-3 py-1 text-[11px] flex items-center gap-1`}
           >
             🏏 Cricket Live
           </button>
           <button
             type="button"
             onClick={() => setActiveTab("cat")}
-            className={`${
-              activeTab === "cat"
+            className={`${activeTab === "cat"
                 ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
                 : "bg-[#c0c0c0] border border-[#808080]"
-            } px-3 py-1 text-[11px] flex items-center gap-1`}
+              } px-3 py-1 text-[11px] flex items-center gap-1`}
           >
             🐱 Cat Videos
           </button>
           <button
             type="button"
             onClick={() => setActiveTab("youtube")}
-            className={`${
-              activeTab === "youtube"
+            className={`${activeTab === "youtube"
                 ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
                 : "bg-[#c0c0c0] border border-[#808080]"
-            } px-3 py-1 text-[11px] flex items-center gap-1`}
+              } px-3 py-1 text-[11px] flex items-center gap-1`}
           >
             ▶️ YouTube
           </button>

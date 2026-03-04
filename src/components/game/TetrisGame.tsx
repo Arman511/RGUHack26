@@ -1,12 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 
 const COLS = 20;
-const ROWS = 12;
+const ROWS = 15;
 const CELL = 22;
-const TIMER_SECONDS = 15;
+const TIMER_SECONDS = 60;
+
 // Row index from the top (0 = very top, ROWS-1 = bottom).
 // Overlay fires when any block reaches this row — i.e. stack is (ROWS - DANGER_ROW) tall.
-const DANGER_ROW = 7; // triggers when 10 of 15 rows are stacked
+const DANGER_ROW = 5; // triggers when 10 of 15 rows are stacked
 
 const SHAPES = [
   [
@@ -266,7 +267,7 @@ export const TetrisGame: React.FC<TetrisGameProps> = ({
         return;
       }
 
-      const dropInterval = Math.max(80, 300 - piecesPlaced * 25);
+      const dropInterval = Math.max(160, 420 - piecesPlaced * 12);
       if (dropCounter > dropInterval) {
         drop();
         dropCounter = 0;
