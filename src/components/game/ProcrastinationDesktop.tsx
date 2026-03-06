@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Globe } from "lucide-react";
 
-const MAX_BALLS_PER_INNINGS = 90 * 6;
+const MATCH_OVERS = 20;
+const MAX_BALLS_PER_INNINGS = MATCH_OVERS * 6;
 
 type BattingTeam = "INDIA" | "AUSTRALIA" | "DONE";
 
@@ -15,6 +16,8 @@ interface MatchState {
   battingTeam: BattingTeam;
   india: InningsState;
   australia: InningsState;
+  recentBalls: string[];
+  lastBallCommentary: string;
 }
 
 function formatOvers(ballsFaced: number) {
@@ -24,6 +27,22 @@ function formatOvers(ballsFaced: number) {
 function isInningsComplete(innings: InningsState) {
   return innings.wickets >= 10 || innings.balls >= MAX_BALLS_PER_INNINGS;
 }
+
+function createInitialMatchState(): MatchState {
+  return {
+    battingTeam: "INDIA",
+    india: { runs: 0, wickets: 0, balls: 0 },
+    australia: { runs: 0, wickets: 0, balls: 0 },
+    recentBalls: [],
+    lastBallCommentary: "Toss: India bat first.",
+  };
+}
+
+function formatRunRate(runs: number, balls: number) {
+  if (balls === 0) return "0.00";
+  return ((runs * 6) / balls).toFixed(2);
+}
+
 interface ProcrastinationDesktopProps {
   hidden?: boolean;
   disabled?: boolean;
@@ -37,11 +56,11 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
   const [activeTab, setActiveTab] = useState<"cricket" | "cat" | "youtube">(
     "cricket",
   );
-  const [match, setMatch] = useState<MatchState>({
-    battingTeam: "INDIA",
-    india: { runs: 0, wickets: 0, balls: 0 },
-    australia: { runs: 0, wickets: 0, balls: 0 },
-  });
+  const [match, setMatch] = useState<MatchState>(createInitialMatchState);
+
+  const resetMatch = useCallback(() => {
+    setMatch(createInitialMatchState());
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -51,31 +70,61 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
         const teamKey = prev.battingTeam === "INDIA" ? "india" : "australia";
         const currentInnings = prev[teamKey];
 
+        const australiaChasedTarget =
+          prev.battingTeam === "AUSTRALIA" && prev.australia.runs > prev.india.runs;
+
+        if (australiaChasedTarget) {
+          return { ...prev, battingTeam: "DONE" };
+        }
+
         if (isInningsComplete(currentInnings)) {
           if (prev.battingTeam === "INDIA") {
-            return { ...prev, battingTeam: "AUSTRALIA" };
+            return {
+              ...prev,
+              battingTeam: "AUSTRALIA",
+              recentBalls: [],
+              lastBallCommentary: `Target: ${prev.india.runs + 1} from ${MATCH_OVERS} overs.`,
+            };
           }
-          return { ...prev, battingTeam: "DONE" };
+          return {
+            ...prev,
+            battingTeam: "DONE",
+            lastBallCommentary: "Australia innings complete.",
+          };
         }
 
         const outcomeRoll = Math.random();
         let runDelta = 0;
         let wicketDelta = 0;
+        let ballSymbol = ".";
+        let ballCommentary = "Dot ball.";
 
         if (outcomeRoll < 0.04) {
           wicketDelta = 1;
+          ballSymbol = "W";
+          ballCommentary = "WICKET! Batter dismissed.";
         } else if (outcomeRoll < 0.44) {
           runDelta = 0;
         } else if (outcomeRoll < 0.79) {
           runDelta = 1;
+          ballSymbol = "1";
+          ballCommentary = "Single taken.";
         } else if (outcomeRoll < 0.91) {
           runDelta = 2;
+          ballSymbol = "2";
+          ballCommentary = "Driven for two.";
         } else if (outcomeRoll < 0.94) {
           runDelta = 3;
+          ballSymbol = "3";
+          ballCommentary = "Excellent running, three runs.";
         } else if (outcomeRoll < 0.995) {
           runDelta = 4;
+          ballSymbol = "4";
+          ballCommentary = "FOUR! Finds the gap.";
         } else {
           runDelta = 6;
+          ballSymbol = "6";
+          ballCommentary = "SIX! Huge hit into the stands.";
         }
 
         const nextInnings: InningsState = {
@@ -84,16 +133,48 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
           balls: currentInnings.balls + 1,
         };
 
-        const nextState: MatchState = {
-          ...prev,
-          [teamKey]: nextInnings,
-        } as MatchState;
+        const nextState: MatchState =
+          teamKey === "india"
+            ? {
+              ...prev,
+              india: nextInnings,
+            }
+            : {
+              ...prev,
+              australia: nextInnings,
+            };
+
+        const ballPrefix =
+          prev.battingTeam === "INDIA" ? `IND ${formatOvers(nextInnings.balls)}` : `AUS ${formatOvers(nextInnings.balls)}`;
+
+        nextState.recentBalls = [...prev.recentBalls.slice(-11), ballSymbol];
+        nextState.lastBallCommentary = `${ballPrefix}: ${ballCommentary}`;
+
+        const chaseCompleted =
+          prev.battingTeam === "AUSTRALIA" && nextState.australia.runs > nextState.india.runs;
+
+        if (chaseCompleted) {
+          return {
+            ...nextState,
+            battingTeam: "DONE",
+            lastBallCommentary: `${ballPrefix}: ${ballCommentary} Australia complete the chase.`,
+          };
+        }
 
         if (isInningsComplete(nextInnings)) {
           if (prev.battingTeam === "INDIA") {
-            return { ...nextState, battingTeam: "AUSTRALIA" };
+            return {
+              ...nextState,
+              battingTeam: "AUSTRALIA",
+              recentBalls: [],
+              lastBallCommentary: `India finish on ${nextState.india.runs}/${nextState.india.wickets}. Target: ${nextState.india.runs + 1}`,
+            };
           }
-          return { ...nextState, battingTeam: "DONE" };
+          return {
+            ...nextState,
+            battingTeam: "DONE",
+            lastBallCommentary: `${ballPrefix}: Innings over.`,
+          };
         }
 
         return nextState;
@@ -105,29 +186,38 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
 
   const indiaRuns = match.india.runs;
   const australiaRuns = match.australia.runs;
+  const target = indiaRuns + 1;
+  const runsNeeded = Math.max(0, target - australiaRuns);
+  const ballsRemaining = Math.max(0, MAX_BALLS_PER_INNINGS - match.australia.balls);
+  const requiredRate =
+    match.battingTeam === "AUSTRALIA" && ballsRemaining > 0 && runsNeeded > 0
+      ? ((runsNeeded * 6) / ballsRemaining).toFixed(2)
+      : "0.00";
+  const currentRate =
+    match.battingTeam === "INDIA"
+      ? formatRunRate(match.india.runs, match.india.balls)
+      : formatRunRate(match.australia.runs, match.australia.balls);
 
   const liveLine =
     match.battingTeam === "INDIA"
-      ? "● LIVE - India 1st innings in progress"
+      ? `● LIVE - India batting first (${MATCH_OVERS}-over match)`
       : match.battingTeam === "AUSTRALIA"
-        ? indiaRuns === australiaRuns
-          ? "● LIVE - Scores level"
-          : australiaRuns < indiaRuns
-            ? `● LIVE - Australia trail by ${indiaRuns - australiaRuns} runs`
-            : `● LIVE - Australia lead by ${australiaRuns - indiaRuns} runs`
-        : indiaRuns === australiaRuns
-          ? "● RESULT - Match tied after one innings each"
-          : indiaRuns > australiaRuns
-            ? `● RESULT - India lead by ${indiaRuns - australiaRuns} runs after one innings each`
-            : `● RESULT - Australia lead by ${australiaRuns - indiaRuns} runs after one innings each`;
+        ? australiaRuns >= target
+          ? `● LIVE - Australia have chased ${target}`
+          : `● LIVE - Australia need ${runsNeeded} from ${ballsRemaining} balls`
+        : australiaRuns >= target
+          ? `● RESULT - Australia won by ${10 - match.australia.wickets} wickets`
+          : indiaRuns === australiaRuns
+            ? "● RESULT - Match tied"
+            : `● RESULT - India won by ${indiaRuns - australiaRuns} runs`;
 
   const statusColorClass =
     match.battingTeam !== "DONE"
       ? "text-green-700"
-      : indiaRuns > australiaRuns
-        ? "text-blue-700"
-        : indiaRuns < australiaRuns
-          ? "text-red-700"
+      : australiaRuns >= target
+        ? "text-red-700"
+        : indiaRuns > australiaRuns
+          ? "text-blue-700"
           : "text-gray-700";
 
   const browserTitle =
@@ -225,8 +315,8 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
             type="button"
             onClick={() => setActiveTab("cricket")}
             className={`${activeTab === "cricket"
-                ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
-                : "bg-[#c0c0c0] border border-[#808080]"
+              ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
+              : "bg-[#c0c0c0] border border-[#808080]"
               } px-3 py-1 text-[11px] flex items-center gap-1`}
           >
             🏏 Cricket Live
@@ -235,8 +325,8 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
             type="button"
             onClick={() => setActiveTab("cat")}
             className={`${activeTab === "cat"
-                ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
-                : "bg-[#c0c0c0] border border-[#808080]"
+              ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
+              : "bg-[#c0c0c0] border border-[#808080]"
               } px-3 py-1 text-[11px] flex items-center gap-1`}
           >
             🐱 Cat Videos
@@ -245,8 +335,8 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
             type="button"
             onClick={() => setActiveTab("youtube")}
             className={`${activeTab === "youtube"
-                ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
-                : "bg-[#c0c0c0] border border-[#808080]"
+              ? "bg-[#ECE9D8] border-t border-l border-r border-white border-b-0 font-bold"
+              : "bg-[#c0c0c0] border border-[#808080]"
               } px-3 py-1 text-[11px] flex items-center gap-1`}
           >
             ▶️ YouTube
@@ -282,18 +372,50 @@ export const ProcrastinationDesktop: React.FC<ProcrastinationDesktopProps> = ({
                     </p>
                   </div>
                 </div>
+                <div className="grid grid-cols-2 gap-3 text-xs mb-3">
+                  <div className="bg-white border border-[#808080] px-2 py-1">
+                    <p className="font-bold text-gray-700">Current RR</p>
+                    <p>{currentRate}</p>
+                  </div>
+                  <div className="bg-white border border-[#808080] px-2 py-1">
+                    <p className="font-bold text-gray-700">Target</p>
+                    <p>{target}</p>
+                  </div>
+                  <div className="bg-white border border-[#808080] px-2 py-1">
+                    <p className="font-bold text-gray-700">Req RR</p>
+                    <p>{requiredRate}</p>
+                  </div>
+                  <div className="bg-white border border-[#808080] px-2 py-1">
+                    <p className="font-bold text-gray-700">Balls Left</p>
+                    <p>{ballsRemaining}</p>
+                  </div>
+                </div>
+                <div className="bg-white border border-[#808080] px-2 py-1 text-xs mb-3">
+                  <p className="font-bold text-gray-700 mb-1">Last Over Feed</p>
+                  <p className="font-mono tracking-wide">
+                    {match.recentBalls.length > 0 ? match.recentBalls.join(" ") : "No balls yet"}
+                  </p>
+                </div>
                 <div className="text-center mt-3">
                   <p className={`text-sm font-bold ${statusColorClass}`}>
                     {liveLine}
                   </p>
+                  <p className="text-xs text-gray-600 mt-1">{match.lastBallCommentary}</p>
                 </div>
               </div>
-              <div className="flex justify-center gap-6 text-xs mt-6">
+              <div className="flex justify-center gap-6 text-xs mt-6 items-center">
                 <span className="underline cursor-pointer">
                   Live Chat (2.4k)
                 </span>
                 <span className="underline cursor-pointer">Scorecard</span>
                 <span className="underline cursor-pointer">Commentary</span>
+                <button
+                  type="button"
+                  onClick={resetMatch}
+                  className="px-2 py-1 border border-[#808080] bg-[#d4d0c8] hover:bg-[#c8c4bb]"
+                >
+                  Restart Match
+                </button>
               </div>
             </>
           )}
