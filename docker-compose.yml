@@ -1,8 +1,6 @@
 services:
   liar:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/arman511/rguhack26
     restart: unless-stopped
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
