@@ -11,7 +11,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 RUN pnpm install --frozen-lockfile
 
-COPY . ./
+COPY . .
 
 ENV NODE_ENV=production
 
@@ -25,14 +25,13 @@ FROM cgr.dev/chainguard/nginx:latest-dev AS brotli-builder
 
 USER root
 
-RUN apk update && apk add --no-cache \
+RUN apk add --no-cache \
     gcc \
     make \
     cmake \
     git \
     wget \
     brotli-dev \
-    brotli-static \
     pcre2-dev \
     zlib-dev \
     openssl-dev \
@@ -47,8 +46,7 @@ RUN set -eux; \
     wget -q \
         "https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz"; \
     \
-    tar -xzf \
-        "nginx-${NGINX_VERSION}.tar.gz"; \
+    tar -xzf "nginx-${NGINX_VERSION}.tar.gz"; \
     \
     git clone \
         --depth 1 \
@@ -57,7 +55,7 @@ RUN set -eux; \
     \
     cd /build/ngx_brotli/deps/brotli; \
     \
-    mkdir out; \
+    mkdir -p out; \
     cd out; \
     \
     cmake \
@@ -77,49 +75,38 @@ RUN set -eux; \
     \
     make modules; \
     \
-    mkdir -p /brotli-modules; \
+    # Collect modules
+    mkdir -p /brotli-runtime/usr/lib/nginx/modules; \
+    cp \
+        objs/ngx_http_brotli_filter_module.so \
+        objs/ngx_http_brotli_static_module.so \
+        /brotli-runtime/usr/lib/nginx/modules/; \
     \
-    cp objs/ngx_http_brotli_filter_module.so \
-        /brotli-modules/; \
-    \
-    cp objs/ngx_http_brotli_static_module.so \
-        /brotli-modules/
+    # Collect libraries while preserving symlinks
+    mkdir -p /brotli-runtime/usr/lib; \
+    cp -a \
+        /usr/lib/libbrotlienc.so.1 \
+        /usr/lib/libbrotlienc.so.1.2.0 \
+        /usr/lib/libbrotlicommon.so.1 \
+        /usr/lib/libbrotlicommon.so.1.2.0 \
+        /brotli-runtime/usr/lib/
 
 
-# ─────────────────────────────────────────────────────────────
-# Stage 3: Minimal Chainguard runtime
-# ─────────────────────────────────────────────────────────────
 # ─────────────────────────────────────────────────────────────
 # Stage 3: Minimal Chainguard runtime
 # ─────────────────────────────────────────────────────────────
 FROM cgr.dev/chainguard/nginx:latest AS release
 
-# Brotli Nginx modules
+# Copy all Brotli modules and libraries in one layer.
+# Symlinks created with cp -a are preserved.
 COPY --from=brotli-builder \
-    /brotli-modules/ \
-    /usr/lib/nginx/modules/
-
-# Brotli runtime libraries
-COPY --from=brotli-builder \
-    /usr/lib/libbrotlienc.so.1.2.0 \
-    /usr/lib/
-
-COPY --from=brotli-builder \
-    /usr/lib/libbrotlienc.so.1 \
-    /usr/lib/
-
-COPY --from=brotli-builder \
-    /usr/lib/libbrotlicommon.so.1.2.0 \
-    /usr/lib/
-
-COPY --from=brotli-builder \
-    /usr/lib/libbrotlicommon.so.1 \
-    /usr/lib/
+    /brotli-runtime/ \
+    /
 
 # Frontend
 COPY --from=frontend-builder \
-    /app/dist \
-    /usr/share/nginx/html
+    /app/dist/ \
+    /usr/share/nginx/html/
 
 # Nginx configuration
 COPY nginx-main.conf \

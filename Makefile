@@ -16,7 +16,7 @@ down:
 	docker compose -f $(docker_compose_file) down
 
 build:
-	docker compose -f $(docker_compose_file) build
+	docker compose -f $(docker_compose_file_dev) build
 
 logs:
 	docker compose -f $(docker_compose_file) logs -f
