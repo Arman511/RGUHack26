@@ -84,11 +84,9 @@ RUN set -eux; \
     \
     # Collect libraries while preserving symlinks
     mkdir -p /brotli-runtime/usr/lib; \
-    cp -a \
+    cp -L \
         /usr/lib/libbrotlienc.so.1 \
-        /usr/lib/libbrotlienc.so.1.2.0 \
         /usr/lib/libbrotlicommon.so.1 \
-        /usr/lib/libbrotlicommon.so.1.2.0 \
         /brotli-runtime/usr/lib/
 
 
